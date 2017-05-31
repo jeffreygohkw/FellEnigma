@@ -1,0 +1,64 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Unit : MonoBehaviour {
+
+	public Vector2 gridPosition = Vector2.zero;
+
+	public Vector3 moveTo;
+	public float moveSpeed = 10.0f;
+
+	public bool isMoving = false;
+	public bool isFighting = false;
+
+	// Unit stats
+	public string unitName;
+	public string job;
+	public int lvl;
+	public int exp;
+	public int maxHP;
+	public int currentHP;
+	public int strength;
+	public int mag;
+	public int skl;
+	public int spd;
+	public int luk;
+	public int def;
+	public int res;
+	public int mov;
+	public int equipped;
+	public int item2;
+
+	public int weaponAcc;
+	public int weaponCrit;
+
+	
+
+	private void Awake()
+	{
+		moveTo = transform.position;
+	}
+
+	// Use this for initialization
+	void Start ()
+	{
+
+	}
+	
+	// Update is called once per frame
+	void Update ()
+	{
+		
+	}
+
+	public virtual void turnUpdate()
+	{
+		
+	}
+
+	public virtual void TurnOnGUI()
+	{
+
+	}
+}
