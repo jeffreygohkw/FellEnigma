@@ -6,6 +6,8 @@ public class Unit : MonoBehaviour {
 
 	public Vector2 gridPosition = Vector2.zero;
 
+	public bool selected = false;
+
 	public Vector3 moveTo;
 	public float moveSpeed = 10.0f;
 
@@ -26,12 +28,15 @@ public class Unit : MonoBehaviour {
 	public int luk;
 	public int def;
 	public int res;
+	public int con;
 	public int mov;
-	public int equipped;
-	public int item2;
 
+
+	public int weaponMt;
+	public bool weaponPhysical;
 	public int weaponAcc;
 	public int weaponCrit;
+	public int weaponWt;
 
 	
 

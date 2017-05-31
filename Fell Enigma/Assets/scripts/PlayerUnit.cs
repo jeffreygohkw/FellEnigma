@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerUnit : Unit
 {
 	public GameObject Menu;
-	private bool selected = false;
+	
 
 	// Use this for initialization
 	void Start()
@@ -43,6 +43,9 @@ public class PlayerUnit : Unit
 			if (Vector3.Distance(moveTo, transform.position) <= 0.1f)
 			{
 				transform.position = moveTo;
+
+				// Reset unit status after moving
+				isMoving = false;
 			}
 		}
 		base.turnUpdate();
@@ -50,6 +53,7 @@ public class PlayerUnit : Unit
 
 	private void OnMouseDown()
 	{
+		Debug.Log("Test");
 		selected = !selected;
 		TurnOnGUI();
 	}
@@ -62,38 +66,39 @@ public class PlayerUnit : Unit
 			Debug.Log("Done");
 		}
 		*/
-
-		Rect buttonRect = new Rect(0, Screen.height - 150, 150, 50);
-
-		//Move
-		if (GUI.Button(buttonRect, "Move"))
+		if (selected)
 		{
-			isMoving = isMoving ? false : true;
-			isFighting = false;
+			Rect buttonRect = new Rect(0, Screen.height - 150, 150, 50);
+
+			//Move
+			if (GUI.Button(buttonRect, "Move"))
+			{
+				isMoving = isMoving ? false : true;
+				isFighting = false;
+			}
+
+
+			buttonRect = new Rect(0, Screen.height - 100, 150, 50);
+
+			//Attack
+			if (GUI.Button(buttonRect, "Attack"))
+			{
+				isMoving = false;
+				isFighting = isFighting ? false : true;
+			}
+
+
+			buttonRect = new Rect(0, Screen.height - 50, 150, 50);
+
+			//End Turn
+
+			if (GUI.Button(buttonRect, "End"))
+			{
+				isMoving = false;
+				isFighting = false;
+				Grid.instance.nextTurn();
+			}
+			base.TurnOnGUI();
 		}
-
-
-		buttonRect = new Rect(0, Screen.height - 100, 150, 50);
-
-		//Attack
-		if (GUI.Button(buttonRect, "Attack"))
-		{
-			isMoving = false;
-			isFighting = isFighting ? false : true;
-		}
-
-
-		buttonRect = new Rect(0, Screen.height - 50, 150, 50);
-
-		//End Turn
-
-		if (GUI.Button(buttonRect, "End"))
-		{
-			isMoving = false;
-			isFighting = false;
-			Grid.instance.nextTurn();
-		}	
-		base.TurnOnGUI();
-		
 	}
 }
