@@ -53,28 +53,39 @@ public class PlayerUnit : Unit
 
 	private void OnMouseDown()
 	{
-		Debug.Log("Test");
 		selected = !selected;
-		TurnOnGUI();
+
+		if (Grid.instance.units[Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentPlayer] != this)
+		{
+			Grid.instance.attackWithCurrentUnit(this);
+		}
+		isMoving = false;
+		isFighting = false;
 	}
 
-	public override void TurnOnGUI()
+
+	public override void OnGUI()
 	{
-		/*
-		if (Grid.instance.units[Grid.instance.currentPlayer] == this) {
-			Menu.SetActive(selected);
-			Debug.Log("Done");
-		}
-		*/
-		if (selected)
+		if (selected && Grid.instance.units[Grid.instance.currentPlayer] == this)
 		{
 			Rect buttonRect = new Rect(0, Screen.height - 150, 150, 50);
 
 			//Move
 			if (GUI.Button(buttonRect, "Move"))
 			{
-				isMoving = isMoving ? false : true;
+				Grid.instance.removeTileHighlight();
 				isFighting = false;
+
+				if (isMoving)
+				{
+					isMoving = false;
+					Grid.instance.removeTileHighlight();
+				}
+				else
+				{
+					isMoving = true;
+					Grid.instance.highlightTilesAt(gridPosition, Color.blue, mov, true);
+				}
 			}
 
 
@@ -83,8 +94,19 @@ public class PlayerUnit : Unit
 			//Attack
 			if (GUI.Button(buttonRect, "Attack"))
 			{
+				Grid.instance.removeTileHighlight();
 				isMoving = false;
-				isFighting = isFighting ? false : true;
+
+				if (isFighting)
+				{
+					isFighting = false;
+					Grid.instance.removeTileHighlight();
+				}
+				else
+				{
+					isFighting = true;
+					Grid.instance.highlightTilesAt(gridPosition, Color.red, weaponRange, false);
+				}
 			}
 
 
@@ -94,11 +116,12 @@ public class PlayerUnit : Unit
 
 			if (GUI.Button(buttonRect, "End"))
 			{
+				Grid.instance.removeTileHighlight();
 				isMoving = false;
 				isFighting = false;
 				Grid.instance.nextTurn();
 			}
-			base.TurnOnGUI();
+			base.OnGUI();
 		}
 	}
 }

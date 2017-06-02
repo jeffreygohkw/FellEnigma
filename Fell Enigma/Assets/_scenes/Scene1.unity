@@ -1526,8 +1526,8 @@ MonoBehaviour:
   unitPrefab: {fileID: 1582125788664680, guid: f1f99c2559c3f124a82aaf93e7f9278d, type: 2}
   enemyPrefab: {fileID: 1441474077148888, guid: 20a4aba89640d544da7c718265ad04f3,
     type: 2}
-  tilesPerRow: 4
-  tilesPerCol: 4
+  tilesPerRow: 7
+  tilesPerCol: 7
   currentPlayer: 0
   units: []
 --- !u!1 &1976485775

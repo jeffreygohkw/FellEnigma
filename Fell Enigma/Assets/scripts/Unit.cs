@@ -31,12 +31,13 @@ public class Unit : MonoBehaviour {
 	public int con;
 	public int mov;
 
-
+	// Weapon stats
 	public int weaponMt;
 	public bool weaponPhysical;
 	public int weaponAcc;
 	public int weaponCrit;
 	public int weaponWt;
+	public int weaponRange;
 
 	
 
@@ -62,7 +63,7 @@ public class Unit : MonoBehaviour {
 		
 	}
 
-	public virtual void TurnOnGUI()
+	public virtual void OnGUI()
 	{
 
 	}

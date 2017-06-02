@@ -40,11 +40,11 @@ public class AIUnit : Unit
 		base.turnUpdate();
 	}
 
-	public override void TurnOnGUI()
+	public override void OnGUI()
 	{
 		
 
 
-		base.TurnOnGUI();
+		base.OnGUI();
 	}
 }
