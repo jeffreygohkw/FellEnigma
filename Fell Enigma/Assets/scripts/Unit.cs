@@ -37,7 +37,8 @@ public class Unit : MonoBehaviour {
 	public int weaponAcc;
 	public int weaponCrit;
 	public int weaponWt;
-	public int weaponRange;
+	public int weaponMinRange;
+	public int weaponMaxRange;
 
 	//movement animation
 	public List<Vector2> positionQueue = new List<Vector2>();

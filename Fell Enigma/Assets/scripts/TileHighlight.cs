@@ -11,20 +11,27 @@ public class TileHighlight {
 
 	/**
 	 * Uses Dijkstra's Formula to find which tiles can be traversed
+	 * 
+	 * v1.1
+	 * Added min and max range (for archers)
+	 * 
 	 * @param originTile The tile our unit is on
-	 * @param range The move or attack range of the unit
+	 * @param minrange The minimum move or attack range of the unit
+	 * @param maxrange The maximum move or attack range of the unit
 	 * @param moving whether we are calculating attack or movement
 	 * @author Jeffrey Goh
-	 * @version v1.0
+	 * @version v1.1
 	 * @updated 2/6/2017
 	 */
-	public static List<Tile> FindHighlight(Tile originTile, int range, bool moving)
+	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, bool moving)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
 
 		// List of valid paths left that could be taken
 		List<TilePath> open = new List<TilePath>();
+
+		List<Tile> toDelete = new List<Tile>();
 
 		// Our path starts from the current location
 		TilePath originPath = new TilePath();
@@ -55,10 +62,15 @@ public class TileHighlight {
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
 
+				if (current.costofPath < minRange)
+				{
+					toDelete.Add(current.lastTile);
+				}
+
 				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
 				if (moving)
 				{
-					if (current.costofPath + t.movementCost > range)
+					if (current.costofPath + t.movementCost > maxRange || t.occupied != null)
 					{
 						continue;
 					}
@@ -66,12 +78,13 @@ public class TileHighlight {
 					// Otherwise, we add that tile and its movement cost to the newTilePath
 					newTilePath.addTile(t);
 					newTilePath.addCost(t.movementCost);
+
 				}
 				else
 				{
 					// If we are attacking, we ignore the tile's movement cost, each tile will effectively cost 1
 					// If the tile exceeds the attack range of the unit. we continue
-					if (current.costofPath + 1 > range)
+					if (current.costofPath + 1 > maxRange)
 					{
 						continue;
 					}
@@ -89,6 +102,10 @@ public class TileHighlight {
 		}
 		// Remove the origin tile as we don't want to attack ourselves or move to our current location
 		closed.Remove(originTile);
+		foreach (Tile t in toDelete)
+		{
+			closed.Remove(t);
+		}
 		return closed;
 	}
 }

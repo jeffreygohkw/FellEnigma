@@ -58,7 +58,7 @@ public class TilePathFinder : MonoBehaviour {
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
 
-				if (current.costofPath + t.movementCost > range)
+				if (current.costofPath + t.movementCost > range || t.occupied != null)
 				{
 					continue;
 				}

@@ -10,6 +10,8 @@ public class Tile : MonoBehaviour {
 
 	public List<Tile> neighbours = new List<Tile>();
 
+	public Unit occupied = null;
+
 
 	public Color colour = Color.green;
 
