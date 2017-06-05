@@ -68,39 +68,41 @@ public class Grid : MonoBehaviour {
 	}
 
 
-	
 
 	/**
 	* Move the current unit to the destination tile
+	* 
+	* v1.1
 	* Does not feature pathfinding, so the unit just moves in a straight line to the destination
+	* 
+	* v1.2
+	* Moves in an L shape to the destination, vertical first
+	* Can navigate around obstacles, and will pick the shortest path
 	* @param destTile The destination tile
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 2/6/2017
+	* @version 1.2
+	* @updated 5/6/2017
 	*/
 	public void moveCurrentUnit(Tile destTile)
 	{
-		/*
-		foreach(Unit u in units)
+		if (destTile.GetComponent<Renderer>().material.color != destTile.colour)
 		{
-			if (u.gridPosition == destTile.gridPosition)
-			{
-				return;
-			}
-		}
-		*/
-
-		if (destTile.GetComponent<Renderer>().material.color != Color.green)
-		{
-			units[currentPlayer].moveTo = destTile.transform.position;
-			units[currentPlayer].gridPosition = destTile.gridPosition;
 			removeTileHighlight();
+
+			List<Tile> path = TilePathFinder.FindPath(map[(int)units[currentPlayer].gridPosition.x][(int)units[currentPlayer].gridPosition.y], units[currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y]).tileList;
+			foreach (Tile t in path)
+			{
+				units[currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
+			}
+			units[currentPlayer].gridPosition = destTile.gridPosition;
 		}
 		else
 		{
 			Debug.Log("Invalid destination.");
 		}
 	}
+
+
 
 	/**
 	 * Highlights tiles on the grid
@@ -121,6 +123,8 @@ public class Grid : MonoBehaviour {
 			t.GetComponent<Renderer>().material.color = highlightcolour;
 		}
 	}
+
+
 
 	/**
 	 * Removes highlights on the grid
@@ -150,20 +154,36 @@ public class Grid : MonoBehaviour {
 	* v 1.1
 	* Opponent will counterattack, checks for magic weapons
 	* 
+	* v1.2
+	* Opponent will only counterattack if in range, attacker and defender will followup if attack speed >= 4
+	* 
 	* To do
 	* Does not factor in terrain, supports, other misc things
 	* No weapon triangle or followups and doesn't check range
 	* 
 	* @param target The target of the attack
 	* @author Jeffrey Goh
-	* @version 1.1
-	* @updated 2/6/2017
+	* @version 1.2
+	* @updated 5/6/2017
 	*/
 	public void attackWithCurrentUnit(Unit target)
 	{
 		if (target != null)
 		{
 			Debug.Log("Calculating");
+
+			// Range
+			int defenderRange = target.weaponRange;
+			bool canCounter = false;
+
+			int dist = Mathf.Abs((int)units[currentPlayer].gridPosition.x - (int)target.gridPosition.x + (int)units[currentPlayer].gridPosition.y - (int)target.gridPosition.y);
+
+			if (defenderRange == dist)
+			{
+				canCounter = true;
+			}
+
+			Debug.Log(defenderRange + " " + dist);
 
 			// Accuracy
 
@@ -248,6 +268,22 @@ public class Grid : MonoBehaviour {
 				defenderCritChance = 0;
 			}
 
+			//Attack Speed
+			int atkBurden = units[currentPlayer].weaponWt - units[currentPlayer].con;
+			if (atkBurden < 0)
+			{
+				atkBurden = 0;
+			}
+
+			int defBurden = target.weaponWt - target.con;
+			if (defBurden < 0)
+			{
+				defBurden = 0;
+			}
+
+			int atkAS = units[currentPlayer].spd - atkBurden;
+			int defAS = target.spd - defBurden;
+
 			//The actual attack
 
 			// Roll for hit
@@ -294,12 +330,149 @@ public class Grid : MonoBehaviour {
 			}
 			else
 			{
-				Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
+				Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP +  ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
 			}
 
-			Debug.Log(target.name + " counterattacks!");
-			if (target.currentHP > 0)
+
+
+			// Counterattack
+			if (target.currentHP > 0 && canCounter)
 			{
+				Debug.Log(target.name + " counterattacks!");
+
+				//Roll for hit
+				int counterHit = Random.Range(1, 100);
+				if (counterHit <= defenderHit)
+				{
+					Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
+
+					//Check for crits
+					int counterCrit = Random.Range(1, 100);
+
+					Debug.Log("Hit Roll: " + counterHit + " Crit Roll: " + counterCrit);
+
+					int tempdefenderDmg;
+
+					if (counterCrit <= defenderCritChance)
+					{
+						tempdefenderDmg = defenderDmg * 3;
+						Debug.Log(target.name + " has critically hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
+					}
+					else
+					{
+						tempdefenderDmg = defenderDmg;
+						Debug.Log(target.name + " has hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
+					}
+
+					units[currentPlayer].currentHP -= tempdefenderDmg;
+
+				}
+				else
+				{
+					Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
+					Debug.Log("Hit Roll: " + counterHit);
+
+					Debug.Log(target.name + " missed!");
+				}
+
+				if (units[currentPlayer].currentHP <= 0)
+				{
+					units[currentPlayer].currentHP = 0;
+					Debug.Log(units[currentPlayer].name + " has died!");
+				}
+				else
+				{
+					Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
+				}
+
+
+
+				// Check if attacker is dead
+				if (units[currentPlayer].currentHP <= 0)
+				{
+					units[currentPlayer].currentHP = 0;
+					Debug.Log(units[currentPlayer].name + " has died!");
+				}
+				else
+				{
+					Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
+				}
+
+			}
+
+
+
+			//Follow up
+			if (atkAS - defAS >= 4 && units[currentPlayer].currentHP > 0)
+			{
+				Debug.Log(units[currentPlayer].name + " does a follow-up attack!");
+
+				// Roll for hit
+				int hit1 = Random.Range(1, 100);
+				if (hit1 <= attackerHit)
+				{
+					Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
+
+					//Check for crits
+					int crit = Random.Range(1, 100);
+
+					Debug.Log("Hit Roll: " + hit1 + " Crit Roll: " + crit);
+
+					int tempattackerDmg;
+
+					if (crit <= attackerCritChance)
+					{
+						tempattackerDmg = attackerDmg * 3;
+						Debug.Log(units[currentPlayer].name + " has critically hit " + target.name + " for " + tempattackerDmg + " damage!");
+					}
+					else
+					{
+						tempattackerDmg = attackerDmg;
+						Debug.Log(units[currentPlayer].name + " has hit " + target.name + " for " + tempattackerDmg + " damage!");
+					}
+
+					target.currentHP -= tempattackerDmg;
+
+				}
+				// If miss
+				else
+				{
+					Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
+					Debug.Log("Hit Roll: " + hit1);
+
+					Debug.Log(units[currentPlayer].name + " missed!");
+				}
+
+				// Check if target is dead
+				if (target.currentHP <= 0)
+				{
+					target.currentHP = 0;
+					Debug.Log(target.name + " has died!");
+				}
+				else
+				{
+					Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
+				}
+
+
+
+				// Check if target is dead
+				if (target.currentHP <= 0)
+				{
+					target.currentHP = 0;
+					Debug.Log(target.name + " has died!");
+				}
+				else
+				{
+					Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
+				}
+			}
+
+
+			
+			if (target.currentHP > 0 && canCounter && defAS - atkAS >= 4)
+			{
+				Debug.Log(target.name + " does a follow up counterattack!");
 				// Counterattack
 
 				//Roll for hit
@@ -345,6 +518,18 @@ public class Grid : MonoBehaviour {
 				else
 				{
 					Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
+				}
+
+
+				// Check if attacker is dead
+				if (units[currentPlayer].currentHP <= 0)
+				{
+					units[currentPlayer].currentHP = 0;
+					Debug.Log(units[currentPlayer].name + " has died!");
+				}
+				else
+				{
+					Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
 				}
 			}
 		}

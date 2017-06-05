@@ -39,7 +39,9 @@ public class Unit : MonoBehaviour {
 	public int weaponWt;
 	public int weaponRange;
 
-	
+	//movement animation
+	public List<Vector2> positionQueue = new List<Vector2>();
+
 
 	private void Awake()
 	{
@@ -67,4 +69,7 @@ public class Unit : MonoBehaviour {
 	{
 
 	}
+
+
+
 }

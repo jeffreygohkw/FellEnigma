@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour {
 	public List<Tile> neighbours = new List<Tile>();
 
 
-	Color colour = Color.green;
+	public Color colour = Color.green;
 
 
 	// Use this for initialization

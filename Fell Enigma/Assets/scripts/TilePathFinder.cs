@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileHighlight {
-
-	public TileHighlight() 
-	{
-
-	}
+public class TilePathFinder : MonoBehaviour {
 
 	/**
-	 * Uses Dijkstra's Formula to find which tiles can be traversed
+	 * Uses Dijkstra's Algorithm to find the shortest path to a tile
 	 * @param originTile The tile our unit is on
 	 * @param range The move or attack range of the unit
-	 * @param moving whether we are calculating attack or movement
+	 * @param destinationTile The tile we want our unit to move to
 	 * @author Jeffrey Goh
 	 * @version v1.0
 	 * @updated 2/6/2017
 	 */
-	public static List<Tile> FindHighlight(Tile originTile, int range, bool moving)
+	public static TilePath FindPath(Tile originTile, int range, Tile destinationTile)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
@@ -43,6 +38,14 @@ public class TileHighlight {
 			TilePath current = open[0];
 			open.Remove(open[0]);
 
+			// If we found the destination tile, return the path
+			if (current.lastTile == destinationTile)
+			{
+				current.tileList.RemoveAt(0);
+				return current;
+			}
+
+
 			// For each neighbour
 			foreach (Tile t in current.lastTile.neighbours)
 			{
@@ -55,40 +58,21 @@ public class TileHighlight {
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
 
-				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
-				if (moving)
+				if (current.costofPath + t.movementCost > range)
 				{
-					if (current.costofPath + t.movementCost > range)
-					{
-						continue;
-					}
+					continue;
+				}
 
-					// Otherwise, we add that tile and its movement cost to the newTilePath
-					newTilePath.addTile(t);
-					newTilePath.addCost(t.movementCost);
-				}
-				else
-				{
-					// If we are attacking, we ignore the tile's movement cost, each tile will effectively cost 1
-					// If the tile exceeds the attack range of the unit. we continue
-					if (current.costofPath + 1 > range)
-					{
-						continue;
-					}
-					// Otherwise, we add that tile and its movement cost to newTilePath
-					newTilePath.addTile(t);
-					newTilePath.addCost(1);
-				}
+				// Otherwise, we add that tile and its movement cost to the newTilePath
+				newTilePath.addTile(t);
+				newTilePath.addCost(t.movementCost);
+
 
 				// We add newTilePath to open so we can consider it again
 				open.Add(newTilePath);
 
-				// We add t to closed as we now know this tile can be visited
-				closed.Add(t);
 			}
 		}
-		// Remove the origin tile as we don't want to attack ourselves or move to our current location
-		closed.Remove(originTile);
-		return closed;
+		return null;
 	}
 }
