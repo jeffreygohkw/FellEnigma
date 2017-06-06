@@ -118,7 +118,7 @@ public class PlayerUnit : Unit
 				else
 				{
 					isMoving = true;
-					Grid.instance.highlightTilesAt(gridPosition, Color.blue, 1, mov, true);
+					Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f,1f,0f,0.5f), 1, mov, true);
 				}
 			}
 
@@ -139,7 +139,7 @@ public class PlayerUnit : Unit
 				else
 				{
 					isFighting = true;
-					Grid.instance.highlightTilesAt(gridPosition, Color.red, weaponMinRange, weaponMaxRange, false);
+					Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f,0f,0f,0.5f), weaponMinRange, weaponMaxRange, false);
 				}
 			}
 

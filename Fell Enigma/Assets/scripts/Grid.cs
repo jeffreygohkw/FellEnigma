@@ -10,6 +10,7 @@ public class Grid : MonoBehaviour {
 	public GameObject tilePrefab;
 	public GameObject unitPrefab;
 	public GameObject enemyPrefab;
+    public GameObject terrainPrefab;
 
 	public int tilesPerRow;
 	public int tilesPerCol;
@@ -18,7 +19,8 @@ public class Grid : MonoBehaviour {
 
 
 	public List<List<Tile>> map = new List<List<Tile>>();
-	public List<Unit> units = new List<Unit>();
+    public List<List<TerrainS>> mapT = new List<List<TerrainS>>();
+    public List<Unit> units = new List<Unit>();
 
 	public void Awake()
 	{
@@ -100,7 +102,7 @@ public class Grid : MonoBehaviour {
 				}
 			}
 
-			// Remove the blue highlighted tiles
+			// Remove the green highlighted tiles
 			removeTileHighlight();
 
 			map[(int)units[currentPlayer].gridPosition.x][(int)units[currentPlayer].gridPosition.y].occupied = null;
@@ -153,9 +155,17 @@ public class Grid : MonoBehaviour {
 
 	/**
 	 * Removes highlights on the grid
+     * 
+     * v 1.0
+     * Manual change of highlight to green
+     * 
+     * v 1.1
+     * Changed to user-defined color
+     * 
+     * 
 	 * @author Jeffrey Goh
-	 * @version 1.0
-	 * @updated 2/6/2017
+	 * @version 1.1
+	 * @updated 6/6/2017 by Wayne Neo
 	 */
 	public void removeTileHighlight()
 	{
@@ -163,7 +173,7 @@ public class Grid : MonoBehaviour {
 		{
 			for (int j = 0; j < tilesPerCol; j++)
 			{
-				map[i][j].GetComponent<Renderer>().material.color = Color.green;
+				map[i][j].resetDefaultColor();
 			}
 		}
 	}
@@ -607,7 +617,7 @@ public class Grid : MonoBehaviour {
 	*/
 	public void attackWithCurrentUnit(Tile destTile)
 	{
-		if (destTile.GetComponent<Renderer>().material.color != Color.green)
+		if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor())
 		{
 			Unit target = null;
 			foreach (Unit u in units)
@@ -652,7 +662,27 @@ public class Grid : MonoBehaviour {
 			// Add the row to the map
 			map.Add(row);
 		}
-	}
+
+        // Iterate through each column
+        for (int i = 0; i < tilesPerCol; i++)
+        {
+            // A row of tiles
+            List<TerrainS> rowT = new List<TerrainS>();
+
+            // Iterate through each Row
+            for (int j = 0; j < tilesPerRow; j++)
+            {
+                TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(i - Mathf.Floor(tilesPerCol / 2), j - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3()))).GetComponent<TerrainS>();
+
+                terrain.gridPosition = new Vector2(i, j);
+                // Add tile to the row
+                rowT.Add(terrain);
+            }
+
+            // Add the row to the map
+            mapT.Add(rowT);
+        }
+    }
 
 
 

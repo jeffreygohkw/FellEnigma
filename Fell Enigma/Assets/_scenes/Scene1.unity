@@ -171,7 +171,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &335011139
 GameObject:
@@ -424,7 +424,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4713320003375672, guid: 20a4aba89640d544da7c718265ad04f3, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1441474077148888, guid: 20a4aba89640d544da7c718265ad04f3, type: 2}
       propertyPath: m_IsActive
@@ -1525,6 +1525,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 1110143937677438, guid: 2aeb9bd06b2ea8c4fb5140b14d60dc9b, type: 2}
   unitPrefab: {fileID: 1582125788664680, guid: f1f99c2559c3f124a82aaf93e7f9278d, type: 2}
   enemyPrefab: {fileID: 1441474077148888, guid: 20a4aba89640d544da7c718265ad04f3,
+    type: 2}
+  terrainPrefab: {fileID: 1253287730436462, guid: 63a390fd8f9707f4091a4963d1adb4bb,
     type: 2}
   tilesPerRow: 7
   tilesPerCol: 7

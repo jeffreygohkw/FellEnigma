@@ -13,12 +13,16 @@ public class Tile : MonoBehaviour {
 	public Unit occupied = null;
 
 
-	public Color colour = Color.green;
+	public Color colour;
+    public float opacity;
+    private Color defaultColour;
 
 
 	// Use this for initialization
 	void Start () {
+        colour.a = opacity;
 		GetComponent<Renderer>().material.color = colour;
+        defaultColour = colour;
 		generateNeighbours();
 	}
 	
@@ -82,4 +86,26 @@ public class Tile : MonoBehaviour {
 			Grid.instance.attackWithCurrentUnit(this);
 		}
 	}
+
+    /**
+	* Resets tile to its default color
+	* @author Wayne Neo
+	* @version 1.0
+	* @updated 6/6/2017
+	*/
+    public void resetDefaultColor()
+    {
+        GetComponent<Renderer>().material.color = defaultColour;
+    }
+
+    /**
+	* Returns the default color
+	* @author Wayne Neo
+	* @version 1.0
+	* @updated 6/6/2017
+	*/
+    public Color returnDefaultColor()
+    {
+        return defaultColour;
+    }
 }
