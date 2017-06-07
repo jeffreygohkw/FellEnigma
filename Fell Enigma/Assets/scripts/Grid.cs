@@ -724,6 +724,8 @@ public class Grid : MonoBehaviour {
 
 		map[0][0].occupied = unit1;
 
+		unit1.team = 0;
+
 		units.Add(unit1);
 
 		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
@@ -754,6 +756,8 @@ public class Grid : MonoBehaviour {
 		unit2.weaponMaxRange = 1;
 
 		map[0][1].occupied = unit2;
+
+		unit2.team = 1;
 
 		units.Add(unit2);
 
@@ -786,6 +790,8 @@ public class Grid : MonoBehaviour {
 
 		map[2][1].occupied = unit3;
 
+		unit3.team = 2;
+
 		units.Add(unit3);
 
 
@@ -817,6 +823,9 @@ public class Grid : MonoBehaviour {
 		unit4.weaponMaxRange = 2;
 
 		map[4][2].occupied = unit4;
+
+		unit4.team = 0;
+
 
 		units.Add(unit4);
 
