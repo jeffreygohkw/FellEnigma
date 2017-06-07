@@ -698,7 +698,7 @@ public class Grid : MonoBehaviour {
 		PlayerUnit unit1 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 0 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit1.gridPosition = new Vector2(0, 0);
 
-		unit1.name = "Lyn";
+		unit1.unitName = "Lyn";
 		unit1.job = "Myrmidon";
 		unit1.lvl = 1;
 		unit1.exp = 0;
@@ -729,7 +729,7 @@ public class Grid : MonoBehaviour {
 		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit2.gridPosition = new Vector2(0, 1);
 
-		unit2.name = "Batta";
+		unit2.unitName = "Batta";
 		unit2.job = "Brigand";
 		unit2.lvl = 2;
 		unit2.exp = 0;
@@ -760,7 +760,7 @@ public class Grid : MonoBehaviour {
 		PlayerUnit unit3 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit3.gridPosition = new Vector2(2, 1);
 
-		unit3.name = "Lute";
+		unit3.unitName = "Lute";
 		unit3.job = "Mage";
 		unit3.lvl = 1;
 		unit3.exp = 0;
@@ -792,7 +792,7 @@ public class Grid : MonoBehaviour {
 		PlayerUnit unit4 = ((GameObject)Instantiate(unitPrefab, new Vector3(4 - Mathf.Floor(tilesPerCol / 2), 2 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit4.gridPosition = new Vector2(4, 2);
 
-		unit4.name = "Rebecca";
+		unit4.unitName = "Rebecca";
 		unit4.job = "Archer";
 		unit4.lvl = 1;
 		unit4.exp = 0;
