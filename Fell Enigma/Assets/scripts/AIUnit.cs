@@ -17,26 +17,35 @@ public class AIUnit : Unit
 
 	}
 
+	/**
+	* Move the current unit to the destination tile
+	* Moves in an L shape to the destination, vertical first
+	* Can navigate around obstacles, and will pick the shortest path
+	* @param destTile The destination tile
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 2/6/2017
+	*/
 	public override void turnUpdate()
 	{
-		// Move to its destination
-		if (Vector3.Distance(moveTo, transform.position) > 0.1f)
+		if (positionQueue.Count > 0)
 		{
-			transform.position += (moveTo - transform.position).normalized * moveSpeed * Time.deltaTime;
-
-			// When the unit has reached its destination
-			if (Vector3.Distance(moveTo, transform.position) <= 0.1f)
+			if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 			{
-				transform.position = moveTo;
-				Grid.instance.nextTurn();
+				transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
+
+				if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
+				{
+					transform.position = positionQueue[0];
+					positionQueue.RemoveAt(0);
+					if (positionQueue.Count == 0)
+					{
+						isMoving = false;
+					}
+				}
 			}
-
 		}
-		else
-		{
-			moveTo = new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0);
-		}
-
+		
 		base.turnUpdate();
 	}
 
