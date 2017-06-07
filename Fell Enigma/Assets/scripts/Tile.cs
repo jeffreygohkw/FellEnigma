@@ -77,13 +77,16 @@ public class Tile : MonoBehaviour {
 	*/
 	private void OnMouseDown()
 	{
-		if (Grid.instance.units[Grid.instance.currentPlayer].isMoving)
+		if (Grid.instance.currentPlayer != -1)
 		{
-			Grid.instance.moveCurrentUnit(this);
-		}
-		else if (Grid.instance.units[Grid.instance.currentPlayer].isFighting)
-		{
-			Grid.instance.attackWithCurrentUnit(this);
+			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isMoving)
+			{
+				Grid.instance.moveCurrentUnit(this);
+			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting)
+			{
+				Grid.instance.attackWithCurrentUnit(this);
+			}
 		}
 	}
 

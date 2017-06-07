@@ -4,31 +4,65 @@ using UnityEngine;
 
 public class PlayerUnit : Unit
 {
-	public GameObject Menu;
-	
 
 	// Use this for initialization
 	void Start()
 	{
-		Menu = GameObject.Find("Canvas");
+
 	}
 
 	// Update is called once per frame
+
 	void Update()
 	{
-		if (Grid.instance.units[Grid.instance.currentPlayer] == this)
+		//If it is your team's turn
+		if (Grid.instance.currentTeam == team)
 		{
-			GetComponent<Renderer>().material.color = Color.yellow;
+			// If the unit has finished its action, it is grey, otherwise, it is cyan
+			if (doneAction)
+			{
+				GetComponent<Renderer>().material.color = Color.grey;
+			}
+			else
+			{
+				GetComponent<Renderer>().material.color = Color.cyan;
+			}
 		}
 		else
 		{
+			//If it is not your team's turn, unit is grey
 			GetComponent<Renderer>().material.color = Color.grey;
 		}
 
 		if (currentHP <= 0)
 		{
-			GetComponent<Renderer>().material.color = Color.red;
-			//gameObject.SetActive(false);
+			//Kept for debugging purposes
+			//GetComponent<Renderer>().material.color = Color.red;
+
+			//Object disappears if dead
+			gameObject.SetActive(false);
+
+			//Turn the tile this unit was standing on free
+			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+
+			//Delete this unit from the list of units
+			//Grid.instance.units[team].RemoveAt(index);
+
+			//Shift the index of each unit after this unit in the list down by 1
+			/*
+			foreach (Unit u in Grid.instance.units[team])
+			{
+				if (u.index >= index)
+				{
+					u.index--;
+				}
+			}
+			*/
+
+			if (Grid.instance.currentPlayer == index)
+			{
+				Grid.instance.currentPlayer = -1;
+			}
 		}
 	}
 
@@ -87,22 +121,39 @@ public class PlayerUnit : Unit
 
 	private void OnMouseDown()
 	{
-		selected = !selected;
-
-		if (Grid.instance.units[Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentPlayer] != this)
+		if (Grid.instance.currentTeam == team)
 		{
-			Grid.instance.attackWithCurrentUnit(this);
+			selected = !selected;
+			if (selected)
+			{
+				Grid.instance.currentPlayer = index;
+			}
+		}
+		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+		{
+			Grid.instance.battle.attackWithCurrentUnit(this);
 		}
 		isMoving = false;
 		isFighting = false;
 	}
 
 
+	/**
+	* GUI buttons
+	* 
+	* v1.1
+	* Added Wait
+	* 
+	* @param destTile The destination tile
+	* @author Jeffrey Goh
+	* @version 1.1
+	* @updated 2/6/2017
+	*/
 	public override void OnGUI()
 	{
-		if (selected && Grid.instance.units[Grid.instance.currentPlayer] == this)
+		if (selected && !doneAction)
 		{
-			Rect buttonRect = new Rect(0, Screen.height - 150, 150, 50);
+			Rect buttonRect = new Rect(0, Screen.height - 200, 150, 50);
 
 			//Move
 			if (GUI.Button(buttonRect, "Move"))
@@ -123,7 +174,7 @@ public class PlayerUnit : Unit
 			}
 
 
-			buttonRect = new Rect(0, Screen.height - 100, 150, 50);
+			buttonRect = new Rect(0, Screen.height - 150, 150, 50);
 
 			//Attack
 			if (GUI.Button(buttonRect, "Attack"))
@@ -144,6 +195,19 @@ public class PlayerUnit : Unit
 			}
 
 
+			buttonRect = new Rect(0, Screen.height - 100, 150, 50);
+			//Wait
+			if (GUI.Button(buttonRect, "Wait"))
+			{
+				Grid.instance.removeTileHighlight();
+				isMoving = false;
+				isFighting = false;
+				doneAction = true;
+				Grid.instance.totalDone++;
+			}
+
+
+
 			buttonRect = new Rect(0, Screen.height - 50, 150, 50);
 
 			//End Turn
@@ -153,6 +217,7 @@ public class PlayerUnit : Unit
 				Grid.instance.removeTileHighlight();
 				isMoving = false;
 				isFighting = false;
+				selected = false;
 				Grid.instance.nextTurn();
 			}
 			base.OnGUI();

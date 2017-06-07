@@ -15,12 +15,18 @@ public class Grid : MonoBehaviour {
 	public int tilesPerRow;
 	public int tilesPerCol;
 
-	public int currentPlayer = 0;
+	public int currentPlayer = -1;
+
+	public int currentTeam = 0;
+
+	public int totalDone = 0;
+
+	public BattleFormula battle = new BattleFormula();
 
 
 	public List<List<Tile>> map = new List<List<Tile>>();
     public List<List<TerrainS>> mapT = new List<List<TerrainS>>();
-    public List<Unit> units = new List<Unit>();
+    public List<List<Unit>> units = new List<List<Unit>>();
 
 	public void Awake()
 	{
@@ -37,36 +43,67 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
-		// Skip turn if dead
-		if (units[currentPlayer].currentHP <= 0)
+		// Skip turn if entire team is dead
+		if (units[currentTeam].Count == 0 || totalDone == units[currentTeam].Count)
 		{
 			nextTurn();
 		}
 		else
 		{
-			units[currentPlayer].turnUpdate();
+			foreach (Unit u in units[currentTeam])
+			{
+				// If the unit is selected and alive
+				if (u.currentHP > 0 && u.selected)
+				{
+					u.turnUpdate();
+				}
+			}
 		}
 	}
 
 	/**
+	 * v1.0
 	 * Moves on to the next turn
 	 * To be revamped
+	 * 
+	 * v1.1
+	 * Added FE style turn order
+	 * 
 	 * @author Jeffrey Goh
-	 * @version v0.01
-	 * @updated 2/6/2017
+	 * @version v1.1
+	 * @updated 7/6/2017
 	 */
 
 	public void nextTurn()
 	{
-		if (currentPlayer < units.Count - 1)
+		foreach (Unit u in units[currentTeam])
 		{
-			currentPlayer++;
+			if (u.currentHP > 0)
+			{
+				u.doneAction = false;
+				u.selected = false;
+			}
+		}
+
+		if (currentTeam < units.Count - 1)
+		{
+			currentTeam++;
 		}
 		else
 		{
-			currentPlayer = 0;
+			currentTeam = 0;
 		}
-		Debug.Log(currentPlayer);
+
+		currentPlayer = -1;
+		totalDone = 0;
+		foreach (Unit u in units[currentTeam])
+		{
+			if (u.currentHP == 0)
+			{
+				totalDone++;
+			}
+		}
+		Debug.Log(currentTeam);
 	}
 
 
@@ -84,39 +121,45 @@ public class Grid : MonoBehaviour {
 	* v1.3
 	* Minor collision bugfix
 	* 
+	* v1.4
+	* Allow movement to tiles where units have died
+	* 
 	* @param destTile The destination tile
 	* @author Jeffrey Goh
-	* @version 1.3
-	* @updated 5/6/2017
+	* @version 1.4
+	* @updated 7/6/2017
 	*/
 	public void moveCurrentUnit(Tile destTile)
 	{
 		if (destTile.GetComponent<Renderer>().material.color != destTile.colour)
 		{
 			// Don't let the unit move to a tile that's occupied
-			foreach (Unit u in units)
+			foreach (List<Unit> i in units)
 			{
-				if (u.gridPosition == destTile.gridPosition)
+				foreach (Unit u in i)
 				{
-					return;
+					if (u.gridPosition == destTile.gridPosition && u.currentHP > 0)
+					{
+						return;
+					}
 				}
 			}
 
 			// Remove the green highlighted tiles
 			removeTileHighlight();
 
-			map[(int)units[currentPlayer].gridPosition.x][(int)units[currentPlayer].gridPosition.y].occupied = null;
+			map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y].occupied = null;
 
 			// Get the path from the unit's current position to its final position
-			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentPlayer].gridPosition.x][(int)units[currentPlayer].gridPosition.y], units[currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y]).tileList;
+			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y]).tileList;
 			foreach (Tile t in path)
 			{
-				units[currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
+				units[currentTeam][currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
 			}
 			// Set gridPosition of the unit to the destination tile
-			units[currentPlayer].gridPosition = destTile.gridPosition;
+			units[currentTeam][currentPlayer].gridPosition = destTile.gridPosition;
 
-			map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y].occupied = units[currentPlayer];
+			map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y].occupied = units[currentTeam][currentPlayer];
 		}
 		else
 		{
@@ -179,435 +222,6 @@ public class Grid : MonoBehaviour {
 	}
 
 
-
-	/**
-	* Attacks the target unit, based on the equipped weapons
-	* 
-	* v 1.0
-	* Basic combat formulas
-	* 
-	* v 1.1
-	* Opponent will counterattack, checks for magic weapons
-	* 
-	* v1.2
-	* Opponent will only counterattack if in range, attacker and defender will followup if attack speed >= 4
-	* 
-	* v1.3
-	* Added max and min range instead of just 1 range
-	* Fixed some bugs with range calculations
-	* 
-	* To do
-	* Does not factor in terrain, supports, other misc things
-	* No weapon triangle or followups and doesn't check range
-	* 
-	* @param target The target of the attack
-	* @author Jeffrey Goh
-	* @version 1.3
-	* @updated 5/6/2017
-	*/
-	public void attackWithCurrentUnit(Unit target)
-	{
-		if (map[(int)target.gridPosition.x][(int)target.gridPosition.y].GetComponent<Renderer>().material.color != map[(int)target.gridPosition.x][(int)target.gridPosition.y].colour)
-		{
-
-			if (target != null)
-			{
-				Debug.Log("Calculating");
-
-				// Range
-				bool canCounter = false;
-
-				int dist = Mathf.Abs((int)units[currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)units[currentPlayer].gridPosition.y - (int)target.gridPosition.y);
-
-				if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
-				{
-					canCounter = true;
-				}
-
-				Debug.Log(target.weaponMaxRange + " " + target.weaponMaxRange + " " + dist);
-
-				// Accuracy
-
-				int attackerAcc = units[currentPlayer].weaponAcc + units[currentPlayer].skl * 2 + units[currentPlayer].luk / 2;
-				int attackerAvd = units[currentPlayer].spd * 2 + units[currentPlayer].luk;
-				int defenderAcc = target.weaponAcc + target.skl * 2 + target.luk / 2;
-				int defenderAvd = target.spd * 2 + target.luk;
-
-				int attackerHit = attackerAcc - defenderAvd;
-				int defenderHit = defenderAcc - attackerAvd;
-
-				int attackerAtk;
-				int attackerDef;
-
-				int defenderAtk;
-				int defenderDef;
-
-				// Damage for attacker
-				// Str and Def if physical weapon equipped, Mag and Res otherwise
-				if (units[currentPlayer].weaponPhysical)
-				{
-					attackerAtk = units[currentPlayer].strength + units[currentPlayer].weaponMt;
-					defenderDef = target.def;
-				}
-				else
-				{
-					attackerAtk = units[currentPlayer].mag + units[currentPlayer].weaponMt;
-					defenderDef = target.res;
-				}
-
-				// Damage for defender
-
-				if (target.weaponPhysical)
-				{
-					defenderAtk = target.strength + target.weaponMt;
-					attackerDef = units[currentPlayer].def;
-				}
-				else
-				{
-					defenderAtk = target.mag + target.weaponMt;
-					attackerDef = units[currentPlayer].res;
-				}
-
-				int attackerDmg = attackerAtk - defenderDef;
-				int defenderDmg = defenderAtk - attackerDef;
-
-				// tink instead of doing negative damage and healing the enemy
-				if (attackerDmg < 0)
-				{
-					attackerDmg = 0;
-				}
-
-				if (defenderDmg < 0)
-				{
-					defenderDmg = 0;
-				}
-
-				//Crits
-				int attackerCritRate = units[currentPlayer].weaponCrit + units[currentPlayer].skl / 2;
-				int attackerCritAvd = units[currentPlayer].luk;
-				int defenderCritRate = target.weaponCrit + target.skl / 2;
-				int defenderCritAvd = target.luk;
-				int attackerCritChance = attackerCritRate - defenderCritAvd;
-				int defenderCritChance = defenderCritRate - attackerCritAvd;
-
-				// Keep crit chance within 0 - 100 to be safe
-				if (attackerCritChance > 100)
-				{
-					attackerCritChance = 100;
-				}
-				else if (attackerCritChance < 0)
-				{
-					attackerCritChance = 0;
-				}
-
-				if (defenderCritChance > 100)
-				{
-					defenderCritChance = 100;
-				}
-				else if (defenderCritChance < 0)
-				{
-					defenderCritChance = 0;
-				}
-
-				//Attack Speed
-				int atkBurden = units[currentPlayer].weaponWt - units[currentPlayer].con;
-				if (atkBurden < 0)
-				{
-					atkBurden = 0;
-				}
-
-				int defBurden = target.weaponWt - target.con;
-				if (defBurden < 0)
-				{
-					defBurden = 0;
-				}
-
-				int atkAS = units[currentPlayer].spd - atkBurden;
-				int defAS = target.spd - defBurden;
-
-				//The actual attack
-
-				// Roll for hit
-				int hit = Random.Range(1, 100);
-				if (hit <= attackerHit)
-				{
-					Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
-
-					//Check for crits
-					int crit = Random.Range(1, 100);
-
-					Debug.Log("Hit Roll: " + hit + " Crit Roll: " + crit);
-
-					int tempattackerDmg;
-
-					if (crit <= attackerCritChance)
-					{
-						tempattackerDmg = attackerDmg * 3;
-						Debug.Log(units[currentPlayer].name + " has critically hit " + target.name + " for " + tempattackerDmg + " damage!");
-					}
-					else
-					{
-						tempattackerDmg = attackerDmg;
-						Debug.Log(units[currentPlayer].name + " has hit " + target.name + " for " + tempattackerDmg + " damage!");
-					}
-
-					target.currentHP -= tempattackerDmg;
-
-				}
-				// If miss
-				else
-				{
-					Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
-					Debug.Log("Hit Roll: " + hit);
-
-					Debug.Log(units[currentPlayer].name + " missed!");
-				}
-
-				// Check if target is dead
-				if (target.currentHP <= 0)
-				{
-					target.currentHP = 0;
-					Debug.Log(target.name + " has died!");
-
-					// Deactivate menu GUI and set unit to not attacking after the attack
-					units[currentPlayer].selected = false;
-					units[currentPlayer].isFighting = false;
-					removeTileHighlight();
-					return;
-				}
-				else
-				{
-					Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
-				}
-
-
-
-				// Counterattack
-				if (target.currentHP > 0 && canCounter)
-				{
-					Debug.Log(target.name + " counterattacks!");
-
-					//Roll for hit
-					int counterHit = Random.Range(1, 100);
-					if (counterHit <= defenderHit)
-					{
-						Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
-
-						//Check for crits
-						int counterCrit = Random.Range(1, 100);
-
-						Debug.Log("Hit Roll: " + counterHit + " Crit Roll: " + counterCrit);
-
-						int tempdefenderDmg;
-
-						if (counterCrit <= defenderCritChance)
-						{
-							tempdefenderDmg = defenderDmg * 3;
-							Debug.Log(target.name + " has critically hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
-						}
-						else
-						{
-							tempdefenderDmg = defenderDmg;
-							Debug.Log(target.name + " has hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
-						}
-
-						units[currentPlayer].currentHP -= tempdefenderDmg;
-
-					}
-					else
-					{
-						Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
-						Debug.Log("Hit Roll: " + counterHit);
-
-						Debug.Log(target.name + " missed!");
-					}
-
-					if (units[currentPlayer].currentHP <= 0)
-					{
-						units[currentPlayer].currentHP = 0;
-						Debug.Log(units[currentPlayer].name + " has died!");
-
-						// Deactivate menu GUI and set unit to not attacking after the attack
-						units[currentPlayer].selected = false;
-						units[currentPlayer].isFighting = false;
-						removeTileHighlight();
-						return;
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
-					}
-
-
-
-					// Check if attacker is dead
-					if (units[currentPlayer].currentHP <= 0)
-					{
-						units[currentPlayer].currentHP = 0;
-						Debug.Log(units[currentPlayer].name + " has died!");
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
-					}
-
-				}
-
-
-
-				//Follow up
-				if (atkAS - defAS >= 4 && units[currentPlayer].currentHP > 0)
-				{
-					Debug.Log(units[currentPlayer].name + " does a follow-up attack!");
-
-					// Roll for hit
-					int hit1 = Random.Range(1, 100);
-					if (hit1 <= attackerHit)
-					{
-						Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
-
-						//Check for crits
-						int crit = Random.Range(1, 100);
-
-						Debug.Log("Hit Roll: " + hit1 + " Crit Roll: " + crit);
-
-						int tempattackerDmg;
-
-						if (crit <= attackerCritChance)
-						{
-							tempattackerDmg = attackerDmg * 3;
-							Debug.Log(units[currentPlayer].name + " has critically hit " + target.name + " for " + tempattackerDmg + " damage!");
-						}
-						else
-						{
-							tempattackerDmg = attackerDmg;
-							Debug.Log(units[currentPlayer].name + " has hit " + target.name + " for " + tempattackerDmg + " damage!");
-						}
-
-						target.currentHP -= tempattackerDmg;
-
-					}
-					// If miss
-					else
-					{
-						Debug.Log("Name: " + units[currentPlayer].name + " Hit: " + attackerHit + " DMG: " + attackerDmg + " Crit: " + attackerCritChance);
-						Debug.Log("Hit Roll: " + hit1);
-
-						Debug.Log(units[currentPlayer].name + " missed!");
-					}
-
-					// Check if target is dead
-					if (target.currentHP <= 0)
-					{
-						target.currentHP = 0;
-						Debug.Log(target.name + " has died!");
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
-					}
-
-
-
-					// Check if target is dead
-					if (target.currentHP <= 0)
-					{
-						target.currentHP = 0;
-						Debug.Log(target.name + " has died!");
-
-						// Deactivate menu GUI and set unit to not attacking after the attack
-						units[currentPlayer].selected = false;
-						units[currentPlayer].isFighting = false;
-						removeTileHighlight();
-						return;
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
-					}
-				}
-
-
-
-				if (target.currentHP > 0 && canCounter && defAS - atkAS >= 4)
-				{
-					Debug.Log(target.name + " does a follow up counterattack!");
-					// Counterattack
-
-					//Roll for hit
-					int counterHit = Random.Range(1, 100);
-					if (counterHit <= defenderHit)
-					{
-						Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
-
-						//Check for crits
-						int counterCrit = Random.Range(1, 100);
-
-						Debug.Log("Hit Roll: " + counterHit + " Crit Roll: " + counterCrit);
-
-						int tempdefenderDmg;
-
-						if (counterCrit <= defenderCritChance)
-						{
-							tempdefenderDmg = defenderDmg * 3;
-							Debug.Log(target.name + " has critically hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
-						}
-						else
-						{
-							tempdefenderDmg = defenderDmg;
-							Debug.Log(target.name + " has hit " + units[currentPlayer].name + " for " + tempdefenderDmg + " damage!");
-						}
-
-						units[currentPlayer].currentHP -= tempdefenderDmg;
-
-					}
-					else
-					{
-						Debug.Log("Name: " + target.name + " Hit: " + defenderHit + " DMG: " + defenderDmg + " Crit: " + defenderCritChance);
-						Debug.Log("Hit Roll: " + counterHit);
-
-						Debug.Log(target.name + " missed!");
-					}
-
-					if (units[currentPlayer].currentHP <= 0)
-					{
-						units[currentPlayer].currentHP = 0;
-						Debug.Log(units[currentPlayer].name + " has died!");
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP);
-					}
-
-
-					// Check if attacker is dead
-					if (units[currentPlayer].currentHP <= 0)
-					{
-						units[currentPlayer].currentHP = 0;
-						Debug.Log(units[currentPlayer].name + " has died!");
-
-						// Deactivate menu GUI and set unit to not attacking after the attack
-						units[currentPlayer].selected = false;
-						units[currentPlayer].isFighting = false;
-						removeTileHighlight();
-						return;
-					}
-					else
-					{
-						Debug.Log(target.name + ": " + target.currentHP + "/" + target.maxHP + ", " + units[currentPlayer].name + ": " + units[currentPlayer].currentHP + "/" + units[currentPlayer].maxHP);
-					}
-				}
-			}
-			
-		}
-		else
-		{
-			Debug.Log("Invalid target");
-		}
-	}
-
-
-
 	/**
 	* Attacks the unit on the target tile
 	* @param target destTile The tile our target is on
@@ -620,13 +234,16 @@ public class Grid : MonoBehaviour {
 		if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor())
 		{
 			Unit target = null;
-			foreach (Unit u in units)
+			foreach (List<Unit> i in units)
 			{
-				if (u.gridPosition == destTile.gridPosition)
+				foreach (Unit u in i)
 				{
-					target = u;
-					this.attackWithCurrentUnit(target);
-					break;
+					if (u.gridPosition == destTile.gridPosition)
+					{
+						target = u;
+						battle.attackWithCurrentUnit(target);
+						break;
+					}
 				}
 			}
 		}
@@ -689,9 +306,14 @@ public class Grid : MonoBehaviour {
 	/**
 	* Add units, both allies and enemies to the map
 	* Have to assign everything manually
+	* 
+	* v1.1 
+	* Added teams 
+	* Must assign the teams and indexes in the correct order
+	* 
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 2/6/2017
+	* @version 1.1
+	* @updated 7/6/2017
 	*/
 	void CreatePlayers()
 	{
@@ -725,8 +347,8 @@ public class Grid : MonoBehaviour {
 		map[0][0].occupied = unit1;
 
 		unit1.team = 0;
+		unit1.index = 0;
 
-		units.Add(unit1);
 
 		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit2.gridPosition = new Vector2(0, 1);
@@ -758,8 +380,8 @@ public class Grid : MonoBehaviour {
 		map[0][1].occupied = unit2;
 
 		unit2.team = 1;
+		unit2.index = 0;
 
-		units.Add(unit2);
 
 		PlayerUnit unit3 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit3.gridPosition = new Vector2(2, 1);
@@ -791,8 +413,7 @@ public class Grid : MonoBehaviour {
 		map[2][1].occupied = unit3;
 
 		unit3.team = 2;
-
-		units.Add(unit3);
+		unit3.index = 0;
 
 
 		PlayerUnit unit4 = ((GameObject)Instantiate(unitPrefab, new Vector3(4 - Mathf.Floor(tilesPerCol / 2), 2 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
@@ -825,9 +446,27 @@ public class Grid : MonoBehaviour {
 		map[4][2].occupied = unit4;
 
 		unit4.team = 0;
+		unit4.index = 1;
 
 
-		units.Add(unit4);
+		List<Unit> team0 = new List<Unit>();
+		List<Unit> team1 = new List<Unit>();
+		List<Unit> team2 = new List<Unit>();
+
+		team0.Add(unit1);
+		team0.Add(unit4);
+
+		units.Add(team0);
+
+		team1.Add(unit2);
+
+		units.Add(team1);
+
+		team2.Add(unit3);
+
+		units.Add(team2);
+
+
 
 
 		/*

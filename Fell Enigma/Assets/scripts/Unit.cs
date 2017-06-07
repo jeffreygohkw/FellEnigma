@@ -9,12 +9,14 @@ public class Unit : MonoBehaviour {
 	public bool selected = false;
 
 	public int team;
+	public int index;
 
 	public Vector3 moveTo;
 	public float moveSpeed = 10.0f;
 
 	public bool isMoving = false;
 	public bool isFighting = false;
+	public bool doneAction = false;
 
 	// Unit stats
 	public string unitName;

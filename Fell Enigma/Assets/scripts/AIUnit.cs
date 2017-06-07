@@ -11,10 +11,51 @@ public class AIUnit : Unit
 
 	}
 
-	// Update is called once per frame
+	/// Update is called once per frame
 	void Update()
 	{
+		//If it is your team's turn
+		if (Grid.instance.currentTeam == team)
+		{
+			// If the unit has finished its action, it is grey, otherwise, it is cyan
+			if (doneAction)
+			{
+				GetComponent<Renderer>().material.color = Color.grey;
+			}
+			else
+			{
+				GetComponent<Renderer>().material.color = Color.cyan;
+			}
+		}
+		else
+		{
+			//If it is not your team's turn, unit is grey
+			GetComponent<Renderer>().material.color = Color.grey;
+		}
 
+		if (currentHP <= 0)
+		{
+			//Kept for debugging purposes
+			//GetComponent<Renderer>().material.color = Color.red;
+
+			//Object disappears if dead
+			gameObject.SetActive(false);
+
+			//Turn the tile this unit was standing on free
+			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+
+			//Delete this unit from the list of units
+			Grid.instance.units[team].RemoveAt(index);
+
+			//Shift the index of each unit after this unit in the list down by 1
+			foreach (Unit u in Grid.instance.units[team])
+			{
+				if (u.index >= index)
+				{
+					u.index--;
+				}
+			}
+		}
 	}
 
 	/**

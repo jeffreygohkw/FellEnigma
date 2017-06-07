@@ -15,13 +15,16 @@ public class TileHighlight {
 	 * v1.1
 	 * Added min and max range (for archers)
 	 * 
+	 * v1.2
+	 * Fixed archer ranges when at the edge of the map
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param minrange The minimum move or attack range of the unit
 	 * @param maxrange The maximum move or attack range of the unit
 	 * @param moving whether we are calculating attack or movement
 	 * @author Jeffrey Goh
-	 * @version v1.1
-	 * @updated 2/6/2017
+	 * @version v1.2
+	 * @updated 7/6/2017
 	 */
 	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, bool moving)
 	{
@@ -53,6 +56,12 @@ public class TileHighlight {
 			// For each neighbour
 			foreach (Tile t in current.lastTile.neighbours)
 			{
+				// If the current costofPath is below the minRange, we mark the current lastTile to be set to not be highlighted
+				if (current.costofPath < minRange)
+				{
+					toDelete.Add(current.lastTile);
+				}
+
 				// If the neighbour is in closed, that tile can be visited and we continue
 				if (closed.Contains(t))
 				{
@@ -61,11 +70,6 @@ public class TileHighlight {
 
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
-
-				if (current.costofPath < minRange)
-				{
-					toDelete.Add(current.lastTile);
-				}
 
 				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
 				if (moving)
