@@ -105,6 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7708eeaa378c18e4d9fb8fe283610274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridPosition: {x: 0, y: 0}
   list:
   - {fileID: 2100000, guid: 783cf2d218b440649be287f1b09f8503, type: 2}
+  - {fileID: 2100000, guid: 30556de8a4794324b851487eef2dede1, type: 2}
+  movementCost: 0100000001000000
+  modifier: 0000000000000000

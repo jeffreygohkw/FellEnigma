@@ -11,6 +11,7 @@ public class Grid : MonoBehaviour {
 	public GameObject unitPrefab;
 	public GameObject enemyPrefab;
     public GameObject terrainPrefab;
+    public TextAsset mapConfig;
 
 	public int tilesPerRow;
 	public int tilesPerCol;
@@ -25,7 +26,6 @@ public class Grid : MonoBehaviour {
 
 
 	public List<List<Tile>> map = new List<List<Tile>>();
-    public List<List<TerrainS>> mapT = new List<List<TerrainS>>();
     public List<List<Unit>> units = new List<List<Unit>>();
 
 	public void Awake()
@@ -36,6 +36,7 @@ public class Grid : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+        CreateTerrain();
 		CreateTiles();
 		CreatePlayers();
 	}
@@ -250,15 +251,42 @@ public class Grid : MonoBehaviour {
 	}
 
 
+    /**
+        * Reads text file MapConfig and generates the terrain
+        * Based on CreateGrid
+        * @author Wayne Neo
+        * @version 1.0
+        * @updated 9/6/2017
+        */
+    void CreateTerrain()
+    {
+        // Splits the text file into lines
+        string[] lines = mapConfig.text.Split("\n"[0]);
+        string[] line;
 
-	/**
+        // Iterate through each column
+        for (int i = 0; i < tilesPerCol; i++)
+        {
+            // Splits the text file into strings containing individual integers
+            line = lines[i].Split(" "[0]);
+            // Iterate through each Row
+            for (int j = 0; j < tilesPerRow; j++)
+            {
+                TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(i - Mathf.Floor(tilesPerCol / 2), j - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3()))).GetComponent<TerrainS>();
+                terrain.LoadTerrain(System.Int32.Parse(line[j]));
+            }
+ 
+        }
+    }
+
+    /**
 	* Generates the grid
 	* Change the tilesPerCol and tilesPerRow to change the dimensions of the grid
 	* @author Jeffrey Goh
 	* @version 1.0
 	* @updated 2/6/2017
 	*/
-	void CreateTiles()
+    void CreateTiles()
 	{
 		// Iterate through each column
 		for (int i = 0; i < tilesPerCol; i++)
@@ -279,26 +307,7 @@ public class Grid : MonoBehaviour {
 			// Add the row to the map
 			map.Add(row);
 		}
-
-        // Iterate through each column
-        for (int i = 0; i < tilesPerCol; i++)
-        {
-            // A row of tiles
-            List<TerrainS> rowT = new List<TerrainS>();
-
-            // Iterate through each Row
-            for (int j = 0; j < tilesPerRow; j++)
-            {
-                TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(i - Mathf.Floor(tilesPerCol / 2), j - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3()))).GetComponent<TerrainS>();
-
-                terrain.gridPosition = new Vector2(i, j);
-                // Add tile to the row
-                rowT.Add(terrain);
-            }
-
-            // Add the row to the map
-            mapT.Add(rowT);
-        }
+        
     }
 
 

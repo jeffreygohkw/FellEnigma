@@ -1528,10 +1528,12 @@ MonoBehaviour:
     type: 2}
   terrainPrefab: {fileID: 1253287730436462, guid: 63a390fd8f9707f4091a4963d1adb4bb,
     type: 2}
+  mapConfig: {fileID: 4900000, guid: 7ab7b946961c7a54baed07ebe66edd16, type: 3}
   tilesPerRow: 7
   tilesPerCol: 7
   currentPlayer: 0
-  units: []
+  currentTeam: 0
+  totalDone: 0
 --- !u!1 &1976485775
 GameObject:
   m_ObjectHideFlags: 0

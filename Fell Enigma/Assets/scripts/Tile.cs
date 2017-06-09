@@ -6,7 +6,9 @@ public class Tile : MonoBehaviour {
 
 	public Vector2 gridPosition = Vector2.zero;
 
-	public int movementCost = 1;
+	public int movementCost;
+    public int tileModifier;
+    private TerrainS linkedTerrain;
 
 	public List<Tile> neighbours = new List<Tile>();
 
@@ -24,6 +26,7 @@ public class Tile : MonoBehaviour {
 		GetComponent<Renderer>().material.color = colour;
         defaultColour = colour;
 		generateNeighbours();
+        detectTerrain();
 	}
 	
 	// Update is called once per frame
@@ -110,5 +113,20 @@ public class Tile : MonoBehaviour {
     public Color returnDefaultColor()
     {
         return defaultColour;
+    }
+
+    /**
+   * Finds the terrain above and sets the corresponding values.
+   * I have no way to confirm this is accurate. It seems to work (magically) though
+   * @author Wayne Neo
+   * @version 1.0
+   * @updated 6/6/2017
+   */
+    private void detectTerrain()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1);
+        this.linkedTerrain = colliders[0].gameObject.GetComponent<TerrainS>();
+        movementCost = linkedTerrain.returnCost();
+        tileModifier = linkedTerrain.returnModifier();
     }
 }
