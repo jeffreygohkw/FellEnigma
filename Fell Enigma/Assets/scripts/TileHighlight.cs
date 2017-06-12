@@ -10,7 +10,7 @@ public class TileHighlight {
 	}
 
 	/**
-	 * Uses Dijkstra's Formula to find which tiles can be traversed
+	 * Uses BFS to find which tiles can be traversed
 	 * 
 	 * v1.1
 	 * Added min and max range (for archers)
@@ -18,15 +18,19 @@ public class TileHighlight {
 	 * v1.2
 	 * Fixed archer ranges when at the edge of the map
 	 * 
+	 * v1.3
+	 * Allows allies to pass through each other
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param minrange The minimum move or attack range of the unit
 	 * @param maxrange The maximum move or attack range of the unit
+	 * @param allies A list containing the allied teams of the current unit
 	 * @param moving whether we are calculating attack or movement
 	 * @author Jeffrey Goh
-	 * @version v1.2
-	 * @updated 7/6/2017
+	 * @version v1.3
+	 * @updated 12/6/2017
 	 */
-	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, bool moving)
+	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, List<int> allies, bool moving)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
@@ -74,11 +78,22 @@ public class TileHighlight {
 				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
 				if (moving)
 				{
-					if (current.costofPath + t.movementCost > maxRange || t.occupied != null)
+					if (current.costofPath + t.movementCost > maxRange)
 					{
 						continue;
 					}
 
+					if (t.occupied != null)
+					{
+						if (allies.Contains(t.occupied.team))
+						{
+							toDelete.Add(t);
+						}
+						else
+						{
+							continue;
+						}
+					}
 					// Otherwise, we add that tile and its movement cost to the newTilePath
 					newTilePath.addTile(t);
 					newTilePath.addCost(t.movementCost);
@@ -111,5 +126,67 @@ public class TileHighlight {
 			closed.Remove(t);
 		}
 		return closed;
+	}
+
+	/**
+	 * Uses Find Highlight to return a dictionary containing the tiles that the unit can attack
+	 * For AI usage mainly
+	 * 
+	 * @param originTile The tile our unit is on
+	 * @param minrange The minimum move range of the unit
+	 * @param maxrange The maximum move range of the unit
+	 * @param minAttack The minimum attack range of the unit
+	 * @param maxAttack The maximum attack range of the unit
+	 * @param allies A list containing the allied teams of the current unit
+	 * @param attacking Whether the unit is attacking or not
+	 * @author Jeffrey Goh
+	 * @version v1.0
+	 * @updated 12/6/2017
+	 */
+	public static Dictionary<Tile, List<Tile>> FindTarget(Tile originTile, int minRange, int maxRange, int minAttack, int maxAttack, List<int> allies, bool attacking)
+	{
+		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true);
+		moveRange.Add(originTile);
+
+		// Dictionary of tiles
+		// Key is a tile that can be attacked
+		// The value is a list of the tiles that the unit can attack the key tile from
+		Dictionary<Tile, List<Tile>> targets = new Dictionary<Tile, List<Tile>>();
+
+		foreach (Tile t in moveRange)
+		{
+			// For each tile in the unit's move range
+			if (t.occupied == null || t == originTile)
+			{
+				//If tile is not occupied, find the tiles it can attack from that tile
+				List<Tile> attackRange = FindHighlight(t, minAttack, maxAttack, allies, false);
+				foreach (Tile a in attackRange)
+				{
+					if (a.occupied != null)
+					{
+						//For each tile it can attack from tile t
+						if (targets.ContainsKey(a))
+						{
+							// If that tile coud already be attacked from another location, add t to the list of tiles under the key a
+							targets[a].Add(t);
+						}
+						else if ((!allies.Contains(a.occupied.team) && attacking) || (allies.Contains(a.occupied.team) && !attacking))
+						{
+							
+							// If a tile contains a hostile unit and we are attacking or if a tile contains an allied unit and we are performing a friendly action
+							// We add that tile to the dictionary with key a and value of a List of tiles containing t
+							List<Tile> temp = new List<Tile>();
+							temp.Add(t);
+							targets.Add(a, temp);
+						}
+						else
+						{
+							continue;
+						}
+					}
+				}
+			}
+		}
+		return targets;
 	}
 }

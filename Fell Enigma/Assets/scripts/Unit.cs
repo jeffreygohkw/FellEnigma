@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour {
 	public bool selected = false;
 
 	public int team;
+	public List<int> allies = new List<int>();
 	public int index;
 
 	public Vector3 moveTo;
@@ -17,6 +18,10 @@ public class Unit : MonoBehaviour {
 	public bool isMoving = false;
 	public bool isFighting = false;
 	public bool doneAction = false;
+	public bool doneMoving = false;
+	public bool willAttack = false;
+
+	public bool movementType;
 
 	// Unit stats
 	public string unitName;

@@ -5,15 +5,20 @@ using UnityEngine;
 public class TilePathFinder : MonoBehaviour {
 
 	/**
-	 * Uses Dijkstra's Algorithm to find the shortest path to a tile
+	 * Uses BFS to find the shortest path to a tile
+	 * 
+	 * v1.1
+	 * Allowed allies to pass through each other
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param range The move or attack range of the unit
 	 * @param destinationTile The tile we want our unit to move to
+	 * @param allies A list containing the allied teams of the current unit
 	 * @author Jeffrey Goh
-	 * @version v1.0
-	 * @updated 2/6/2017
+	 * @version v1.1
+	 * @updated 12/6/2017
 	 */
-	public static TilePath FindPath(Tile originTile, int range, Tile destinationTile)
+	public static TilePath FindPath(Tile originTile, int range, Tile destinationTile, List<int> allies)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
@@ -58,9 +63,17 @@ public class TilePathFinder : MonoBehaviour {
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
 
-				if (current.costofPath + t.movementCost > range || t.occupied != null)
+				if (current.costofPath + t.movementCost > range)
 				{
 					continue;
+				}
+
+				if (t.occupied != null)
+				{
+					if (!allies.Contains(t.occupied.team))
+					{
+						continue;
+					}
 				}
 
 				// Otherwise, we add that tile and its movement cost to the newTilePath

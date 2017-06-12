@@ -123,6 +123,14 @@ public class PlayerUnit : Unit
 	{
 		if (Grid.instance.currentTeam == team)
 		{
+			foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
+			{
+				if (u.selected && u != this)
+				{
+					// Don't select this unit if another unit is selected
+					return;
+				}
+			}
 			selected = !selected;
 			if (selected)
 			{

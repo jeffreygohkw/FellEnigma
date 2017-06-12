@@ -23,6 +23,9 @@ public class BattleFormula
 	* v1.4
 	* Updated variable names, stop the unit from taking any more actions after attacking
 	* 
+	* v1.5
+	* AI compatibility
+	* 
 	* To do
 	* Does not factor in terrain, supports, other misc things
 	* No weapon triangle
@@ -34,7 +37,7 @@ public class BattleFormula
 	*/
 	public void attackWithCurrentUnit(Unit target)
 	{
-		if (Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].GetComponent<Renderer>().material.color != Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].colour)
+		if (Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].GetComponent<Renderer>().material.color != Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].colour || Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
 		{
 
 			if (target != null)
@@ -447,5 +450,116 @@ public class BattleFormula
 		{
 			Debug.Log("Invalid target");
 		}
+	}
+
+
+	/**
+	* Calculates estimated damage assuming no misses or crits
+	* 
+	* v 1.0
+	* Based on v1.4 of attackWithCurrentUnit
+	* 
+	* To do
+	* Does not factor in terrain, supports, other misc things
+	* No weapon triangle
+	* 
+	* @param attacker The attacking unit
+	* @param target The target of the attack
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 12/6/2017
+	*/
+	public int battleForecast(Unit attacker, Unit target)
+	{
+		int attackerAtk;
+		int attackerDef;
+
+		int defenderAtk;
+		int defenderDef;
+
+		// Damage for attacker
+		// Str and Def if physical weapon equipped, Mag and Res otherwise
+		if (attacker.weaponPhysical)
+		{
+			attackerAtk = attacker.strength + attacker.weaponMt;
+			defenderDef = target.def;
+		}
+		else
+		{
+			attackerAtk = attacker.mag + attacker.weaponMt;
+			defenderDef = target.res;
+		}
+
+		// Damage for defender
+
+		if (target.weaponPhysical)
+		{
+			defenderAtk = target.strength + target.weaponMt;
+			attackerDef = attacker.def;
+		}
+		else
+		{
+			defenderAtk = target.mag + target.weaponMt;
+			attackerDef = attacker.res;
+		}
+
+		int attackerDmg = attackerAtk - defenderDef;
+		int defenderDmg = defenderAtk - attackerDef;
+
+		// tink instead of doing negative damage and healing the enemy
+		if (attackerDmg < 0)
+		{
+			attackerDmg = 0;
+		}
+
+		if (defenderDmg < 0)
+		{
+			defenderDmg = 0;
+		}
+
+		// Range
+		bool canCounter = false;
+
+		int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)target.gridPosition.y);
+
+		if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
+		{
+			canCounter = true;
+		}
+
+		//Attack Speed
+		int atkBurden = attacker.weaponWt - attacker.con;
+		if (atkBurden < 0)
+		{
+			atkBurden = 0;
+		}
+
+		int defBurden = target.weaponWt - target.con;
+		if (defBurden < 0)
+		{
+			defBurden = 0;
+		}
+
+		int atkAS = attacker.spd - atkBurden;
+		int defAS = target.spd - defBurden;
+
+		int dmgDealt = attackerDmg;
+		int dmgTaken = 0;
+
+		if (canCounter)
+		{
+			dmgTaken += defenderDmg;
+		}
+
+		if (dmgTaken >= attacker.currentHP)
+		{
+			return dmgDealt;
+		}
+
+		if (atkAS - defAS >= 4)
+		{
+			dmgDealt += attackerDmg;
+		}
+		return dmgDealt;
 	}
 }

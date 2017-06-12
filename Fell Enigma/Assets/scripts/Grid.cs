@@ -20,6 +20,8 @@ public class Grid : MonoBehaviour {
 
 	public int currentTeam = 0;
 
+	public List<int> AITeams = new List<int>();
+
 	public int totalDone = 0;
 
 	public BattleFormula battle = new BattleFormula();
@@ -45,18 +47,36 @@ public class Grid : MonoBehaviour {
 	void Update()
 	{
 		// Skip turn if entire team is dead
-		if (units[currentTeam].Count == 0 || totalDone == units[currentTeam].Count)
+		if (units[currentTeam].Count == 0 || totalDone == units[currentTeam].Count || currentPlayer == units[currentTeam].Count)
 		{
 			nextTurn();
 		}
 		else
 		{
-			foreach (Unit u in units[currentTeam])
+			if (AITeams.Contains(currentTeam))
 			{
-				// If the unit is selected and alive
-				if (u.currentHP > 0 && u.selected)
+				if (currentPlayer == -1)
 				{
-					u.turnUpdate();
+					currentPlayer++;
+				}
+				if (units[currentTeam][currentPlayer].currentHP > 0 && !units[currentTeam][currentPlayer].doneAction)
+				{
+					units[currentTeam][currentPlayer].turnUpdate();
+				}
+				else
+				{
+					currentPlayer++;
+				}
+			}
+			else
+			{
+				foreach (Unit u in units[currentTeam])
+				{
+					// If the unit is selected and alive
+					if (u.currentHP > 0 && u.selected)
+					{
+						u.turnUpdate();
+					}
 				}
 			}
 		}
@@ -81,8 +101,10 @@ public class Grid : MonoBehaviour {
 		{
 			if (u.currentHP > 0)
 			{
+				u.doneMoving = false;
 				u.doneAction = false;
 				u.selected = false;
+				u.willAttack = false;
 			}
 		}
 
@@ -125,26 +147,20 @@ public class Grid : MonoBehaviour {
 	* v1.4
 	* Allow movement to tiles where units have died
 	* 
+	* v1.5
+	* AI compatibility
+	* 
 	* @param destTile The destination tile
 	* @author Jeffrey Goh
-	* @version 1.4
-	* @updated 7/6/2017
+	* @version 1.5
+	* @updated 12/6/2017
 	*/
 	public void moveCurrentUnit(Tile destTile)
 	{
-		if (destTile.GetComponent<Renderer>().material.color != destTile.colour)
+
+		if ((destTile.GetComponent<Renderer>().material.color != destTile.colour || AITeams.Contains(currentTeam)) && destTile.occupied == null)
 		{
 			// Don't let the unit move to a tile that's occupied
-			foreach (List<Unit> i in units)
-			{
-				foreach (Unit u in i)
-				{
-					if (u.gridPosition == destTile.gridPosition && u.currentHP > 0)
-					{
-						return;
-					}
-				}
-			}
 
 			// Remove the green highlighted tiles
 			removeTileHighlight();
@@ -152,7 +168,7 @@ public class Grid : MonoBehaviour {
 			map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y].occupied = null;
 
 			// Get the path from the unit's current position to its final position
-			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y]).tileList;
+			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y], units[currentTeam][currentPlayer].allies).tileList;
 			foreach (Tile t in path)
 			{
 				units[currentTeam][currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
@@ -187,7 +203,7 @@ public class Grid : MonoBehaviour {
 	 */
 	public void highlightTilesAt(Vector2 origin, Color highlightcolour, int minActionRange, int maxActionRange, bool move)
 	{
-		List<Tile> highlightedTiles = TileHighlight.FindHighlight(map[(int)origin.x][(int)origin.y], minActionRange, maxActionRange, move);
+		List<Tile> highlightedTiles = TileHighlight.FindHighlight(map[(int)origin.x][(int)origin.y], minActionRange, maxActionRange, units[currentTeam][currentPlayer].allies, move);
 
 		foreach (Tile t in highlightedTiles)
 		{
@@ -225,14 +241,21 @@ public class Grid : MonoBehaviour {
 
 	/**
 	* Attacks the unit on the target tile
+	* 
+	* v1.1
+	* Added check for destTile being null and AI compatibility
+	* 
 	* @param target destTile The tile our target is on
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 2/6/2017
+	* @version 1.1
+	* @updated 12/6/2017
 	*/
 	public void attackWithCurrentUnit(Tile destTile)
 	{
-		if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor())
+		if (destTile == null) {
+			return;
+		}
+		else if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor() || AITeams.Contains(currentTeam))
 		{
 			Unit target = null;
 			foreach (List<Unit> i in units)
@@ -356,40 +379,42 @@ public class Grid : MonoBehaviour {
 		map[0][0].occupied = unit1;
 
 		unit1.team = 0;
+		unit1.allies.Add(0);
 		unit1.index = 0;
 
 
-		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit2.gridPosition = new Vector2(0, 1);
+		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+		enemy1.gridPosition = new Vector2(0, 1);
 
-		unit2.unitName = "Batta";
-		unit2.job = "Brigand";
-		unit2.lvl = 2;
-		unit2.exp = 0;
-		unit2.maxHP = 21;
-		unit2.currentHP = 21;
-		unit2.strength = 5;
-		unit2.mag = 0;
-		unit2.skl = 1;
-		unit2.spd = 3;
-		unit2.luk = 2;
-		unit2.def = 3;
-		unit2.res = 0;
-		unit2.con = 10;
-		unit2.mov = 5;
+		enemy1.unitName = "Batta";
+		enemy1.job = "Brigand";
+		enemy1.lvl = 2;
+		enemy1.exp = 0;
+		enemy1.maxHP = 21;
+		enemy1.currentHP = 21;
+		enemy1.strength = 5;
+		enemy1.mag = 0;
+		enemy1.skl = 1;
+		enemy1.spd = 3;
+		enemy1.luk = 2;
+		enemy1.def = 3;
+		enemy1.res = 0;
+		enemy1.con = 10;
+		enemy1.mov = 5;
 
-		unit2.weaponMt = 8;
-		unit2.weaponPhysical = true;
-		unit2.weaponAcc = 75;
-		unit2.weaponCrit = 0;
-		unit2.weaponWt = 10;
-		unit2.weaponMinRange = 1;
-		unit2.weaponMaxRange = 1;
+		enemy1.weaponMt = 8;
+		enemy1.weaponPhysical = true;
+		enemy1.weaponAcc = 75;
+		enemy1.weaponCrit = 0;
+		enemy1.weaponWt = 10;
+		enemy1.weaponMinRange = 1;
+		enemy1.weaponMaxRange = 1;
 
-		map[0][1].occupied = unit2;
+		map[0][1].occupied = enemy1;
 
-		unit2.team = 1;
-		unit2.index = 0;
+		enemy1.team = 1;
+		enemy1.allies.Add(1);
+		enemy1.index = 0;
 
 
 		PlayerUnit unit3 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
@@ -422,6 +447,7 @@ public class Grid : MonoBehaviour {
 		map[2][1].occupied = unit3;
 
 		unit3.team = 2;
+		unit3.allies.Add(2);
 		unit3.index = 0;
 
 
@@ -455,6 +481,7 @@ public class Grid : MonoBehaviour {
 		map[4][2].occupied = unit4;
 
 		unit4.team = 0;
+		unit4.allies.Add(0);
 		unit4.index = 1;
 
 
@@ -467,7 +494,7 @@ public class Grid : MonoBehaviour {
 
 		units.Add(team0);
 
-		team1.Add(unit2);
+		team1.Add(enemy1);
 
 		units.Add(team1);
 
@@ -476,7 +503,7 @@ public class Grid : MonoBehaviour {
 		units.Add(team2);
 
 
-
+		AITeams.Add(1);
 
 		/*
 		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(3 - Mathf.Floor(tilesPerCol / 2), 3 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
