@@ -211,6 +211,7 @@ public class PlayerUnit : Unit
 				isMoving = false;
 				isFighting = false;
 				doneAction = true;
+				selected = false;
 				Grid.instance.totalDone++;
 			}
 
@@ -226,9 +227,12 @@ public class PlayerUnit : Unit
 				isMoving = false;
 				isFighting = false;
 				selected = false;
+				doneAction = true;
 				Grid.instance.nextTurn();
 			}
 			base.OnGUI();
 		}
 	}
+
+
 }

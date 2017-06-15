@@ -47,8 +47,8 @@ public class AIUnit : Unit
 			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
 
 			//Delete this unit from the list of units
-			Grid.instance.units[team].RemoveAt(index);
-
+			//Grid.instance.units[team].RemoveAt(index);
+			/*
 			//Shift the index of each unit after this unit in the list down by 1
 			foreach (Unit u in Grid.instance.units[team])
 			{
@@ -57,6 +57,7 @@ public class AIUnit : Unit
 					u.index--;
 				}
 			}
+			*/
 		}
 	}
 
@@ -113,7 +114,7 @@ public class AIUnit : Unit
 		}
 		else
 		{
-			// Replace this with 1 and don't increment for stationary enemies
+			// Replace this with 0 and don't increment for stationary enemies
 			int tempMov = mov;
 			// Find all enemies within range
 			Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
@@ -125,6 +126,7 @@ public class AIUnit : Unit
 				// Find all enemies within range
 				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
 
+				Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
 				if (target == null)
 				{
@@ -248,7 +250,7 @@ public class AIUnit : Unit
 					int occupiedCount = 0;
 					foreach (Tile x in enemiesInRange[targetTile])
 					{
-						if (x.occupied == null)
+						if ((x.occupied == null || x == Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y]))
 						{
 							toReturn.Add(targetTile);
 							toReturn.Add(x);
@@ -294,11 +296,28 @@ public class AIUnit : Unit
 		}
 	}
 
+	private void OnMouseDown()
+	{
+		/*
+		highlighted = !highlighted;
+		if (highlighted)
+		{
+			Grid.instance.highlightTilesAt(gridPosition, Color.red, weaponMinRange, weaponMaxRange, false);
+		}
+		
+		else
+		{
+			Grid.instance.removeTileHighlight();
+		}
+		*/
+		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+		{
+			Grid.instance.battle.attackWithCurrentUnit(this);
+		}
+	}
+
 	public override void OnGUI()
 	{
-		
-
-
 		base.OnGUI();
 	}
 }

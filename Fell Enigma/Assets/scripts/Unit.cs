@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour {
 	public bool doneAction = false;
 	public bool doneMoving = false;
 	public bool willAttack = false;
+	public bool highlighted = false;
 
 	public bool movementType;
 

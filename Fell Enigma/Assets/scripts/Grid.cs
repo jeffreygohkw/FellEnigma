@@ -10,6 +10,7 @@ public class Grid : MonoBehaviour {
 	public GameObject tilePrefab;
 	public GameObject unitPrefab;
 	public GameObject enemyPrefab;
+	public GameObject bossPrefab;
     public GameObject terrainPrefab;
     public TextAsset mapConfig;
 
@@ -59,7 +60,7 @@ public class Grid : MonoBehaviour {
 				{
 					currentPlayer++;
 				}
-				if (units[currentTeam][currentPlayer].currentHP > 0 && !units[currentTeam][currentPlayer].doneAction)
+				else if (units[currentTeam][currentPlayer].currentHP > 0 && !units[currentTeam][currentPlayer].doneAction)
 				{
 					units[currentTeam][currentPlayer].turnUpdate();
 				}
@@ -126,7 +127,6 @@ public class Grid : MonoBehaviour {
 				totalDone++;
 			}
 		}
-		Debug.Log(currentTeam);
 	}
 
 
@@ -382,43 +382,41 @@ public class Grid : MonoBehaviour {
 		unit1.allies.Add(0);
 		unit1.index = 0;
 
+		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 6 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+		unit2.gridPosition = new Vector2(0, 6);
 
-		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		enemy1.gridPosition = new Vector2(0, 1);
+		unit2.unitName = "Seth";
+		unit2.job = "Paladin";
+		unit2.lvl = 1;
+		unit2.exp = 0;
+		unit2.maxHP = 30;
+		unit2.currentHP = 30;
+		unit2.strength = 14;
+		unit2.mag = 0;
+		unit2.skl = 13;
+		unit2.spd = 12;
+		unit2.luk = 13;
+		unit2.def = 11;
+		unit2.res = 8;
+		unit2.con = 11;
+		unit2.mov = 8;
 
-		enemy1.unitName = "Batta";
-		enemy1.job = "Brigand";
-		enemy1.lvl = 2;
-		enemy1.exp = 0;
-		enemy1.maxHP = 21;
-		enemy1.currentHP = 21;
-		enemy1.strength = 5;
-		enemy1.mag = 0;
-		enemy1.skl = 1;
-		enemy1.spd = 3;
-		enemy1.luk = 2;
-		enemy1.def = 3;
-		enemy1.res = 0;
-		enemy1.con = 10;
-		enemy1.mov = 5;
+		unit2.weaponMt = 14;
+		unit2.weaponPhysical = true;
+		unit2.weaponAcc = 75;
+		unit2.weaponCrit = 0;
+		unit2.weaponWt = 12;
+		unit2.weaponMinRange = 1;
+		unit2.weaponMaxRange = 1;
 
-		enemy1.weaponMt = 8;
-		enemy1.weaponPhysical = true;
-		enemy1.weaponAcc = 75;
-		enemy1.weaponCrit = 0;
-		enemy1.weaponWt = 10;
-		enemy1.weaponMinRange = 1;
-		enemy1.weaponMaxRange = 1;
+		map[0][6].occupied = unit2;
 
-		map[0][1].occupied = enemy1;
+		unit2.team = 2;
+		unit2.allies.Add(2);
+		unit2.index = 0;
 
-		enemy1.team = 1;
-		enemy1.allies.Add(1);
-		enemy1.index = 0;
-
-
-		PlayerUnit unit3 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 1 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit3.gridPosition = new Vector2(2, 1);
+		PlayerUnit unit3 = ((GameObject)Instantiate(unitPrefab, new Vector3(1 - Mathf.Floor(tilesPerCol / 2), 6 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+		unit3.gridPosition = new Vector2(1, 6);
 
 		unit3.unitName = "Lute";
 		unit3.job = "Mage";
@@ -444,15 +442,15 @@ public class Grid : MonoBehaviour {
 		unit3.weaponMinRange = 1;
 		unit3.weaponMaxRange = 2;
 
-		map[2][1].occupied = unit3;
+		map[1][6].occupied = unit3;
 
 		unit3.team = 2;
 		unit3.allies.Add(2);
-		unit3.index = 0;
+		unit3.index = 1;
 
 
-		PlayerUnit unit4 = ((GameObject)Instantiate(unitPrefab, new Vector3(4 - Mathf.Floor(tilesPerCol / 2), 2 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit4.gridPosition = new Vector2(4, 2);
+		PlayerUnit unit4 = ((GameObject)Instantiate(unitPrefab, new Vector3(1 - Mathf.Floor(tilesPerCol / 2), 0 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+		unit4.gridPosition = new Vector2(1, 0);
 
 		unit4.unitName = "Rebecca";
 		unit4.job = "Archer";
@@ -478,11 +476,77 @@ public class Grid : MonoBehaviour {
 		unit4.weaponMinRange = 2;
 		unit4.weaponMaxRange = 2;
 
-		map[4][2].occupied = unit4;
+		map[1][0].occupied = unit4;
 
 		unit4.team = 0;
 		unit4.allies.Add(0);
 		unit4.index = 1;
+
+		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(5 - Mathf.Floor(tilesPerCol / 2), 6 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+		enemy1.gridPosition = new Vector2(5, 6);
+
+		enemy1.unitName = "Batta";
+		enemy1.job = "Brigand";
+		enemy1.lvl = 2;
+		enemy1.exp = 0;
+		enemy1.maxHP = 21;
+		enemy1.currentHP = 21;
+		enemy1.strength = 5;
+		enemy1.mag = 0;
+		enemy1.skl = 1;
+		enemy1.spd = 3;
+		enemy1.luk = 2;
+		enemy1.def = 3;
+		enemy1.res = 0;
+		enemy1.con = 10;
+		enemy1.mov = 5;
+
+		enemy1.weaponMt = 8;
+		enemy1.weaponPhysical = true;
+		enemy1.weaponAcc = 75;
+		enemy1.weaponCrit = 0;
+		enemy1.weaponWt = 10;
+		enemy1.weaponMinRange = 1;
+		enemy1.weaponMaxRange = 1;
+
+		map[5][6].occupied = enemy1;
+
+		enemy1.team = 1;
+		enemy1.allies.Add(1);
+		enemy1.index = 0;
+
+		StationaryUnit boss1 = ((GameObject)Instantiate(bossPrefab, new Vector3(6 - Mathf.Floor(tilesPerCol / 2), 5 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<StationaryUnit>();
+		boss1.gridPosition = new Vector2(6, 5);
+
+		boss1.unitName = "Lundgren";
+		boss1.job = "General";
+		boss1.lvl = 1;
+		boss1.exp = 0;
+		boss1.maxHP = 35;
+		boss1.currentHP = 35;
+		boss1.strength = 12;
+		boss1.mag = 0;
+		boss1.skl = 8;
+		boss1.spd = 5;
+		boss1.luk = 6;
+		boss1.def = 14;
+		boss1.res = 7;
+		boss1.con = 15;
+		boss1.mov = 5;
+
+		boss1.weaponMt = 6;
+		boss1.weaponPhysical = true;
+		boss1.weaponAcc = 65;
+		boss1.weaponCrit = 0;
+		boss1.weaponWt = 11;
+		boss1.weaponMinRange = 1;
+		boss1.weaponMaxRange = 2;
+
+		map[6][5].occupied = boss1;
+
+		boss1.team = 1;
+		boss1.allies.Add(1);
+		boss1.index = 0;
 
 
 		List<Unit> team0 = new List<Unit>();
@@ -495,9 +559,11 @@ public class Grid : MonoBehaviour {
 		units.Add(team0);
 
 		team1.Add(enemy1);
+		team1.Add(boss1);
 
 		units.Add(team1);
 
+		team2.Add(unit2);
 		team2.Add(unit3);
 
 		units.Add(team2);
@@ -505,11 +571,5 @@ public class Grid : MonoBehaviour {
 
 		AITeams.Add(1);
 
-		/*
-		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(3 - Mathf.Floor(tilesPerCol / 2), 3 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		enemy1.gridPosition = new Vector2(3, 3);
-
-		units.Add(enemy1);
-		*/
 	}
 }

@@ -80,6 +80,7 @@ public class Tile : MonoBehaviour {
 	*/
 	private void OnMouseDown()
 	{
+		Debug.Log(gridPosition.x + " " + gridPosition.y);
 		if (Grid.instance.currentPlayer != -1)
 		{
 			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isMoving)

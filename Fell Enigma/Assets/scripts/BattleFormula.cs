@@ -202,7 +202,10 @@ public class BattleFormula
 					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
 					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
 					Grid.instance.totalDone++;
-					Grid.instance.currentPlayer = -1;
+					if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+					{
+						Grid.instance.currentPlayer = -1;
+					}
 					Grid.instance.removeTileHighlight();
 					return;
 				}
@@ -263,7 +266,10 @@ public class BattleFormula
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
 						Grid.instance.totalDone++;
-						Grid.instance.currentPlayer = -1;
+						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+						{
+							Grid.instance.currentPlayer = -1;
+						}
 						Grid.instance.removeTileHighlight();
 						return;
 					}
@@ -355,7 +361,10 @@ public class BattleFormula
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
 						Grid.instance.totalDone++;
-						Grid.instance.currentPlayer = -1;
+						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+						{
+							Grid.instance.currentPlayer = -1;
+						}
 						Grid.instance.removeTileHighlight();
 						return;
 					}
@@ -429,7 +438,10 @@ public class BattleFormula
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
 						Grid.instance.totalDone++;
-						Grid.instance.currentPlayer = -1;
+						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+						{
+							Grid.instance.currentPlayer = -1;
+						}
 						Grid.instance.removeTileHighlight();
 						return;
 					}
@@ -443,7 +455,10 @@ public class BattleFormula
 			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
 			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
 			Grid.instance.totalDone++;
-			Grid.instance.currentPlayer = -1;
+			if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+			{
+				Grid.instance.currentPlayer = -1;
+			}
 			Grid.instance.removeTileHighlight();
 		}
 		else
