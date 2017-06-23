@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114292102223752646}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,5 +108,6 @@ MonoBehaviour:
   list:
   - {fileID: 2100000, guid: 783cf2d218b440649be287f1b09f8503, type: 2}
   - {fileID: 2100000, guid: 30556de8a4794324b851487eef2dede1, type: 2}
-  movementCost: 0100000001000000
-  modifier: 0000000000000000
+  movementCostList: 0100000001000000
+  modifierList: 000000000a000000
+  typeList: 0000000001000000

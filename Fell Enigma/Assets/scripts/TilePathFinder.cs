@@ -76,6 +76,11 @@ public class TilePathFinder : MonoBehaviour {
 					}
 				}
 
+                if (!t.checkPassable())
+                {
+                    continue;
+                }
+
 				// Otherwise, we add that tile and its movement cost to the newTilePath
 				newTilePath.addTile(t);
 				newTilePath.addCost(t.movementCost);

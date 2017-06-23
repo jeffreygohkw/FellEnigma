@@ -7,11 +7,19 @@ public class TerrainS : MonoBehaviour
 {
 
     private int config;
-    private bool passable;
+    private bool isPassable;
 
     public Material[] list;
-    public int[] movementCost;
-    public int[] modifier;
+    public int[] movementCostList;
+    public int[] modifierList;
+
+
+    /* Type 0: Normal tile
+     * Type 1: Impassable tile
+     * Type 2: Event tile
+     * 
+     */
+    public int[] typeList;
 
 
     // Use this for initialization
@@ -27,10 +35,14 @@ public class TerrainS : MonoBehaviour
     }
 
     /**
-    * Renders the terrain and sets isPassable (should be seperated)
+    * Renders the terrain
     * Requires manual updating of materials in inspector. No safety net if out of array.
     * Trying to figure out how to seperate the Terrain prefab for different levels
     * Otherwise, have to load every material on one prefab...which is pretty bad
+    * 
+    * v1.1
+    * 
+    * 
     * @param i is extracted from the text file mapConfig found in Grid
     * @author Wayne Neo
     * @version 1.0
@@ -40,31 +52,31 @@ public class TerrainS : MonoBehaviour
     {
         this.config = i;
         GetComponent<Renderer>().material = list[config];
-
-        if (movementCost[config] == -1)
+        if (typeList[config] == 1)
         {
-            this.passable = false;
+            this.isPassable = false;
         }
         else
         {
-            this.passable = true;
+            this.isPassable = true;
         }
+       
     }
 
 
     public int returnCost()
     {
-        return movementCost[config];
+        return movementCostList[config];
     }
 
-    public bool isPassable()
+    public bool returnPassable()
     {
-        return this.passable;
+        return this.isPassable;
     }
 
     public int returnModifier()
     {
-        return this.modifier[config];
+        return this.modifierList[config];
     }
    
 }

@@ -7,7 +7,6 @@ public class Tile : MonoBehaviour {
 	public Vector2 gridPosition = Vector2.zero;
 
 	public int movementCost;
-    public int tileModifier;
     private TerrainS linkedTerrain;
 
 	public List<Tile> neighbours = new List<Tile>();
@@ -27,6 +26,7 @@ public class Tile : MonoBehaviour {
         defaultColour = colour;
 		generateNeighbours();
         detectTerrain();
+        //Debug.Log(gridPosition + " " + this.linkedTerrain.returnModifier());
 	}
 	
 	// Update is called once per frame
@@ -105,12 +105,7 @@ public class Tile : MonoBehaviour {
         GetComponent<Renderer>().material.color = defaultColour;
     }
 
-    /**
-	* Returns the default color
-	* @author Wayne Neo
-	* @version 1.0
-	* @updated 6/6/2017
-	*/
+    //Returns the default color
     public Color returnDefaultColor()
     {
         return defaultColour;
@@ -118,16 +113,40 @@ public class Tile : MonoBehaviour {
 
     /**
    * Finds the terrain above and sets the corresponding values.
-   * I have no way to confirm this is accurate. It seems to work (magically) though
+   * For some reason, it works when I reduced the radius from 1 to 0.5.
+   * 
+   * v1.1
+   * Added a failsafe and reduced the radius, which correctly detects the terrain above it
+   * 
    * @author Wayne Neo
-   * @version 1.0
-   * @updated 6/6/2017
+   * @version 1.1
+   * @updated 16/6/2017
    */
     private void detectTerrain()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 1);
-        this.linkedTerrain = colliders[0].gameObject.GetComponent<TerrainS>();
+        Collider[] colliders = Physics.OverlapSphere(this.transform.position, 0.5f);
+        for (int i = 0; i < colliders.Length ; i++)
+        {
+            if (colliders[i].gameObject.CompareTag("Terrain"))
+            {
+                this.linkedTerrain = colliders[i].gameObject.GetComponent<TerrainS>();
+                break;
+            }
+        }
+
         movementCost = linkedTerrain.returnCost();
-        tileModifier = linkedTerrain.returnModifier();
+    }
+
+    
+    // Returns a boolean containing terrain's passability
+    public bool checkPassable()
+    {
+        return this.linkedTerrain.returnPassable();
+    }
+
+    // Returns a integer containing terrain's modifier
+    public int returnModifier()
+    {
+        return this.linkedTerrain.returnModifier();
     }
 }

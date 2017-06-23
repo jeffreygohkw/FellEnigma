@@ -173,6 +173,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &249826965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 603464832}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 249826966}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &249826966
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 603464832}
+  m_GameObject: {fileID: 249826965}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &335011139
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,6 +473,7 @@ GameObject:
   - component: {fileID: 736736687}
   - component: {fileID: 736736686}
   - component: {fileID: 736736685}
+  - component: {fileID: 736736690}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -522,6 +551,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &736736690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 736736684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a95b2901e479b6046b1345d495f61d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Boundary: 50
+  speed: 5
+  min_x: 0
+  max_x: 0
+  min_y: 0
+  max_y: 0
 --- !u!1 &925423106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,7 +1550,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1960816814 stripped
 GameObject:
@@ -1526,7 +1572,6 @@ MonoBehaviour:
   unitPrefab: {fileID: 1582125788664680, guid: f1f99c2559c3f124a82aaf93e7f9278d, type: 2}
   enemyPrefab: {fileID: 1441474077148888, guid: 20a4aba89640d544da7c718265ad04f3,
     type: 2}
-  bossPrefab: {fileID: 1852767040743716, guid: 9edcc313c88ee7e4b96ed3b79162d923, type: 2}
   terrainPrefab: {fileID: 1253287730436462, guid: 63a390fd8f9707f4091a4963d1adb4bb,
     type: 2}
   mapConfig: {fileID: 4900000, guid: 0ab44b88dfee64f4c8fdeba07f113586, type: 3}
@@ -1709,7 +1754,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4006228794786654, guid: f1f99c2559c3f124a82aaf93e7f9278d, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1582125788664680, guid: f1f99c2559c3f124a82aaf93e7f9278d, type: 2}
       propertyPath: m_IsActive

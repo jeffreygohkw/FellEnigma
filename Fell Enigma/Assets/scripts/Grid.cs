@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour {
 	public GameObject tilePrefab;
 	public GameObject unitPrefab;
 	public GameObject enemyPrefab;
-	public GameObject bossPrefab;
+	// public GameObject bossPrefab;
     public GameObject terrainPrefab;
     public TextAsset mapConfig;
 
@@ -295,8 +295,9 @@ public class Grid : MonoBehaviour {
             // Iterate through each Row
             for (int j = 0; j < tilesPerRow; j++)
             {
-                TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(i - Mathf.Floor(tilesPerCol / 2), j - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3()))).GetComponent<TerrainS>();
+                TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(j - Mathf.Floor(tilesPerCol / 2), i - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3()))).GetComponent<TerrainS>();
                 terrain.LoadTerrain(System.Int32.Parse(line[j]));
+           
             }
  
         }
@@ -349,7 +350,7 @@ public class Grid : MonoBehaviour {
 	*/
 	void CreatePlayers()
 	{
-		PlayerUnit unit1 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 0 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+		PlayerUnit unit1 = ((GameObject)Instantiate(unitPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 0 - Mathf.Floor(tilesPerRow / 2),0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit1.gridPosition = new Vector2(0, 0);
 
 		unit1.unitName = "Lyn";
@@ -515,7 +516,7 @@ public class Grid : MonoBehaviour {
 		enemy1.allies.Add(1);
 		enemy1.index = 0;
 
-		StationaryUnit boss1 = ((GameObject)Instantiate(bossPrefab, new Vector3(6 - Mathf.Floor(tilesPerCol / 2), 5 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<StationaryUnit>();
+		/*StationaryUnit boss1 = ((GameObject)Instantiate(bossPrefab, new Vector3(6 - Mathf.Floor(tilesPerCol / 2), 5 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<StationaryUnit>();
 		boss1.gridPosition = new Vector2(6, 5);
 
 		boss1.unitName = "Lundgren";
@@ -547,7 +548,7 @@ public class Grid : MonoBehaviour {
 		boss1.team = 1;
 		boss1.allies.Add(1);
 		boss1.index = 0;
-
+        */
 
 		List<Unit> team0 = new List<Unit>();
 		List<Unit> team1 = new List<Unit>();
@@ -559,7 +560,7 @@ public class Grid : MonoBehaviour {
 		units.Add(team0);
 
 		team1.Add(enemy1);
-		team1.Add(boss1);
+		//team1.Add(boss1);
 
 		units.Add(team1);
 

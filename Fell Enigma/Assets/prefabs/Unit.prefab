@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 136513901711235020}
   - component: {fileID: 23093969864569946}
   - component: {fileID: 114502311745272014}
+  - component: {fileID: 114491747963083866}
   m_Layer: 0
   m_Name: Unit
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -82,6 +83,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1582125788664680}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114491747963083866
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1582125788664680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc6c5e6983ae3341921ff2499f14a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsWindow: {fileID: 223815128799964206, guid: f77a185d746a95a448660979c6cdd9d5,
+    type: 2}
 --- !u!114 &114502311745272014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,10 +107,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 996b02602c8f4ab40a73a153bcce0031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPosition: {x: 0, y: 0}
+  selected: 0
+  team: 0
+  allies: 
+  index: 0
   moveTo: {x: 0, y: 0, z: 0}
   moveSpeed: 10
   isMoving: 0
   isFighting: 0
+  doneAction: 0
+  doneMoving: 0
+  willAttack: 0
+  highlighted: 0
+  movementType: 0
   unitName: 
   job: 
   lvl: 0
@@ -107,10 +131,19 @@ MonoBehaviour:
   mag: 0
   skl: 0
   spd: 0
+  luk: 0
   def: 0
   res: 0
+  con: 0
   mov: 0
-  Menu: {fileID: 0}
+  weaponMt: 0
+  weaponPhysical: 0
+  weaponAcc: 0
+  weaponCrit: 0
+  weaponWt: 0
+  weaponMinRange: 0
+  weaponMaxRange: 0
+  positionQueue: []
 --- !u!136 &136513901711235020
 CapsuleCollider:
   m_ObjectHideFlags: 1
