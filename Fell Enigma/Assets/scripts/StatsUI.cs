@@ -23,8 +23,12 @@ public class StatsUI: MonoBehaviour {
         {
             thisUnit = this.GetComponent<AIUnit>();
         }
+		else if (this.CompareTag("Stationary"))
+		{
+			thisUnit = this.GetComponent<StationaryUnit>();
+		}
 
-        UI = Instantiate(statsWindow, this.transform);
+		UI = Instantiate(statsWindow, this.transform);
         healthBar = UI.GetComponentInChildren<Slider>();
         displayName = UI.GetComponentsInChildren<Text>()[0];
         displayStats = UI.GetComponentsInChildren<Text>()[1];
@@ -56,7 +60,7 @@ public class StatsUI: MonoBehaviour {
     private void loadStats()
     {
         displayName.text = thisUnit.unitName;
-        displayStats.text = "ATK = " + thisUnit.strength.ToString() + " MAG = " + thisUnit.mag.ToString() + " SPD = " + thisUnit.spd.ToString() + "\n"
-            + "LUK = " + thisUnit.luk.ToString() + " DEF = " + thisUnit.def.ToString() + " RES = " + thisUnit.res.ToString();
+        displayStats.text = "HP = " + thisUnit.currentHP.ToString() + "/" + thisUnit.maxHP.ToString() + " STR = " + thisUnit.strength.ToString() + " MAG = " + thisUnit.mag.ToString() + " SKL = " + thisUnit.skl.ToString() + "\n"
+            + " SPD = " + thisUnit.spd.ToString() + " LUK = " + thisUnit.luk.ToString() + " DEF = " + thisUnit.def.ToString() + " RES = " + thisUnit.res.ToString();
     }
 }

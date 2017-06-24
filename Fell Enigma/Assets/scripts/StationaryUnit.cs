@@ -46,18 +46,6 @@ public class StationaryUnit : Unit {
 			//Turn the tile this unit was standing on free
 			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
 
-			//Delete this unit from the list of units
-			//Grid.instance.units[team].RemoveAt(index);
-			/*
-			//Shift the index of each unit after this unit in the list down by 1
-			foreach (Unit u in Grid.instance.units[team])
-			{
-				if (u.index >= index)
-				{
-					u.index--;
-				}
-			}
-			*/
 		}
 	}
 

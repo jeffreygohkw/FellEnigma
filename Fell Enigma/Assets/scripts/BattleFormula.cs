@@ -26,14 +26,17 @@ public class BattleFormula
 	* v1.5
 	* AI compatibility
 	* 
+	* v1.6
+	* Added terrain and exp
+	* 
 	* To do
-	* Does not factor in terrain, supports, other misc things
+	* Does not factor in supports, other misc things
 	* No weapon triangle
 	* 
 	* @param target The target of the attack
 	* @author Jeffrey Goh
-	* @version 1.4
-	* @updated 7/6/2017
+	* @version 1.6
+	* @updated 24/6/2017
 	*/
 	public void attackWithCurrentUnit(Unit target)
 	{
@@ -57,9 +60,9 @@ public class BattleFormula
 				// Accuracy
 
 				int attackerAcc = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].weaponAcc + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].skl * 2 + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk / 2;
-				int attackerAvd = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spd * 2 + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk;
+				int attackerAvd = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spd * 2 + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk + Grid.instance.map[(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x][(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y].linkedTerrain.returnAvd();
 				int defenderAcc = target.weaponAcc + target.skl * 2 + target.luk / 2;
-				int defenderAvd = target.spd * 2 + target.luk;
+				int defenderAvd = target.spd * 2 + target.luk + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnAvd();
 
 				int attackerHit = attackerAcc - defenderAvd;
 				int defenderHit = defenderAcc - attackerAvd;
@@ -75,12 +78,12 @@ public class BattleFormula
 				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].weaponPhysical)
 				{
 					attackerAtk = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].strength + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].weaponMt;
-					defenderDef = target.def;
+					defenderDef = target.def + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
 				}
 				else
 				{
 					attackerAtk = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].weaponMt;
-					defenderDef = target.res;
+					defenderDef = target.res + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
 				}
 
 				// Damage for defender
@@ -88,12 +91,12 @@ public class BattleFormula
 				if (target.weaponPhysical)
 				{
 					defenderAtk = target.strength + target.weaponMt;
-					attackerDef = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].def;
+					attackerDef = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].def + Grid.instance.map[(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x][(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y].linkedTerrain.returnDef();
 				}
 				else
 				{
 					defenderAtk = target.mag + target.weaponMt;
-					attackerDef = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].res;
+					attackerDef = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].res + Grid.instance.map[(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x][(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y].linkedTerrain.returnDef();
 				}
 
 				int attackerDmg = attackerAtk - defenderDef;
@@ -207,6 +210,13 @@ public class BattleFormula
 						Grid.instance.currentPlayer = -1;
 					}
 					Grid.instance.removeTileHighlight();
+
+					// Add exp if attacker is a PlayerUnit
+					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+					{
+						this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, true);
+					}
+
 					return;
 				}
 				else
@@ -271,25 +281,17 @@ public class BattleFormula
 							Grid.instance.currentPlayer = -1;
 						}
 						Grid.instance.removeTileHighlight();
+
+						// Add exp if target is a PlayerUnit
+						if (target is PlayerUnit)
+						{
+							this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], defenderDmg, true);
+						}
 						return;
 					}
 					else
 					{
 						Debug.Log(target.unitName + ": " + target.currentHP + "/" + target.maxHP + ", " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + ": " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP + "/" + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP);
-					}
-
-
-
-					// Check if attacker is dead
-					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP <= 0)
-					{
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP = 0;
-						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
-						return;
-					}
-					else
-					{
-						Debug.Log(target.unitName + ": " + target.currentHP + ", " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + ": " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP);
 					}
 
 				}
@@ -337,17 +339,6 @@ public class BattleFormula
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
 					}
 
-					// Check if target is dead
-					if (target.currentHP <= 0)
-					{
-						target.currentHP = 0;
-						Debug.Log(target.unitName + " has died!");
-					}
-					else
-					{
-						Debug.Log(target.unitName + ": " + target.currentHP + ", " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + ": " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP);
-					}
-
 
 
 					// Check if target is dead
@@ -366,6 +357,13 @@ public class BattleFormula
 							Grid.instance.currentPlayer = -1;
 						}
 						Grid.instance.removeTileHighlight();
+
+						// Add exp if attacker is a PlayerUnit
+						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, 2*attackerDmg, true);
+						}
+
 						return;
 					}
 					else
@@ -443,11 +441,45 @@ public class BattleFormula
 							Grid.instance.currentPlayer = -1;
 						}
 						Grid.instance.removeTileHighlight();
+						// Add exp if target is a PlayerUnit
+						if (target is PlayerUnit)
+						{
+							this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], 2 * defenderDmg, true);
+						}
 						return;
 					}
 					else
 					{
 						Debug.Log(target.unitName + ": " + target.currentHP + "/" + target.maxHP + ", " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + ": " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP + "/" + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP);
+					}
+				}
+				// Add exp if attacker is a PlayerUnit
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+				{
+					if (atkAS - defAS >= 4)
+					{
+						this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, 2 * attackerDmg, false);
+					}
+					else
+					{
+						this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, false);
+					}
+				}
+
+				// Add exp if target is a PlayerUnit
+				if (target is PlayerUnit)
+				{
+					if (!canCounter)
+					{
+						this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], 0, false);
+					}
+					else if (defAS - atkAS >= 4)
+					{
+						this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], 2*defenderDmg, false);
+					}
+					else
+					{
+						this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], defenderDmg, false);
 					}
 				}
 			}
@@ -460,6 +492,7 @@ public class BattleFormula
 				Grid.instance.currentPlayer = -1;
 			}
 			Grid.instance.removeTileHighlight();
+			return;
 		}
 		else
 		{
@@ -474,15 +507,18 @@ public class BattleFormula
 	* v 1.0
 	* Based on v1.4 of attackWithCurrentUnit
 	* 
+	* v1.1
+	* Added Terrain
+	* 
 	* To do
-	* Does not factor in terrain, supports, other misc things
+	* Does not factor in supports, other misc things
 	* No weapon triangle
 	* 
 	* @param attacker The attacking unit
 	* @param target The target of the attack
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 12/6/2017
+	* @version 1.1
+	* @updated 24/6/2017
 	*/
 	public int battleForecast(Unit attacker, Unit target)
 	{
@@ -497,12 +533,12 @@ public class BattleFormula
 		if (attacker.weaponPhysical)
 		{
 			attackerAtk = attacker.strength + attacker.weaponMt;
-			defenderDef = target.def;
+			defenderDef = target.def + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
 		}
 		else
 		{
 			attackerAtk = attacker.mag + attacker.weaponMt;
-			defenderDef = target.res;
+			defenderDef = target.res + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
 		}
 
 		// Damage for defender
@@ -510,12 +546,12 @@ public class BattleFormula
 		if (target.weaponPhysical)
 		{
 			defenderAtk = target.strength + target.weaponMt;
-			attackerDef = attacker.def;
+			attackerDef = attacker.def + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
 		}
 		else
 		{
 			defenderAtk = target.mag + target.weaponMt;
-			attackerDef = attacker.res;
+			attackerDef = attacker.res + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
 		}
 
 		int attackerDmg = attackerAtk - defenderDef;
@@ -576,5 +612,125 @@ public class BattleFormula
 			dmgDealt += attackerDmg;
 		}
 		return dmgDealt;
+	}
+
+	/**
+	* Allows player units to gain exp and level up from combat
+	* 
+	* 
+	* @param attacker The attacking unit
+	* @param defender The target of the attack
+	* @param damage The damage dealt in combat
+	* @param defeated Whether the target was defeated
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 24/6/2017
+	*/
+	public void battleEXP(Unit attacker, Unit defender, int damage, bool defeated)
+	{
+		if (attacker.lvl == 20)
+		{
+			return;
+		}
+		else
+		{
+			int expGain = 0;
+			if (damage == 0)
+			{
+				expGain = 1;
+			}
+			else
+			{
+				int expDmg = (31 + (defender.lvl + defender.classBonusA) - (attacker.lvl + attacker.classBonusA)) / 3;
+
+				if (defeated)
+				{
+					int expBase = ((defender.lvl * defender.classPower) + defender.classBonusB) - ((attacker.lvl + attacker.classPower) + attacker.classBonusB);
+					int expKill = expDmg + expBase + 20 + defender.isBoss * 40 + defender.isThief;
+					if (expKill <= 0)
+					{
+						expKill = 1;
+					}
+					else if (expKill > 100)
+					{
+						expKill = 100;
+					}
+					expGain = expKill;
+				}
+				else
+				{
+					if (expDmg <= 0)
+					{
+						expDmg = 1;
+					}
+					else if (expDmg > 100)
+					{
+						expDmg = 100;
+					}
+					expGain = expDmg;
+				}
+			}
+			Debug.Log(attacker.unitName + " has gained " + expGain + " exp!");
+			//Level up
+			if (attacker.exp >= 100)
+			{
+				attacker.exp -= 100;
+				attacker.lvl += 1;
+				Debug.Log(attacker.unitName + " has levelled up!");
+				int roll = Random.Range(1, 100);
+				if (roll <= attacker.hpG)
+				{
+					attacker.currentHP += 1;
+					attacker.maxHP += 1;
+					Debug.Log(attacker.unitName + " has gained 1 HP!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.strG)
+				{
+					attacker.strength += 1;
+					Debug.Log(attacker.unitName + " has gained 1 STR!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.magG)
+				{
+					attacker.mag += 1;
+					Debug.Log(attacker.unitName + " has gained 1 MAG!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.sklG)
+				{
+					attacker.skl += 1;
+					Debug.Log(attacker.unitName + " has gained 1 SKL!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.spdG)
+				{
+					attacker.spd += 1;
+					Debug.Log(attacker.unitName + " has gained 1 SPD!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.lukG)
+				{
+					attacker.luk += 1;
+					Debug.Log(attacker.unitName + " has gained 1 LUK!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.defG)
+				{
+					attacker.def += 1;
+					Debug.Log(attacker.unitName + " has gained 1 DEF!");
+				}
+				roll = Random.Range(1, 100);
+				if (roll <= attacker.resG)
+				{
+					attacker.res += 1;
+					Debug.Log(attacker.unitName + " has gained 1 RES!");
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
 	}
 }

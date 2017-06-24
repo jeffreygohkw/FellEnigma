@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour {
 	public Vector2 gridPosition = Vector2.zero;
 
 	public int movementCost;
-    private TerrainS linkedTerrain;
+    public TerrainS linkedTerrain;
 
 	public List<Tile> neighbours = new List<Tile>();
 
@@ -144,9 +144,15 @@ public class Tile : MonoBehaviour {
         return this.linkedTerrain.returnPassable();
     }
 
-    // Returns a integer containing terrain's modifier
-    public int returnModifier()
+    // Returns a integer containing terrain's avoid
+    public int returnAvd()
     {
-        return this.linkedTerrain.returnModifier();
+        return this.linkedTerrain.returnAvd();
     }
+
+	// Returns a integer containing terrain's defense
+	public int returnDef()
+	{
+		return this.linkedTerrain.returnDef();
+	}
 }

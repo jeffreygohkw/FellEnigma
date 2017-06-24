@@ -11,15 +11,17 @@ public class TerrainS : MonoBehaviour
 
     public Material[] list;
     public int[] movementCostList;
-    public int[] modifierList;
+    public int[] avdList;
+	public int[] defList;
+	public int[] healList;
 
 
-    /* Type 0: Normal tile
+	/* Type 0: Normal tile
      * Type 1: Impassable tile
      * Type 2: Event tile
      * 
      */
-    public int[] typeList;
+	public int[] typeList;
 
 
     // Use this for initialization
@@ -74,9 +76,19 @@ public class TerrainS : MonoBehaviour
         return this.isPassable;
     }
 
-    public int returnModifier()
+    public int returnAvd()
     {
-        return this.modifierList[config];
+        return this.avdList[config];
     }
-   
+
+	public int returnDef()
+	{
+		return this.defList[config];
+	}
+
+	public int returnHeal()
+	{
+		return this.healList[config];
+	}
+
 }

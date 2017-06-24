@@ -27,6 +27,12 @@ public class Unit : MonoBehaviour {
 	// Unit stats
 	public string unitName;
 	public string job;
+	//1 for true
+	public int isBoss = 0;
+	public int isThief = 0;
+	public int classPower = 3;
+	public int classBonusA;
+	public int classBonusB = 0;
 	public int lvl;
 	public int exp;
 	public int maxHP;
@@ -40,6 +46,16 @@ public class Unit : MonoBehaviour {
 	public int res;
 	public int con;
 	public int mov;
+
+	//Growths
+	public int hpG;
+	public int strG;
+	public int magG;
+	public int sklG;
+	public int spdG;
+	public int lukG;
+	public int defG;
+	public int resG;
 
 	// Weapon stats
 	public int weaponMt;
