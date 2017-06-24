@@ -167,7 +167,7 @@ public class TileHighlight {
 				List<Tile> attackRange = FindHighlight(t, minAttack, maxAttack, allies, false);
 				foreach (Tile a in attackRange)
 				{
-					if (a.occupied != null)
+					if (a.occupied != null && a.occupied.currentHP > 0)
 					{
 						//For each tile it can attack from tile t
 						if (targets.ContainsKey(a))

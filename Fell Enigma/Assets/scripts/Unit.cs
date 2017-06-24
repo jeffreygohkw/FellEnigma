@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour {
 
 	public bool selected = false;
 
-	public int team;
+	public int team = 0;
 	public List<int> allies = new List<int>();
 	public int index;
 

@@ -670,13 +670,14 @@ public class BattleFormula
 					expGain = expDmg;
 				}
 			}
+			attacker.exp += expGain;
 			Debug.Log(attacker.unitName + " has gained " + expGain + " exp!");
 			//Level up
-			if (attacker.exp >= 100)
+			while (attacker.exp >= 100)
 			{
 				attacker.exp -= 100;
 				attacker.lvl += 1;
-				Debug.Log(attacker.unitName + " has levelled up!");
+				Debug.Log(attacker.unitName + " has levelled up to level " + attacker.lvl);
 				int roll = Random.Range(1, 100);
 				if (roll <= attacker.hpG)
 				{
@@ -727,10 +728,7 @@ public class BattleFormula
 					Debug.Log(attacker.unitName + " has gained 1 RES!");
 				}
 			}
-			else
-			{
-				return;
-			}
+			return;
 		}
 	}
 }

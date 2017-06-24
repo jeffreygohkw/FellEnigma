@@ -63,9 +63,11 @@ public class AIUnit : Unit
 	* v1.1
 	* AIUnit will attack the weakest unit in range
 	*
+	* v1.2
+	* Added Passive and Stationary AI
 	* @author Jeffrey Goh
-	* @version 1.1
-	* @updated 12/6/2017
+	* @version 1.2
+	* @updated 24/6/2017
 	*/
 	public override void turnUpdate()
 	{
@@ -103,11 +105,13 @@ public class AIUnit : Unit
 				isMoving = false;
 				isFighting = false;
 				doneAction = true;
+				targetTile = null;
 				Grid.instance.totalDone++;
 			}
 		}
 		else
 		{
+			targetTile = null;
 			if (ai_id == 0)
 			{
 				//Agressive AI
@@ -125,6 +129,11 @@ public class AIUnit : Unit
 					Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
 					if (target == null)
+					{
+						tempMov++;
+						continue;
+					}
+					else if (target[0] == null)
 					{
 						tempMov++;
 						continue;
@@ -190,6 +199,7 @@ public class AIUnit : Unit
 					isMoving = false;
 					isFighting = false;
 					doneAction = true;
+					targetTile = null;
 					Grid.instance.totalDone++;
 				}
 
@@ -228,6 +238,7 @@ public class AIUnit : Unit
 					isMoving = false;
 					isFighting = false;
 					doneAction = true;
+					targetTile = null;
 					Grid.instance.totalDone++;
 				}
 
@@ -242,15 +253,18 @@ public class AIUnit : Unit
 	}
 
 	/**
-	* Choose a target to move to and attack
-	* Returns null if there are no units in range
-	* Returns the tile containing the unit that this unit will target and the tile this unit will attack from
-	* Returns the unit this unit can deal the most damage to if this unit cannot reach any unit in range due to obstructions, and null since it cannot actually hit the target
-	* @param enemiesInRange The tiles of enemies we want to consider to choose as our target
-	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 12/6/2017
-	*/
+	 * v1.1
+	 * Bug fixes for units that deal 0 damage
+	 * 
+	 * Choose a target to move to and attack
+	 * Returns null if there are no units in range
+	 * Returns the tile containing the unit that this unit will target and the tile this unit will attack from
+	 * Returns the unit this unit can deal the most damage to if this unit cannot reach any unit in range due to obstructions, and null since it cannot actually hit the target
+	 * @param enemiesInRange The tiles of enemies we want to consider to choose as our target
+	 * @author Jeffrey Goh
+	 * @version 1.1
+	 * @updated 24/6/2017
+	 */
 	public List<Tile> chooseTarget(Dictionary<Tile, List<Tile>> enemiesInRange)
 	{
 		Tile primeTarget = null;
@@ -258,14 +272,12 @@ public class AIUnit : Unit
 
 		List<Tile> toReturn = new List<Tile>();
 
-		Dictionary<Tile, List<Tile>> enemiesToApproach = new Dictionary<Tile, List<Tile>>();
 		if (enemiesInRange.Count > 0)
 		{
 			while (!doneAction)
 			{
 				if (enemiesInRange.Count == 0)
 				{
-					// We get here when everything in enemiesInRange is moved to enemiesToApproach
 					// We return primeTarget instead of null since there exists a unit that is in range, but cannot be attacked
 					toReturn.Add(primeTarget);
 					toReturn.Add(null);
@@ -279,7 +291,7 @@ public class AIUnit : Unit
 					// if none will die, attack the unit that will take the most damage
 					bool hasKillableTarget = false;
 					bool targetWillDie = false;
-					int maxDmg = 0;
+					int maxDmg = -1;
 
 					// Determine which unit is the target 
 					foreach (Tile t in enemiesInRange.Keys)
@@ -313,41 +325,38 @@ public class AIUnit : Unit
 
 					// To keep track of the number of occupied tiles that would have otherwise allowed this unit to hit the target
 					int occupiedCount = 0;
-					foreach (Tile x in enemiesInRange[targetTile])
+					if (enemiesInRange.ContainsKey(targetTile))
 					{
-						if ((x.occupied == null || x == Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y]))
+						foreach (Tile x in enemiesInRange[targetTile])
 						{
-							toReturn.Add(targetTile);
-							toReturn.Add(x);
-							return toReturn;
+							if ((x.occupied == null || x == Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y]))
+							{
+								toReturn.Add(targetTile);
+								toReturn.Add(x);
+								return toReturn;
+							}
+							else
+							{
+								occupiedCount++;
+							}
 						}
-						else
+
+
+						// If every tile is occupied, remove this target and recalculate
+						if (occupiedCount == enemiesInRange[targetTile].Count)
 						{
-							occupiedCount++;
+							if (enemiesInRange.Count == originalCount)
+							{
+								primeTarget = targetTile;
+							}
+							enemiesInRange.Remove(targetTile);
+							continue;
 						}
 					}
-
-
-					// If every tile is occupied, move this target to enemiesToApproach and recalculate
-					if (occupiedCount == enemiesInRange[targetTile].Count)
-					{
-						if (enemiesInRange.Count == originalCount)
-						{
-							primeTarget = targetTile;
-						}
-						enemiesToApproach.Add(targetTile, enemiesInRange[targetTile]);
-						enemiesInRange.Remove(targetTile);
-						continue;
-					}
-
 					else
 					{
-						//Otherwise, move every target to enemiesToApproach
-						foreach (Tile t in enemiesInRange.Keys)
-						{
-							enemiesToApproach.Add(t, enemiesInRange[t]);
-							enemiesInRange.Remove(t);
-						}
+						enemiesInRange.Remove(targetTile);
+						continue;
 					}
 				}
 			}
@@ -375,9 +384,12 @@ public class AIUnit : Unit
 			Grid.instance.removeTileHighlight();
 		}
 		*/
-		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+		if (Grid.instance.currentPlayer != -1)
 		{
-			Grid.instance.battle.attackWithCurrentUnit(this);
+			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			{
+				Grid.instance.battle.attackWithCurrentUnit(this);
+			}
 		}
 	}
 
