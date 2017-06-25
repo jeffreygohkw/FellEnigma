@@ -60,6 +60,12 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+        //Force shut game
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
 		//Debug.Log(currentPlayer);
 		if (units[2][0].currentHP <= 0)
 		{

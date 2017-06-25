@@ -68,6 +68,8 @@ public class StatsUI: MonoBehaviour {
     private void updateData()
     {
         healthBar.value =  Mathf.Floor(((float) thisUnit.currentHP / (float) thisUnit.maxHP) * 100);
+        displayStats.text = "HP = " + thisUnit.currentHP.ToString() + "/" + thisUnit.maxHP.ToString() + " STR = " + thisUnit.strength.ToString() + " MAG = " + thisUnit.mag.ToString() + " SKL = " + thisUnit.skl.ToString() + "\n"
+            + " SPD = " + thisUnit.spd.ToString() + " LUK = " + thisUnit.luk.ToString() + " DEF = " + thisUnit.def.ToString() + " RES = " + thisUnit.res.ToString();
     }
 
     /**
