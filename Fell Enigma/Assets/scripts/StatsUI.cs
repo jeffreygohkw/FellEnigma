@@ -31,7 +31,7 @@ public class StatsUI: MonoBehaviour {
 
         // Obtains the various components under the UI prefab
         // Note that Text components need to be in order (aka don't change the order in Inspector)
-		UI = Instantiate(statsWindow, this.transform);
+		UI = Instantiate(statsWindow, new Vector3(Screen.width,Screen.height,0), Quaternion.Euler(new Vector3(90, 0, 0)));
         healthBar = UI.GetComponentInChildren<Slider>();
         displayName = UI.GetComponentsInChildren<Text>()[0];
         displayStats = UI.GetComponentsInChildren<Text>()[1];
