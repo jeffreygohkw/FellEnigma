@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraS : MonoBehaviour {
 
-    public float Boundary = 50; // distance from edge scrolling starts
+    public float Boundary = 0.05f; // distance from edge scrolling starts
     public float speed = 5;
     public float min_x;
     public float max_x;
@@ -15,19 +15,40 @@ public class CameraS : MonoBehaviour {
     private Vector3 newPos;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         screenDim = new Vector2(Screen.width, Screen.height);
         min_x = transform.position.x - 5;
-        max_x = transform.position.x + 5;
-        min_y = transform.position.y - 5;
-        max_y = transform.position.y + 5;
+        max_x = transform.position.x + 1;
+        min_y = transform.position.y - 7;
+        max_y = transform.position.y + 4;
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 
         newPos = transform.position;
 
+        // Movement by arrow keys
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            newPos.x += speed * Time.deltaTime; // move on +X axis
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            newPos.x -= speed * Time.deltaTime; // move on -X axis
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            newPos.y -= speed * Time.deltaTime; // move on -Y axis
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            newPos.y += speed * Time.deltaTime; // move on +Y axis
+        }
+
+        // Movement by moving mouse to edge of screen
         if (Input.mousePosition.x > screenDim.x - Boundary)
         { 
             newPos.x += speed * Time.deltaTime; // move on +X axis

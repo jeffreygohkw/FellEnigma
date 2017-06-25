@@ -42,7 +42,6 @@ public class TerrainS : MonoBehaviour
     * Trying to figure out how to seperate the Terrain prefab for different levels
     * Otherwise, have to load every material on one prefab...which is pretty bad
     * 
-    * v1.1
     * 
     * 
     * @param i is extracted from the text file mapConfig found in Grid

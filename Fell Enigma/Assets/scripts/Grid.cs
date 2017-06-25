@@ -12,6 +12,7 @@ public class Grid : MonoBehaviour {
 	public GameObject enemyPrefab;
     public GameObject terrainPrefab;
     public TextAsset mapConfig;
+    public Camera mainCam;
 
 	public int tilesPerRow;
 	public int tilesPerCol;
@@ -59,7 +60,7 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
-		Debug.Log(currentPlayer);
+		//Debug.Log(currentPlayer);
 		if (units[2][0].currentHP <= 0)
 		{
 			foreach (List<Unit> u in units)
@@ -134,6 +135,7 @@ public class Grid : MonoBehaviour {
 
 	public void nextTurn()
 	{
+        resetCamera();
 		removeTileHighlight();
 		foreach (Unit u in units[currentTeam])
 		{
@@ -726,6 +728,8 @@ public class Grid : MonoBehaviour {
 		List<Unit> team1 = new List<Unit>();
 		List<Unit> team2 = new List<Unit>();
 
+        unit1.mainCam = unit2.mainCam = unit3.mainCam = unit4.mainCam = enemy1.mainCam = enemy2.mainCam = enemy3.mainCam = boss1.mainCam = mainCam;
+
 		team0.Add(unit1);
 		team0.Add(unit2);
 		team0.Add(unit4);
@@ -749,4 +753,18 @@ public class Grid : MonoBehaviour {
 		AITeams.Add(2);
 
 	}
+
+    /**
+	* A crude snap back of the camera to the first unit found
+    * Will be improved
+    * 
+	* @author Wayne Neo
+	* @version 1.0
+	* @updated 25/6/2017
+	*/
+    public void resetCamera()
+    {
+        GameObject firstUnit = GameObject.FindGameObjectsWithTag("Player")[0];
+        mainCam.transform.position = new Vector3(firstUnit.transform.position.x, firstUnit.transform.position.y, mainCam.transform.position.z);
+    }
 }

@@ -65,11 +65,12 @@ public class StationaryUnit : Unit {
 	{
 		if (positionQueue.Count > 0)
 		{
-			if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
+            //mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
+            if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 			{
 				transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
-
-				if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
+                //mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
+                if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
 				{
 					transform.position = positionQueue[0];
 					positionQueue.RemoveAt(0);

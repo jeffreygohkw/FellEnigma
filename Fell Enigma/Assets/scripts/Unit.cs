@@ -69,6 +69,7 @@ public class Unit : MonoBehaviour {
 	//movement animation
 	public List<Vector2> positionQueue = new List<Vector2>();
 
+    public Camera mainCam;
 
 	private void Awake()
 	{

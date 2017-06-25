@@ -15,6 +15,7 @@ public class StatsUI: MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        // Obtains Unit component (necessary for this to work)
         if (this.CompareTag("Player"))
         {
             thisUnit = this.GetComponent<PlayerUnit>();
@@ -28,6 +29,8 @@ public class StatsUI: MonoBehaviour {
 			thisUnit = this.GetComponent<StationaryUnit>();
 		}
 
+        // Obtains the various components under the UI prefab
+        // Note that Text components need to be in order (aka don't change the order in Inspector)
 		UI = Instantiate(statsWindow, this.transform);
         healthBar = UI.GetComponentInChildren<Slider>();
         displayName = UI.GetComponentsInChildren<Text>()[0];
@@ -41,22 +44,40 @@ public class StatsUI: MonoBehaviour {
     {
     }
 
+    // Updates and enables UI 
     public void OnMouseOver()
     {
         updateData();
         UI.enabled = true;
     }
 
+    // Disables UI
     public void OnMouseExit()
     {
         UI.enabled = false;
     }
 
+
+    /**
+    * Updates the health bar in the UI
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 25/6/17
+    */
     private void updateData()
     {
         healthBar.value =  Mathf.Floor(((float) thisUnit.currentHP / (float) thisUnit.maxHP) * 100);
     }
 
+    /**
+    * Initial loading of parameters and name
+    * Assuming name and parameters are not changed ingame
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 25/6/17
+    */
     private void loadStats()
     {
         displayName.text = thisUnit.unitName;
