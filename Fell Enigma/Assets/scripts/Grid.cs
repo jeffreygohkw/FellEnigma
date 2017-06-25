@@ -37,8 +37,11 @@ public class Grid : MonoBehaviour {
 	 * 3 = Survive
 	 * More to be added later
 	 * */
-	public int winCon1;
-	public int winCon2;
+	//public int winCon1;
+	//public int winCon2;
+
+	public bool victory = false;
+	public bool failure = false;
 
 	public void Awake()
 	{
@@ -56,6 +59,30 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+		Debug.Log(currentPlayer);
+		if (units[2][0].currentHP <= 0)
+		{
+			foreach (List<Unit> u in units)
+			{
+				foreach (Unit v in u)
+				{
+					v.gameObject.SetActive(false);
+				}
+			}
+			return;
+		}
+		else if (units[1][0].currentHP <= 0)
+		{
+			foreach (List<Unit> u in units)
+			{
+				foreach (Unit v in u)
+				{
+					v.gameObject.SetActive(false);
+				}
+			}
+			return;
+		}
+		
 		// Skip turn if entire team is dead
 		if (units[currentTeam].Count == 0 || totalDone == units[currentTeam].Count || currentPlayer == units[currentTeam].Count)
 		{
@@ -139,7 +166,24 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
-
+	/**
+	 * 
+	 * 
+	 * @author Jeffrey Goh
+	 * @version v1.0
+	 * @updated 24/6/2017
+	 */
+	void GameOver()
+	{
+		foreach (Unit u in units[currentTeam])
+		{
+			// If the unit is selected and alive
+			if (u.currentHP > 0 && u.selected)
+			{
+				u.turnUpdate();
+			}
+		}
+	}
 
 	/**
 	* Move the current unit to the destination tile
@@ -239,9 +283,9 @@ public class Grid : MonoBehaviour {
 	 */
 	public void removeTileHighlight()
 	{
-		for (int i = 0; i < tilesPerRow; i++)
+		for (int i = 0; i < tilesPerCol; i++)
 		{
-			for (int j = 0; j < tilesPerCol; j++)
+			for (int j = 0; j < tilesPerRow; j++)
 			{
 				map[i][j].resetDefaultColor();
 			}

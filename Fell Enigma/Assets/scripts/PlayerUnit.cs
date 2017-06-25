@@ -117,8 +117,11 @@ public class PlayerUnit : Unit
 					return;
 				}
 			}
-			selected = !selected;
-			if (selected)
+			if (!doneAction)
+			{
+				selected = !selected;
+			}
+			if (selected && !doneAction)
 			{
 				Grid.instance.currentPlayer = index;
 			}
