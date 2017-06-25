@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StatsUI: MonoBehaviour {
 
     public Canvas statsWindow;
-    private Canvas UI;
+    public Canvas UI;
     private Slider healthBar;
     private Text displayName;
     private Text displayStats;
@@ -42,6 +42,7 @@ public class StatsUI: MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+       
     }
 
     // Updates and enables UI 
@@ -59,7 +60,7 @@ public class StatsUI: MonoBehaviour {
 
 
     /**
-    * Updates the health bar in the UI
+    * Updates the health bar and parameters in the UI
     * 
     * @author Wayne Neo
     * @version 1.0

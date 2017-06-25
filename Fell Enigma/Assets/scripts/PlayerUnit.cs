@@ -36,11 +36,12 @@ public class PlayerUnit : Unit
 
 		if (currentHP <= 0)
 		{
-			//Kept for debugging purposes
-			//GetComponent<Renderer>().material.color = Color.red;
+            //Kept for debugging purposes
+            //GetComponent<Renderer>().material.color = Color.red;
 
-			//Object disappears if dead
-			gameObject.SetActive(false);
+            //Object disappears if dead
+            this.GetComponent<StatsUI>().UI.enabled = false;
+            gameObject.SetActive(false);
 
 			//Turn the tile this unit was standing on free
 			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
