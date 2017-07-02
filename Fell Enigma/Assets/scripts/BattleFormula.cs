@@ -617,14 +617,16 @@ public class BattleFormula
 	/**
 	* Allows player units to gain exp and level up from combat
 	* 
+	* v1.1
+	* Updated EXP formula to account for over 100% growths
 	* 
 	* @param attacker The attacking unit
 	* @param defender The target of the attack
 	* @param damage The damage dealt in combat
 	* @param defeated Whether the target was defeated
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 24/6/2017
+	* @version 1.1
+	* @updated 2/7/2017
 	*/
 	public void battleEXP(Unit attacker, Unit defender, int damage, bool defeated)
 	{
@@ -678,54 +680,143 @@ public class BattleFormula
 				attacker.exp -= 100;
 				attacker.lvl += 1;
 				Debug.Log(attacker.unitName + " has levelled up to level " + attacker.lvl);
-				int roll = Random.Range(1, 100);
-				if (roll <= attacker.hpG)
+				int roll;
+				int statup = 0;
+				int tempG = attacker.hpG;
+				do
 				{
-					attacker.currentHP += 1;
-					attacker.maxHP += 1;
-					Debug.Log(attacker.unitName + " has gained 1 HP!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.maxHP += statup;
+					attacker.currentHP += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " HP!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.strG)
+				
+				tempG = attacker.strG;
+				do
 				{
-					attacker.strength += 1;
-					Debug.Log(attacker.unitName + " has gained 1 STR!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.strength += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " STR!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.magG)
+
+				tempG = attacker.magG;
+				do
 				{
-					attacker.mag += 1;
-					Debug.Log(attacker.unitName + " has gained 1 MAG!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.mag += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " MAG!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.sklG)
+
+				tempG = attacker.sklG;
+				do
 				{
-					attacker.skl += 1;
-					Debug.Log(attacker.unitName + " has gained 1 SKL!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.skl += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " SKL!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.spdG)
+
+				tempG = attacker.spdG;
+				do
 				{
-					attacker.spd += 1;
-					Debug.Log(attacker.unitName + " has gained 1 SPD!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.spd += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " SPD!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.lukG)
+
+				tempG = attacker.lukG;
+				do
 				{
-					attacker.luk += 1;
-					Debug.Log(attacker.unitName + " has gained 1 LUK!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.luk += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " LUK!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.defG)
+
+				tempG = attacker.defG;
+				do
 				{
-					attacker.def += 1;
-					Debug.Log(attacker.unitName + " has gained 1 DEF!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.def += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " DEF!");
+					statup = 0;
 				}
-				roll = Random.Range(1, 100);
-				if (roll <= attacker.resG)
+
+				tempG = attacker.resG;
+				do
 				{
-					attacker.res += 1;
-					Debug.Log(attacker.unitName + " has gained 1 RES!");
+					roll = Random.Range(1, 100);
+					if (roll <= tempG)
+					{
+						statup += 1;
+					}
+					tempG -= 100;
+				} while (tempG > 0);
+				if (statup > 0)
+				{
+					attacker.res += statup;
+					Debug.Log(attacker.unitName + " has gained " + statup + " RES!");
+					statup = 0;
 				}
 			}
 			return;

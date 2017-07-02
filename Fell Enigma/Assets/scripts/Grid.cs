@@ -27,7 +27,6 @@ public class Grid : MonoBehaviour {
 
 	public BattleFormula battle = new BattleFormula();
 
-
 	public List<List<Tile>> map = new List<List<Tile>>();
     public List<List<Unit>> units = new List<List<Unit>>();
 
@@ -52,6 +51,7 @@ public class Grid : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		Item.instance.initialiseWeapons();
         CreateTerrain();
 		CreateTiles();
 		CreatePlayers();
@@ -419,29 +419,32 @@ public class Grid : MonoBehaviour {
 		PlayerUnit unit1 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 5 - Mathf.Floor(tilesPerRow / 2),0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 		unit1.gridPosition = new Vector2(2, 5);
 
-		unit1.unitName = "Caineghis";
-		unit1.job = "Lion King";
-		unit1.lvl = 20;
+		unit1.unitName = "Karel";
+		unit1.job = "Swordmaster";
+		unit1.lvl = 19;
 		unit1.exp = 0;
-		unit1.maxHP = 76;
-		unit1.currentHP = 76;
-		unit1.strength = 44;
-		unit1.mag = 8;
-		unit1.skl = 46;
-		unit1.spd = 34;
-		unit1.luk = 30;
-		unit1.def = 44;
-		unit1.res = 20;
-		unit1.con = 27;
-		unit1.mov = 9;
+		unit1.maxHP = 44;
+		unit1.currentHP = 44;
+		unit1.strength = 20;
+		unit1.mag = 5;
+		unit1.skl = 28;
+		unit1.spd = 23;
+		unit1.luk = 18;
+		unit1.def = 15;
+		unit1.res = 13;
+		unit1.con = 9;
+		unit1.mov = 6;
 
-		unit1.weaponMt = 22;
-		unit1.weaponPhysical = true;
-		unit1.weaponAcc = 100;
-		unit1.weaponCrit = 0;
-		unit1.weaponWt = 1;
-		unit1.weaponMinRange = 1;
-		unit1.weaponMaxRange = 1;
+		unit1.hpG = 210;
+		unit1.strG = 130;
+		unit1.magG = 0;
+		unit1.sklG = 140;
+		unit1.spdG = 140;
+		unit1.lukG = 120;
+		unit1.defG = 110;
+		unit1.resG = 100;
+
+		Item.instance.equipWeapon(unit1, "Sword", "WoDao");
 
 		map[2][5].occupied = unit1;
 
@@ -477,13 +480,7 @@ public class Grid : MonoBehaviour {
 		unit2.defG = 30;
 		unit2.resG = 50;
 
-		unit2.weaponMt = 13;
-		unit2.weaponPhysical = false;
-		unit2.weaponAcc = 95;
-		unit2.weaponCrit = 10;
-		unit2.weaponWt = 5;
-		unit2.weaponMinRange = 1;
-		unit2.weaponMaxRange = 2;
+		Item.instance.equipWeapon(unit2, "Tome", "Fimbulvetr");
 
 		map[2][6].occupied = unit2;
 
@@ -521,13 +518,7 @@ public class Grid : MonoBehaviour {
 		unit4.defG = 45;
 		unit4.resG = 20;
 
-		unit4.weaponMt = 8;
-		unit4.weaponPhysical = true;
-		unit4.weaponAcc = 80;
-		unit4.weaponCrit = 30;
-		unit4.weaponWt = 9;
-		unit4.weaponMinRange = 2;
-		unit4.weaponMaxRange = 2;
+		Item.instance.equipWeapon(unit4, "Bow", "KillerBow");
 
 		map[1][6].occupied = unit4;
 
@@ -566,13 +557,7 @@ public class Grid : MonoBehaviour {
 		unit3.defG = 15;
 		unit3.resG = 50;
 
-		unit3.weaponMt = 5;
-		unit3.weaponPhysical = false;
-		unit3.weaponAcc = 90;
-		unit3.weaponCrit = 0;
-		unit3.weaponWt = 4;
-		unit3.weaponMinRange = 1;
-		unit3.weaponMaxRange = 2;
+		Item.instance.equipWeapon(unit3, "Tome", "Elfire");
 
 		map[10][7].occupied = unit3;
 
@@ -607,13 +592,7 @@ public class Grid : MonoBehaviour {
 		boss1.con = 7;
 		boss1.mov = 6;
 
-		boss1.weaponMt = 15;
-		boss1.weaponPhysical = false;
-		boss1.weaponAcc = 70;
-		boss1.weaponCrit = 0;
-		boss1.weaponWt = 18;
-		boss1.weaponMinRange = 1;
-		boss1.weaponMaxRange = 2;
+		Item.instance.equipWeapon(boss1, "Tome", "Fenrir");
 
 		map[10][18].occupied = boss1;
 
@@ -643,13 +622,7 @@ public class Grid : MonoBehaviour {
 		enemy1.con = 7;
 		enemy1.mov = 6;
 
-		enemy1.weaponMt = 12;
-		enemy1.weaponPhysical = false;
-		enemy1.weaponAcc = 85;
-		enemy1.weaponCrit = 15;
-		enemy1.weaponWt = 15;
-		enemy1.weaponMinRange = 1;
-		enemy1.weaponMaxRange = 2;
+		Item.instance.equipWeapon(enemy1, "Tome", "Aura");
 
 		map[10][13].occupied = enemy1;
 
@@ -680,13 +653,7 @@ public class Grid : MonoBehaviour {
 		enemy2.con = 13;
 		enemy2.mov = 6;
 
-		enemy2.weaponMt = 15;
-		enemy2.weaponPhysical = true;
-		enemy2.weaponAcc = 70;
-		enemy2.weaponCrit = 0;
-		enemy2.weaponWt = 15;
-		enemy2.weaponMinRange = 1;
-		enemy2.weaponMaxRange = 1;
+		Item.instance.equipWeapon(enemy2, "Axe", "Tomahawk");
 
 		map[0][12].occupied = enemy2;
 
@@ -716,13 +683,7 @@ public class Grid : MonoBehaviour {
 		enemy3.con = 10;
 		enemy3.mov = 8;
 
-		enemy3.weaponMt = 9;
-		enemy3.weaponPhysical = true;
-		enemy3.weaponAcc = 85;
-		enemy3.weaponCrit = 30;
-		enemy3.weaponWt = 3;
-		enemy3.weaponMinRange = 2;
-		enemy3.weaponMaxRange = 3;
+		Item.instance.equipWeapon(enemy3, "Bow", "Longbow");
 
 		map[19][15].occupied = enemy3;
 
