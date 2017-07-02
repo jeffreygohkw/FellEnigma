@@ -30,6 +30,8 @@ public class Grid : MonoBehaviour {
 	public List<List<Tile>> map = new List<List<Tile>>();
     public List<List<Unit>> units = new List<List<Unit>>();
 
+	public int gold = 3000;
+
 	/*
 	 * 0 = No wincon (deactivated)
 	 * 1 = Rout
