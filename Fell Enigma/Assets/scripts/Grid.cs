@@ -456,7 +456,6 @@ public class Grid : MonoBehaviour {
 		unit1.defG = 110;
 		unit1.resG = 100;
 
-		Item.instance.addWeapon(unit1, "Sword", "WoDao");
 		Item.instance.equipWeapon(unit1, "Sword", "WoDao");
 
 		map[2][5].occupied = unit1;
@@ -493,7 +492,6 @@ public class Grid : MonoBehaviour {
 		unit2.defG = 30;
 		unit2.resG = 50;
 
-		Item.instance.addWeapon(unit2, "Tome", "Fimbulvetr");
 		Item.instance.equipWeapon(unit2, "Tome", "Fimbulvetr");
 
 		map[2][6].occupied = unit2;
@@ -532,8 +530,9 @@ public class Grid : MonoBehaviour {
 		unit4.defG = 45;
 		unit4.resG = 20;
 
-		Item.instance.addWeapon(unit4, "Bow", "KillerBow");
+		
 		Item.instance.equipWeapon(unit4, "Bow", "KillerBow");
+		Item.instance.equipWeapon(unit4, "Bow", "Longbow");
 
 		map[1][6].occupied = unit4;
 
@@ -572,7 +571,7 @@ public class Grid : MonoBehaviour {
 		unit3.defG = 15;
 		unit3.resG = 50;
 
-		Item.instance.addWeapon(unit3, "Tome", "Elfire");
+		
 		Item.instance.equipWeapon(unit3, "Tome", "Elfire");
 
 		map[10][7].occupied = unit3;
@@ -607,8 +606,7 @@ public class Grid : MonoBehaviour {
 		boss1.res = 19;
 		boss1.con = 7;
 		boss1.mov = 6;
-
-		Item.instance.addWeapon(boss1, "Tome", "Fenrir");
+		
 		Item.instance.equipWeapon(boss1, "Tome", "Fenrir");
 
 		map[10][18].occupied = boss1;
@@ -638,8 +636,7 @@ public class Grid : MonoBehaviour {
 		enemy1.res = 20;
 		enemy1.con = 7;
 		enemy1.mov = 6;
-
-		Item.instance.addWeapon(enemy1, "Tome", "Aura");
+		
 		Item.instance.equipWeapon(enemy1, "Tome", "Aura");
 
 		map[10][13].occupied = enemy1;
@@ -671,7 +668,6 @@ public class Grid : MonoBehaviour {
 		enemy2.con = 13;
 		enemy2.mov = 6;
 
-		Item.instance.addWeapon(enemy2, "Axe", "Tomahawk");
 		Item.instance.equipWeapon(enemy2, "Axe", "Tomahawk");
 
 		map[0][12].occupied = enemy2;
@@ -702,7 +698,7 @@ public class Grid : MonoBehaviour {
 		enemy3.con = 10;
 		enemy3.mov = 8;
 
-		Item.instance.addWeapon(enemy3, "Bow", "Longbow");
+	
 		Item.instance.equipWeapon(enemy3, "Bow", "Longbow");
 
 		map[19][15].occupied = enemy3;

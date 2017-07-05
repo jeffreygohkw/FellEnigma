@@ -21,7 +21,9 @@ public class Unit : MonoBehaviour {
 	public bool doneMoving = false;
 	public bool willAttack = false;
 	public bool highlighted = false;
-	
+	public bool displayInventory = false;
+	public int selectedItemIndex = -1;
+
 
 	public bool movementType;
 
@@ -59,6 +61,7 @@ public class Unit : MonoBehaviour {
 	public int resG;
 
 	// Weapon stats
+	public int equippedIndex = -1;
 	public int weaponMt;
 	public bool weaponPhysical;
 	public int weaponAcc;

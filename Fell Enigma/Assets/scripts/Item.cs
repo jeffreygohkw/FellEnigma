@@ -46,7 +46,6 @@ public class Item : MonoBehaviour {
 			}
 			else
 			{
-
 				//Add the weapon to type with the key being the weapon's name
 				type.Add(line[1], line);
 			}
@@ -138,23 +137,32 @@ public class Item : MonoBehaviour {
 		}
 		else
 		{
-			string[] weaponStats = weaponCatalog[weaponType][weaponName];
-
-			character.weaponMt = int.Parse(weaponStats[6]);
-
-			if (weaponType != "Tome")
+			if (character.inventory.Count < character.inventorySize)
 			{
-				character.weaponPhysical = true;
+				character.inventory.Add(weaponCatalog[weaponType][weaponName]);
+				string[] weaponStats = weaponCatalog[weaponType][weaponName];
+
+				character.weaponMt = int.Parse(weaponStats[6]);
+
+				if (weaponType != "Tome")
+				{
+					character.weaponPhysical = true;
+				}
+				else
+				{
+					character.weaponPhysical = false;
+				}
+				character.weaponAcc = int.Parse(weaponStats[7]);
+				character.weaponCrit = int.Parse(weaponStats[8]);
+				character.weaponWt = int.Parse(weaponStats[5]);
+				character.weaponMinRange = int.Parse(weaponStats[3]);
+				character.weaponMaxRange = int.Parse(weaponStats[4]);
+				character.equippedIndex = character.inventory.Count - 1;
 			}
 			else
 			{
-				character.weaponPhysical = false;
+				Debug.Log("Inventory is full");
 			}
-			character.weaponAcc = int.Parse(weaponStats[7]);
-			character.weaponCrit = int.Parse(weaponStats[8]);
-			character.weaponWt = int.Parse(weaponStats[5]);
-			character.weaponMinRange = int.Parse(weaponStats[3]);
-			character.weaponMaxRange = int.Parse(weaponStats[4]);
 		}
 	}
 }

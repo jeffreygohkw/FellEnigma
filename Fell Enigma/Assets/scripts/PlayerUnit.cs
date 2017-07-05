@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerUnit : Unit
 {
 	List<Vector2> lastPosition = new List<Vector2>();
-	public bool displayInventory = false;
-	public int selectedItemIndex = -1;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -131,6 +130,78 @@ public class PlayerUnit : Unit
 		isFighting = false;
 	}
 
+	/**
+	 * Equips an item in the PlayerUnit's inventory
+	 * @param index index of the item
+	 * @author Jeffrey Goh
+	 * @version 1.0
+	 * @updated 5/7/2017
+	 */
+	public void equipItem(int index)
+	{
+		// Don't equip if an invalid index is passed in
+		if (inventory.Count < index)
+		{
+			Debug.Log("Invalid index");
+		}
+		else
+		{
+			Debug.Log(inventory[index].Length);
+			//If not weapon, don't equip
+			if (inventory[index].Length != 13)
+			{
+				Debug.Log("Not a weapon");
+			}
+			else
+			{
+				// Equip their weapon
+				weaponMt = int.Parse(inventory[index][6]);
+
+				if (inventory[index][0] != "Tome")
+				{
+					weaponPhysical = true;
+				}
+				else
+				{
+					weaponPhysical = false;
+				}
+				weaponAcc = int.Parse(inventory[index][7]);
+				weaponCrit = int.Parse(inventory[index][8]);
+				weaponWt = int.Parse(inventory[index][5]);
+				weaponMinRange = int.Parse(inventory[index][3]);
+				weaponMaxRange = int.Parse(inventory[index][4]);
+				equippedIndex = index;
+				Debug.Log(inventory[index][1] + " equipped!");
+			}
+		}
+	}
+
+
+	/**
+	 * Discards an item in the PlayerUnit's inventory
+	 * @param index index of the item
+	 * @author Jeffrey Goh
+	 * @version 1.0
+	 * @updated 5/7/2017
+	 */
+	public void discardItem(int index)
+	{
+		// Don't discard if an invalid index is passed in
+		if (inventory.Count < index)
+		{
+			Debug.Log("Invalid index");
+		}
+		else
+		{
+			// Discard their weapon
+			inventory.RemoveAt(index);
+			// Make the unit unequipped if you discard their weapon
+			if (equippedIndex == index)
+			{
+				equippedIndex = -1;
+			}
+		}
+	}
 
 
 
@@ -150,6 +221,8 @@ public class PlayerUnit : Unit
 	*/
 	public override void OnGUI()
 	{
+		
+
 		if (selected && !doneAction)
 		{
 			Rect buttonRect = new Rect(0, Screen.height - 250, 150, 50);
@@ -226,14 +299,14 @@ public class PlayerUnit : Unit
 			{
 				displayInventory = !displayInventory;
 			}
+
+			// The actual Items
 			if (displayInventory)
 			{
-				Debug.Log(inventory.Count);
 				if (inventory.Count >= 1)
 				{
-					Debug.Log(inventory[0][1]);
 					buttonRect = new Rect(151, Screen.height - 150, 150, 50);
-					if (GUI.Button(buttonRect, inventory[1][0]))
+					if (GUI.Button(buttonRect, inventory[0][1]))
 					{
 						if (selectedItemIndex != 0)
 						{
@@ -277,6 +350,24 @@ public class PlayerUnit : Unit
 							selectedItemIndex = -1;
 						}
 					}
+				}
+			}
+
+			//What you can do with the items
+			//Currently assuming weapons
+			if (selectedItemIndex != -1 && displayInventory)
+			{
+				buttonRect = new Rect(300, Screen.height - 100, 150, 50);
+				if (GUI.Button(buttonRect, "Equip"))
+				{
+					equipItem(selectedItemIndex);
+				}
+
+				buttonRect = new Rect(300, Screen.height - 50, 150, 50);
+				if (GUI.Button(buttonRect, "Discard"))
+				{
+					discardItem(selectedItemIndex);
+					selectedItemIndex = -1;
 				}
 			}
 

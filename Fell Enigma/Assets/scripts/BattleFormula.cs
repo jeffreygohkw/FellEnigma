@@ -43,7 +43,7 @@ public class BattleFormula
 		if (Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].GetComponent<Renderer>().material.color != Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].colour || Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
 		{
 
-			if (target != null)
+			if (target != null && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].equippedIndex != -1)
 			{
 				Debug.Log("Calculating");
 
@@ -510,6 +510,9 @@ public class BattleFormula
 	* v1.1
 	* Added Terrain
 	* 
+	* v1.2
+	* Checks for equipped item
+	* 
 	* To do
 	* Does not factor in supports, other misc things
 	* No weapon triangle
@@ -517,101 +520,108 @@ public class BattleFormula
 	* @param attacker The attacking unit
 	* @param target The target of the attack
 	* @author Jeffrey Goh
-	* @version 1.1
-	* @updated 24/6/2017
+	* @version 1.2
+	* @updated 5/7/2017
 	*/
 	public int battleForecast(Unit attacker, Unit target)
 	{
-		int attackerAtk;
-		int attackerDef;
-
-		int defenderAtk;
-		int defenderDef;
-
-		// Damage for attacker
-		// Str and Def if physical weapon equipped, Mag and Res otherwise
-		if (attacker.weaponPhysical)
+		if (attacker.equippedIndex != -1)
 		{
-			attackerAtk = attacker.strength + attacker.weaponMt;
-			defenderDef = target.def + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
-		}
-		else
-		{
-			attackerAtk = attacker.mag + attacker.weaponMt;
-			defenderDef = target.res + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
-		}
+			int attackerAtk;
+			int attackerDef;
 
-		// Damage for defender
+			int defenderAtk;
+			int defenderDef;
 
-		if (target.weaponPhysical)
-		{
-			defenderAtk = target.strength + target.weaponMt;
-			attackerDef = attacker.def + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
-		}
-		else
-		{
-			defenderAtk = target.mag + target.weaponMt;
-			attackerDef = attacker.res + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
-		}
+			// Damage for attacker
+			// Str and Def if physical weapon equipped, Mag and Res otherwise
+			if (attacker.weaponPhysical)
+			{
+				attackerAtk = attacker.strength + attacker.weaponMt;
+				defenderDef = target.def + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
+			}
+			else
+			{
+				attackerAtk = attacker.mag + attacker.weaponMt;
+				defenderDef = target.res + Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].linkedTerrain.returnDef();
+			}
 
-		int attackerDmg = attackerAtk - defenderDef;
-		int defenderDmg = defenderAtk - attackerDef;
+			// Damage for defender
 
-		// tink instead of doing negative damage and healing the enemy
-		if (attackerDmg < 0)
-		{
-			attackerDmg = 0;
-		}
+			if (target.weaponPhysical)
+			{
+				defenderAtk = target.strength + target.weaponMt;
+				attackerDef = attacker.def + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
+			}
+			else
+			{
+				defenderAtk = target.mag + target.weaponMt;
+				attackerDef = attacker.res + Grid.instance.map[(int)attacker.gridPosition.x][(int)attacker.gridPosition.y].linkedTerrain.returnDef();
+			}
 
-		if (defenderDmg < 0)
-		{
-			defenderDmg = 0;
-		}
+			int attackerDmg = attackerAtk - defenderDef;
+			int defenderDmg = defenderAtk - attackerDef;
 
-		// Range
-		bool canCounter = false;
+			// tink instead of doing negative damage and healing the enemy
+			if (attackerDmg < 0)
+			{
+				attackerDmg = 0;
+			}
 
-		int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)target.gridPosition.y);
+			if (defenderDmg < 0)
+			{
+				defenderDmg = 0;
+			}
 
-		if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
-		{
-			canCounter = true;
-		}
+			// Range
+			bool canCounter = false;
 
-		//Attack Speed
-		int atkBurden = attacker.weaponWt - attacker.con;
-		if (atkBurden < 0)
-		{
-			atkBurden = 0;
-		}
+			int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)target.gridPosition.y);
 
-		int defBurden = target.weaponWt - target.con;
-		if (defBurden < 0)
-		{
-			defBurden = 0;
-		}
+			if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
+			{
+				canCounter = true;
+			}
 
-		int atkAS = attacker.spd - atkBurden;
-		int defAS = target.spd - defBurden;
+			//Attack Speed
+			int atkBurden = attacker.weaponWt - attacker.con;
+			if (atkBurden < 0)
+			{
+				atkBurden = 0;
+			}
 
-		int dmgDealt = attackerDmg;
-		int dmgTaken = 0;
+			int defBurden = target.weaponWt - target.con;
+			if (defBurden < 0)
+			{
+				defBurden = 0;
+			}
 
-		if (canCounter)
-		{
-			dmgTaken += defenderDmg;
-		}
+			int atkAS = attacker.spd - atkBurden;
+			int defAS = target.spd - defBurden;
 
-		if (dmgTaken >= attacker.currentHP)
-		{
+			int dmgDealt = attackerDmg;
+			int dmgTaken = 0;
+
+			if (canCounter)
+			{
+				dmgTaken += defenderDmg;
+			}
+
+			if (dmgTaken >= attacker.currentHP)
+			{
+				return dmgDealt;
+			}
+
+			if (atkAS - defAS >= 4)
+			{
+				dmgDealt += attackerDmg;
+			}
 			return dmgDealt;
 		}
-
-		if (atkAS - defAS >= 4)
+		else
 		{
-			dmgDealt += attackerDmg;
+			return 0;
 		}
-		return dmgDealt;
 	}
 
 	/**
