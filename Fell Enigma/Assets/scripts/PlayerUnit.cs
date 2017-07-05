@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerUnit : Unit
 {
 	List<Vector2> lastPosition = new List<Vector2>();
-
+	public bool displayInventory = false;
+	public int selectedItemIndex = -1;
 	// Use this for initialization
 	void Start()
 	{
@@ -103,8 +104,6 @@ public class PlayerUnit : Unit
 
 	private void OnMouseDown()
 	{
-		Debug.Log(gridPosition.x);
-		Debug.Log(gridPosition.y);
 		if (Grid.instance.currentTeam == team)
 		{
 			foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
@@ -133,6 +132,8 @@ public class PlayerUnit : Unit
 	}
 
 
+
+
 	/**
 	* GUI buttons
 	* 
@@ -153,33 +154,56 @@ public class PlayerUnit : Unit
 		{
 			Rect buttonRect = new Rect(0, Screen.height - 250, 150, 50);
 
-			//Move
-			if (GUI.Button(buttonRect, "Move"))
+			if (!doneMoving)
 			{
-				if (!doneMoving)
+				//Move
+				if (GUI.Button(buttonRect, "Move"))
 				{
-					Grid.instance.removeTileHighlight();
-					isFighting = false;
-
-					if (isMoving)
+					if (!doneMoving)
 					{
-						isMoving = false;
+						displayInventory = false;
+						selectedItemIndex = -1;
 						Grid.instance.removeTileHighlight();
-					}
-					else
-					{
-						isMoving = true;
-						Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+						isFighting = false;
+
+						if (isMoving)
+						{
+							isMoving = false;
+							Grid.instance.removeTileHighlight();
+						}
+						else
+						{
+							isMoving = true;
+							Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+						}
 					}
 				}
 			}
-
-
+			else 
+			{
+				//Undo Move
+				if (GUI.Button(buttonRect, "Undo Move"))
+				{
+					if (lastPosition.Count != 0)
+					{
+						displayInventory = false;
+						selectedItemIndex = -1;
+						Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+						transform.position = Grid.instance.map[(int)lastPosition[0].x][(int)lastPosition[0].y].transform.position;
+						this.gridPosition = lastPosition[0];
+						Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = this;
+					}
+					lastPosition.Clear();
+					doneMoving = false;
+				}
+			}
 			buttonRect = new Rect(0, Screen.height - 200, 150, 50);
 
 			//Attack
 			if (GUI.Button(buttonRect, "Attack"))
 			{
+				displayInventory = false;
+				selectedItemIndex = -1;
 				Grid.instance.removeTileHighlight();
 				isMoving = false;
 
@@ -197,20 +221,64 @@ public class PlayerUnit : Unit
 
 			buttonRect = new Rect(0, Screen.height - 150, 150, 50);
 
-			//Undo Move
-			if (GUI.Button(buttonRect, "Undo Move"))
+			//Item
+			if (GUI.Button(buttonRect, "Item"))
 			{
-				if (lastPosition.Count != 0)
-				{
-					Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
-					transform.position = Grid.instance.map[(int)lastPosition[0].x][(int)lastPosition[0].y].transform.position;
-					this.gridPosition = lastPosition[0];
-					Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = this;
-				}
-				lastPosition.Clear();
-				doneMoving = false;
+				displayInventory = !displayInventory;
 			}
+			if (displayInventory)
+			{
+				Debug.Log(inventory.Count);
+				if (inventory.Count >= 1)
+				{
+					Debug.Log(inventory[0][1]);
+					buttonRect = new Rect(151, Screen.height - 150, 150, 50);
+					if (GUI.Button(buttonRect, inventory[1][0]))
+					{
+						if (selectedItemIndex != 0)
+						{
+							selectedItemIndex = 0;
+						}
+						else
+						{
+							selectedItemIndex = -1;
+						}
+					}
+				}
 
+				
+				if (inventory.Count >= 2)
+				{
+					buttonRect = new Rect(150, Screen.height - 100, 150, 50);
+					if (GUI.Button(buttonRect, inventory[1][1]))
+					{
+						if (selectedItemIndex != 1)
+						{
+							selectedItemIndex = 1;
+						}
+						else
+						{
+							selectedItemIndex = -1;
+						}
+					}
+				}
+					
+				if (inventory.Count >= 3)
+				{
+					buttonRect = new Rect(150, Screen.height - 50, 150, 50);
+					if (GUI.Button(buttonRect, inventory[2][1]))
+					{
+						if (selectedItemIndex != 2)
+						{
+							selectedItemIndex = 2;
+						}
+						else
+						{
+							selectedItemIndex = -1;
+						}
+					}
+				}
+			}
 
 			buttonRect = new Rect(0, Screen.height - 100, 150, 50);
 			//Wait
@@ -222,6 +290,8 @@ public class PlayerUnit : Unit
 				isFighting = false;
 				doneAction = true;
 				selected = false;
+				displayInventory = false;
+				selectedItemIndex = -1;
 				Grid.instance.totalDone++;
 			}
 
@@ -239,6 +309,8 @@ public class PlayerUnit : Unit
 				isFighting = false;
 				selected = false;
 				doneAction = true;
+				displayInventory = false;
+				selectedItemIndex = -1;
 				Grid.instance.nextTurn();
 			}
 			base.OnGUI();

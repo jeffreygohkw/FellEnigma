@@ -31,7 +31,6 @@ public class Item : MonoBehaviour {
 		// Splits the text file into lines
 		string[] lines = database.text.Split("\r"[0]);
 		string[] line;
-		string[] word;
 		Dictionary<string, string[]> type = new Dictionary<string, string[]>();
 		// Iterate through the text file
 		for (int i = 2; i < lines.Length; i++)
@@ -84,17 +83,49 @@ public class Item : MonoBehaviour {
 		}
 	}
 
+	/**
+	* Adds a fresh weapon from the catalog to the character if the character's inventory is empty
+	* 
+	* @param character The character to equip the weapon
+	* @weaponType The type of weapon
+	* @weaponName The name of the weapon
+	* @author Jeffrey Goh
+	* @version v1.0
+	* @updated 2/7/2017
+	*/
+	public void addWeapon(Unit character, string weaponType, string weaponName)
+	{
+		if (!weaponCatalog.ContainsKey(weaponType))
+		{
+			Debug.Log("Wrong weaponType");
+		}
+		else if (!weaponCatalog[weaponType].ContainsKey(weaponName))
+		{
+			Debug.Log("Wrong weaponName");
+		}
+		else
+		{
+			if (character.inventory.Count < character.inventorySize)
+			{
+				character.inventory.Add(weaponCatalog[weaponType][weaponName]);
+			}
+			else
+			{
+				Debug.Log("Inventory is full");
+			}
+		}
+	}
 
 	/**
-	 * Equips a character with a fresh weapon from the catalog
-	 * 
-	 * @param character The character to equip the weapon
-	 * @weaponType The type of weapon
-	 * @weaponName The name of the weapon
-	 * @author Jeffrey Goh
-	 * @version v1.0
-	 * @updated 2/7/2017
-	 */
+	* Equips a character with a fresh weapon from the catalog
+	* 
+	* @param character The character to equip the weapon
+	* @weaponType The type of weapon
+	* @weaponName The name of the weapon
+	* @author Jeffrey Goh
+	* @version v1.0
+	* @updated 2/7/2017
+	*/
 	public void equipWeapon(Unit character, string weaponType, string weaponName)
 	{
 		if (!weaponCatalog.ContainsKey(weaponType))

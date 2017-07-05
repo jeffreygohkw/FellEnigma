@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour {
 	public bool doneMoving = false;
 	public bool willAttack = false;
 	public bool highlighted = false;
+	
 
 	public bool movementType;
 
@@ -65,6 +66,12 @@ public class Unit : MonoBehaviour {
 	public int weaponWt;
 	public int weaponMinRange;
 	public int weaponMaxRange;
+
+
+	public int inventorySize = 3;
+	public List<string[]> inventory = new List<string[]>();
+
+
 
 	//movement animation
 	public List<Vector2> positionQueue = new List<Vector2>();
