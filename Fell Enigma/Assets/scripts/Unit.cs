@@ -74,6 +74,8 @@ public class Unit : MonoBehaviour {
 	public int inventorySize = 3;
 	public List<string[]> inventory = new List<string[]>();
 
+    private bool updatedUI = true;
+
 
 
 	//movement animation
@@ -106,10 +108,23 @@ public class Unit : MonoBehaviour {
 	public virtual void OnGUI()
 	{
 
-	}
+    }
 
+    // Updates UI only when mouseOver
+   public void OnMouseOver()
+   {
+        // So update only triggers once.
+        if (updatedUI)
+        {
+            EventManager.TriggerEvent("GetStats");
+            updatedUI = false;
+        }
+   }
+
+    public void OnMouseExit()
+    {
+        updatedUI = true;
+    }
     
-
-
 
 }

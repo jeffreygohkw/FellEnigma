@@ -1,90 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class StatsUI: MonoBehaviour {
+public class StatsUI : MonoBehaviour {
 
-    public Canvas statsWindow;
-    public Canvas UI;
+    // UI Elements
     private Slider healthBar;
     private Text displayName;
     private Text displayStats;
-    private Unit thisUnit;
+
+    private Unit currUnit;
+    private bool isSelected;
 
 	// Use this for initialization
-	void Start ()
-    {
-        // Obtains Unit component (necessary for this to work)
-        if (this.CompareTag("Player"))
-        {
-            thisUnit = this.GetComponent<PlayerUnit>();
-        }
-        else if (this.CompareTag("Enemy"))
-        {
-            thisUnit = this.GetComponent<AIUnit>();
-        }
-		else if (this.CompareTag("Stationary"))
-		{
-			thisUnit = this.GetComponent<StationaryUnit>();
-		}
+	void Start () {
+        EventManager.StartListening("GetStats", GetStats);
 
         // Obtains the various components under the UI prefab
         // Note that Text components need to be in order (aka don't change the order in Inspector)
-		UI = Instantiate(statsWindow, new Vector3(Screen.width,Screen.height,0), Quaternion.Euler(new Vector3(90, 0, 0)));
-        healthBar = UI.GetComponentInChildren<Slider>();
-        displayName = UI.GetComponentsInChildren<Text>()[0];
-        displayStats = UI.GetComponentsInChildren<Text>()[1];
-        loadStats();
-        UI.enabled = false;
+        
+        healthBar = this.GetComponentInChildren<Slider>();
+        displayName = this.GetComponentsInChildren<Text>()[0];
+        displayStats = this.GetComponentsInChildren<Text>()[1];
     }
 	
 	// Update is called once per frame
-	void Update ()
-    {
-       
-    }
+	void Update () {
+		
+	}
 
-    // Updates and enables UI 
-    public void OnMouseOver()
+    void GetStats()
     {
-        updateData();
-        UI.enabled = true;
-    }
+        Collider[] colliders = Physics.OverlapSphere(new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y,0), 0.5f);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject.CompareTag("Player"))
+            {
+                this.currUnit = colliders[i].gameObject.GetComponent<PlayerUnit>();
+                break;
+            }
+            else if (colliders[i].gameObject.CompareTag("Enemy"))
+            {
+                this.currUnit = colliders[i].gameObject.GetComponent<AIUnit>();
+                break;
+            }
+            else if (colliders[i].gameObject.CompareTag("Stationary"))
+            {
+                this.currUnit = colliders[i].gameObject.GetComponent<StationaryUnit>();
+                break;
+            }
+        }
 
-    // Disables UI
-    public void OnMouseExit()
-    {
-        UI.enabled = false;
-    }
-
-
-    /**
-    * Updates the health bar and parameters in the UI
-    * 
-    * @author Wayne Neo
-    * @version 1.0
-    * @updated on 25/6/17
-    */
-    private void updateData()
-    {
-        healthBar.value =  Mathf.Floor(((float) thisUnit.currentHP / (float) thisUnit.maxHP) * 100);
-        displayStats.text = "HP = " + thisUnit.currentHP.ToString() + "/" + thisUnit.maxHP.ToString() + " STR = " + thisUnit.strength.ToString() + " MAG = " + thisUnit.mag.ToString() + " SKL = " + thisUnit.skl.ToString() + "\n"
-            + " SPD = " + thisUnit.spd.ToString() + " LUK = " + thisUnit.luk.ToString() + " DEF = " + thisUnit.def.ToString() + " RES = " + thisUnit.res.ToString();
-    }
-
-    /**
-    * Initial loading of parameters and name
-    * Assuming name and parameters are not changed ingame
-    * 
-    * @author Wayne Neo
-    * @version 1.0
-    * @updated on 25/6/17
-    */
-    private void loadStats()
-    {
-        displayName.text = thisUnit.unitName;
-        displayStats.text = "HP = " + thisUnit.currentHP.ToString() + "/" + thisUnit.maxHP.ToString() + " STR = " + thisUnit.strength.ToString() + " MAG = " + thisUnit.mag.ToString() + " SKL = " + thisUnit.skl.ToString() + "\n"
-            + " SPD = " + thisUnit.spd.ToString() + " LUK = " + thisUnit.luk.ToString() + " DEF = " + thisUnit.def.ToString() + " RES = " + thisUnit.res.ToString();
+        displayName.text = currUnit.unitName;
+        healthBar.value = Mathf.Floor(((float)currUnit.currentHP / (float)currUnit.maxHP) * 100);
+        displayStats.text = "HP = " + currUnit.currentHP.ToString() + "/" + currUnit.maxHP.ToString() + " STR = " + currUnit.strength.ToString() + " MAG = " + currUnit.mag.ToString() + " SKL = " + currUnit.skl.ToString() + "\n"
+            + " SPD = " + currUnit.spd.ToString() + " LUK = " + currUnit.luk.ToString() + " DEF = " + currUnit.def.ToString() + " RES = " + currUnit.res.ToString();
     }
 }

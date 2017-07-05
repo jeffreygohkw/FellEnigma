@@ -20,7 +20,7 @@ public class CameraS : MonoBehaviour {
         screenDim = new Vector2(Screen.width, Screen.height);
         min_x = transform.position.x - 5;
         max_x = transform.position.x + 1;
-        min_y = transform.position.y - 7;
+        min_y = transform.position.y - 10;
         max_y = transform.position.y + 4;
     }
 	
@@ -49,7 +49,8 @@ public class CameraS : MonoBehaviour {
         }
 
         // Movement by moving mouse to edge of screen
-        if (Input.mousePosition.x > screenDim.x - Boundary)
+        // Deactivated temporarily till can find right balance with UI
+        /*if (Input.mousePosition.x > screenDim.x - Boundary)
         { 
             newPos.x += speed * Time.deltaTime; // move on +X axis
         }
@@ -65,6 +66,7 @@ public class CameraS : MonoBehaviour {
         {
             newPos.y -= speed * Time.deltaTime; // move on -Y axis
         }
+        */
 
         transform.position = new Vector3(Mathf.Clamp(newPos.x, min_x, max_x), Mathf.Clamp(newPos.y, min_y, max_y), transform.position.z);
     }

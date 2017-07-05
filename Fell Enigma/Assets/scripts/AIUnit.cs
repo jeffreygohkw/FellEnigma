@@ -48,7 +48,6 @@ public class AIUnit : Unit
             //GetComponent<Renderer>().material.color = Color.red;
 
             //Object disappears if dead
-            this.GetComponent<StatsUI>().UI.enabled = false;
             gameObject.SetActive(false);
            
 
