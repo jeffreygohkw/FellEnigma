@@ -199,6 +199,11 @@ public class PlayerUnit : Unit
 			if (equippedIndex == index)
 			{
 				equippedIndex = -1;
+				weaponMinRange = 0;
+				weaponMaxRange = 0;
+				weaponMt = 0;
+				weaponWt = 0;
+				weaponCrit = 0;
 			}
 		}
 	}
