@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour {
 	public bool displayInventory = false;
 	public int selectedItemIndex = -1;
 
+	public List<string> proficiency = new List<string>();
 
 	public bool movementType;
 
@@ -49,6 +50,9 @@ public class Unit : MonoBehaviour {
 	public int res;
 	public int con;
 	public int mov;
+
+	//public Dictionary<string, int> stats = new Dictionary<string, int>();
+	
 
 	//Growths
 	public int hpG;
@@ -86,6 +90,18 @@ public class Unit : MonoBehaviour {
 	private void Awake()
 	{
 		moveTo = transform.position;
+		/*
+		stats.Add("maxHP", maxHP);
+		stats.Add("strength", strength);
+		stats.Add("mag", mag);
+		stats.Add("skl", skl);
+		stats.Add("spd", spd);
+		stats.Add("luk", luk);
+		stats.Add("def", def);
+		stats.Add("res", res);
+		stats.Add("mov", mov);
+		stats.Add("con", con);
+		*/
 	}
 
 	// Use this for initialization
@@ -93,7 +109,7 @@ public class Unit : MonoBehaviour {
 	{
 
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{

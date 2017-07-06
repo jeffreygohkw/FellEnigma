@@ -131,10 +131,14 @@ public class PlayerUnit : Unit
 
 	/**
 	 * Equips an item in the PlayerUnit's inventory
+	 * 
+	 * v1.1
+	 * Checks for weapon type
+	 * 
 	 * @param index index of the item
 	 * @author Jeffrey Goh
-	 * @version 1.0
-	 * @updated 5/7/2017
+	 * @version 1.1
+	 * @updated 6/7/2017
 	 */
 	public void equipItem(int index)
 	{
@@ -145,11 +149,14 @@ public class PlayerUnit : Unit
 		}
 		else
 		{
-			Debug.Log(inventory[index].Length);
 			//If not weapon, don't equip
 			if (inventory[index].Length != 13)
 			{
 				Debug.Log("Not a weapon");
+			}
+			else if (!proficiency.Contains(inventory[index][0]))
+			{
+				Debug.Log("Cannot equip a weapon of this type.");
 			}
 			else
 			{
@@ -175,14 +182,113 @@ public class PlayerUnit : Unit
 		}
 	}
 
-
 	/**
-	 * Discards an item in the PlayerUnit's inventory
+	 * Uses an item in the PlayerUnit's inventory
+	 * 
 	 * @param index index of the item
 	 * @author Jeffrey Goh
 	 * @version 1.0
-	 * @updated 5/7/2017
+	 * @updated 6/7/2017
 	 */
+	public void useItem(int index)
+	{
+		// Don't equip if an invalid index is passed in
+		if (inventory.Count < index)
+		{
+			Debug.Log("Invalid index");
+		}
+		else
+		{
+			if (inventory[index][0] == "Staff")
+			{
+				//Heal code here
+			}
+			else if (inventory[index][0] == "StatBoost")
+			{
+				if (inventory[index][5] == "maxHP")
+				{
+					maxHP += int.Parse(inventory[index][4]);
+					currentHP += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "strength")
+				{
+					strength += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "mag")
+				{
+					mag += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "skl")
+				{
+					skl += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "spd")
+				{
+					spd += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "def")
+				{
+					def += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "luk")
+				{
+					luk += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "res")
+				{
+					res += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "mov")
+				{
+					mov += int.Parse(inventory[index][4]);
+				}
+				else if (inventory[index][5] == "con")
+				{
+					con += int.Parse(inventory[index][4]);
+				}
+				else
+				{
+					Debug.Log("Something's wrong with your stat booster");
+					return;
+				}
+				discardItem(index);
+				selectedItemIndex = -1;
+			}
+			else if (inventory[index][0] == "Consumable")
+			{
+				if (currentHP == maxHP)
+				{
+					Debug.Log("HP is full!");
+				}
+				else
+				{
+					currentHP += int.Parse(inventory[index][4]);
+					if (currentHP > maxHP)
+					{
+						currentHP = maxHP;
+					}
+					discardItem(index);
+					selectedItemIndex = -1;
+				}
+			}
+			else if (inventory[index][0] == "Key")
+			{
+				// Unlock door code here
+			}
+			else
+			{
+				Debug.Log("Wrong Item type");
+			}
+		}
+	}
+
+	/**
+		* Discards an item in the PlayerUnit's inventory
+		* @param index index of the item
+		* @author Jeffrey Goh
+		* @version 1.0
+		* @updated 5/7/2017
+		*/
 	public void discardItem(int index)
 	{
 		// Don't discard if an invalid index is passed in
@@ -263,6 +369,8 @@ public class PlayerUnit : Unit
 				{
 					if (lastPosition.Count != 0)
 					{
+						isFighting = false;
+						Grid.instance.removeTileHighlight();
 						displayInventory = false;
 						selectedItemIndex = -1;
 						Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
@@ -362,12 +470,21 @@ public class PlayerUnit : Unit
 			if (selectedItemIndex != -1 && displayInventory)
 			{
 				buttonRect = new Rect(300, Screen.height - 100, 150, 50);
-				if (GUI.Button(buttonRect, "Equip"))
+				if (inventory[selectedItemIndex].Length == 13)
 				{
-					equipItem(selectedItemIndex);
+					if (GUI.Button(buttonRect, "Equip"))
+					{
+						equipItem(selectedItemIndex);
+					}
 				}
-
-				buttonRect = new Rect(300, Screen.height - 50, 150, 50);
+				else
+				{
+					if (GUI.Button(buttonRect, "Use"))
+					{
+						useItem(selectedItemIndex);
+					}
+				}
+					buttonRect = new Rect(300, Screen.height - 50, 150, 50);
 				if (GUI.Button(buttonRect, "Discard"))
 				{
 					discardItem(selectedItemIndex);

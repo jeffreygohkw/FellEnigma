@@ -30,6 +30,8 @@ public class Grid : MonoBehaviour {
 	public List<List<Tile>> map = new List<List<Tile>>();
     public List<List<Unit>> units = new List<List<Unit>>();
 
+	public Dictionary<Vector2, string[]> villageLoot = new Dictionary<Vector2, string[]>();
+
 	public int gold = 3000;
 
 	/*
@@ -63,7 +65,7 @@ public class Grid : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		Item.instance.initialiseWeapons();
+		Item.instance.initialiseItems();
         CreateTerrain();
 		CreateTiles();
 		CreatePlayers();
@@ -78,7 +80,8 @@ public class Grid : MonoBehaviour {
             Application.Quit();
         }
 
-		//Debug.Log(currentPlayer);
+		//Win conditions
+		//If neutral unit dies
 		if (units[2][0].currentHP <= 0)
 		{
 			foreach (List<Unit> u in units)
@@ -90,6 +93,7 @@ public class Grid : MonoBehaviour {
 			}
 			return;
 		}
+		//If boss dies
 		else if (units[1][0].currentHP <= 0)
 		{
 			foreach (List<Unit> u in units)
@@ -163,6 +167,11 @@ public class Grid : MonoBehaviour {
 				u.doneAction = false;
 				u.selected = false;
 				u.willAttack = false;
+				u.isMoving = false;
+				u.isFighting = false;
+				u.highlighted = false;
+				u.displayInventory = false;
+				u.selectedItemIndex = -1;
 			}
 		}
 
@@ -182,6 +191,21 @@ public class Grid : MonoBehaviour {
 			if (u.currentHP == 0)
 			{
 				totalDone++;
+			}
+			//Heal if on a fort
+			else if (map[(int)u.gridPosition.x][(int)u.gridPosition.y].linkedTerrain.returnHeal() != 0)
+			{
+				float percent = (float)map[(int)u.gridPosition.x][(int)u.gridPosition.y].linkedTerrain.returnHeal() / (float)100;
+				u.currentHP += (int)(percent * (float)u.maxHP);
+				
+				// Set the current HP to the max HP if it overshoots
+				if (u.currentHP > u.maxHP)
+				{
+					u.currentHP = u.maxHP;
+				}
+
+				Debug.Log(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
+				Debug.Log(u.unitName + "'s HP: " + u.currentHP + "/" + u.maxHP);
 			}
 		}
 	}
@@ -456,7 +480,9 @@ public class Grid : MonoBehaviour {
 		unit1.defG = 110;
 		unit1.resG = 100;
 
+		unit1.proficiency.Add("Sword");
 		Item.instance.equipWeapon(unit1, "Sword", "WoDao");
+		Item.instance.addWeapon(unit1, "Lance", "Spear");
 
 		map[2][5].occupied = unit1;
 
@@ -492,7 +518,10 @@ public class Grid : MonoBehaviour {
 		unit2.defG = 30;
 		unit2.resG = 50;
 
+		unit2.proficiency.Add("Tome");
 		Item.instance.equipWeapon(unit2, "Tome", "Fimbulvetr");
+		Item.instance.addItem(unit2, "StatBoost", "AngelicRobe");
+		
 
 		map[2][6].occupied = unit2;
 
@@ -530,7 +559,8 @@ public class Grid : MonoBehaviour {
 		unit4.defG = 45;
 		unit4.resG = 20;
 
-		
+		unit4.proficiency.Add("Bow");
+		Item.instance.addItem(unit4, "Consumable", "Herb");
 		Item.instance.equipWeapon(unit4, "Bow", "KillerBow");
 		Item.instance.equipWeapon(unit4, "Bow", "Longbow");
 
@@ -571,7 +601,7 @@ public class Grid : MonoBehaviour {
 		unit3.defG = 15;
 		unit3.resG = 50;
 
-		
+		unit3.proficiency.Add("Tome");
 		Item.instance.equipWeapon(unit3, "Tome", "Elfire");
 
 		map[10][7].occupied = unit3;
@@ -596,7 +626,7 @@ public class Grid : MonoBehaviour {
 		boss1.lvl = 20;
 		boss1.exp = 0;
 		boss1.maxHP = 60;
-		boss1.currentHP = 120;
+		boss1.currentHP = 60;
 		boss1.strength = 25;
 		boss1.mag = 22;
 		boss1.skl = 13;
@@ -606,7 +636,8 @@ public class Grid : MonoBehaviour {
 		boss1.res = 19;
 		boss1.con = 7;
 		boss1.mov = 6;
-		
+
+		boss1.proficiency.Add("Tome");
 		Item.instance.equipWeapon(boss1, "Tome", "Fenrir");
 
 		map[10][18].occupied = boss1;
@@ -636,7 +667,8 @@ public class Grid : MonoBehaviour {
 		enemy1.res = 20;
 		enemy1.con = 7;
 		enemy1.mov = 6;
-		
+
+		enemy1.proficiency.Add("Tome");
 		Item.instance.equipWeapon(enemy1, "Tome", "Aura");
 
 		map[10][13].occupied = enemy1;
@@ -668,6 +700,7 @@ public class Grid : MonoBehaviour {
 		enemy2.con = 13;
 		enemy2.mov = 6;
 
+		enemy2.proficiency.Add("Axe");
 		Item.instance.equipWeapon(enemy2, "Axe", "Tomahawk");
 
 		map[0][12].occupied = enemy2;
@@ -698,7 +731,8 @@ public class Grid : MonoBehaviour {
 		enemy3.con = 10;
 		enemy3.mov = 8;
 
-	
+		enemy3.proficiency.Add("Bow");
+		enemy3.proficiency.Add("Sword");
 		Item.instance.equipWeapon(enemy3, "Bow", "Longbow");
 
 		map[19][15].occupied = enemy3;

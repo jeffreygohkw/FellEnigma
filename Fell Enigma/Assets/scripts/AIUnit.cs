@@ -80,7 +80,6 @@ public class AIUnit : Unit
 			{
 				transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
                 mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
-				Debug.Log(positionQueue[0].x + " " + positionQueue[0].y);
 				if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
 				{
 					transform.position = positionQueue[0];
