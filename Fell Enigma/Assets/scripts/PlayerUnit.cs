@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerUnit : Unit
 {
 	List<Vector2> lastPosition = new List<Vector2>();
-
+    
 	// Use this for initialization
 	void Start()
 	{
@@ -90,8 +90,8 @@ public class PlayerUnit : Unit
 						{
 							isMoving = false;
 							doneMoving = true;
-							
-						}
+                            EventManager.TriggerEvent("MovedUnit");
+                        }
 					}
 				}
 			}
@@ -118,11 +118,32 @@ public class PlayerUnit : Unit
 			if (!doneAction)
 			{
 				selected = !selected;
+                if (selected)
+                {
+                    EventManager.TriggerEvent("SelectUnit");
+                    EventManager.StartListening("MoveUnit", MoveUnit);
+                    EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
+                    EventManager.StartListening("AttackUnit", AttackUnit);
+                    EventManager.StartListening("ItemUnit", ItemUnit);
+                    EventManager.StartListening("WaitUnit", WaitUnit);
+                    EventManager.StartListening("EndUnit", EndUnit);
+
+                }
+                else
+                {
+                    EventManager.TriggerEvent("DeselectUnit");
+                    EventManager.StopListening("MoveUnit", MoveUnit);
+                    EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+                    EventManager.StopListening("AttackUnit", AttackUnit);
+                    EventManager.StopListening("ItemUnit", ItemUnit);
+                    EventManager.StopListening("WaitUnit", WaitUnit);
+                    EventManager.StopListening("EndUnit", EndUnit);
+                }
 			}
 			if (selected && !doneAction)
 			{
 				Grid.instance.currentPlayer = index;
-			}
+            }
 		}
 		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 		{
@@ -360,13 +381,14 @@ public class PlayerUnit : Unit
 	* @version 1.2
 	* @updated 2/7/2017
 	*/
-	public override void OnGUI()
+	/*public override void OnGUI()
 	{
 		
 
 		if (selected && !doneAction)
 		{
-			Rect buttonRect = new Rect(0, Screen.height - 250, 150, 50);
+  
+            Rect buttonRect = new Rect(0, Screen.height - 250, 150, 50);
 
 			if (!doneMoving)
 			{
@@ -583,8 +605,112 @@ public class PlayerUnit : Unit
 				Grid.instance.nextTurn();
 			}
 			base.OnGUI();
-		}
-	}
+            
+        }
+        
+        
+    }*/
 
+    void MoveUnit()
+    {
+        if (!doneMoving)
+        { 
+                    displayInventory = false;
+                    selectedItemIndex = -1;
+                    Grid.instance.removeTileHighlight();
+                    isFighting = false;
+                    isHealing = false;
+                    activeStaffIndex = -1;
+                    if (isMoving)
+                    {
+                        isMoving = false;
+                        Grid.instance.removeTileHighlight();
+                    }
+                    else
+                    {
+                        isMoving = true;
+                        Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+                    }
+        }
+        
+        
+    }
 
+    void UndoMoveUnit()
+    {
+            if (lastPosition.Count != 0)
+            {
+                isFighting = false;
+                isHealing = false;
+                activeStaffIndex = -1;
+                Grid.instance.removeTileHighlight();
+                displayInventory = false;
+                selectedItemIndex = -1;
+                Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+                transform.position = Grid.instance.map[(int)lastPosition[0].x][(int)lastPosition[0].y].transform.position;
+                this.gridPosition = lastPosition[0];
+                Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = this;
+            }
+            lastPosition.Clear();
+            doneMoving = false;
+            EventManager.TriggerEvent("UndoMovedUnit");   
+    }
+
+    void AttackUnit()
+    {
+        displayInventory = false;
+        selectedItemIndex = -1;
+        Grid.instance.removeTileHighlight();
+        isMoving = false;
+        isHealing = false;
+        activeStaffIndex = -1;
+
+        if (isFighting)
+        {
+            isFighting = false;
+            Grid.instance.removeTileHighlight();
+        }
+        else
+        {
+            isFighting = true;
+            Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false);
+        }
+    }
+
+    void ItemUnit()
+    {
+        Debug.Log("In progress");
+    }
+
+    void WaitUnit()
+    {
+        Grid.instance.removeTileHighlight();
+        lastPosition.Clear();
+        isMoving = false;
+        isFighting = false;
+        isHealing = false;
+        activeStaffIndex = -1;
+        doneAction = true;
+        selected = false;
+        displayInventory = false;
+        selectedItemIndex = -1;
+        Grid.instance.totalDone++;
+        EventManager.TriggerEvent("DeselectUnit");
+    }
+
+    void EndUnit()
+    {
+        Grid.instance.removeTileHighlight();
+        lastPosition.Clear();
+        isMoving = false;
+        isFighting = false;
+        isHealing = false;
+        activeStaffIndex = -1;
+        selected = false;
+        doneAction = true;
+        displayInventory = false;
+        selectedItemIndex = -1;
+        Grid.instance.nextTurn();
+        EventManager.TriggerEvent("DeselectUnit");
+    }
 }
