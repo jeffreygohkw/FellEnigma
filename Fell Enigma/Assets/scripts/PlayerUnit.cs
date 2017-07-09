@@ -121,6 +121,7 @@ public class PlayerUnit : Unit
                 if (selected)
                 {
                     EventManager.TriggerEvent("SelectUnit");
+                    EventManager.TriggerEvent("SelectUnitStats");
                     EventManager.StartListening("MoveUnit", MoveUnit);
                     EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
                     EventManager.StartListening("AttackUnit", AttackUnit);
@@ -132,6 +133,7 @@ public class PlayerUnit : Unit
                 else
                 {
                     EventManager.TriggerEvent("DeselectUnit");
+                    EventManager.TriggerEvent("DeselectUnitStats");
                     EventManager.StopListening("MoveUnit", MoveUnit);
                     EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
                     EventManager.StopListening("AttackUnit", AttackUnit);
@@ -613,31 +615,35 @@ public class PlayerUnit : Unit
 
     void MoveUnit()
     {
-        if (!doneMoving)
-        { 
-                    displayInventory = false;
-                    selectedItemIndex = -1;
+        if (selected && !doneAction)
+        {
+            if (!doneMoving)
+            {
+                displayInventory = false;
+                selectedItemIndex = -1;
+                Grid.instance.removeTileHighlight();
+                isFighting = false;
+                isHealing = false;
+                activeStaffIndex = -1;
+                if (isMoving)
+                {
+                    isMoving = false;
                     Grid.instance.removeTileHighlight();
-                    isFighting = false;
-                    isHealing = false;
-                    activeStaffIndex = -1;
-                    if (isMoving)
-                    {
-                        isMoving = false;
-                        Grid.instance.removeTileHighlight();
-                    }
-                    else
-                    {
-                        isMoving = true;
-                        Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
-                    }
+                }
+                else
+                {
+                    isMoving = true;
+                    Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+                }
+            }
         }
-        
         
     }
 
     void UndoMoveUnit()
     {
+        if (selected && !doneAction)
+        {
             if (lastPosition.Count != 0)
             {
                 isFighting = false;
@@ -653,64 +659,79 @@ public class PlayerUnit : Unit
             }
             lastPosition.Clear();
             doneMoving = false;
-            EventManager.TriggerEvent("UndoMovedUnit");   
+            EventManager.TriggerEvent("UndoMovedUnit");
+        }
     }
 
     void AttackUnit()
     {
-        displayInventory = false;
-        selectedItemIndex = -1;
-        Grid.instance.removeTileHighlight();
-        isMoving = false;
-        isHealing = false;
-        activeStaffIndex = -1;
-
-        if (isFighting)
+        if (selected && !doneAction)
         {
-            isFighting = false;
+            displayInventory = false;
+            selectedItemIndex = -1;
             Grid.instance.removeTileHighlight();
-        }
-        else
-        {
-            isFighting = true;
-            Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false);
+            isMoving = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+
+            if (isFighting)
+            {
+                isFighting = false;
+                Grid.instance.removeTileHighlight();
+            }
+            else
+            {
+                isFighting = true;
+                Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false);
+            }
         }
     }
 
     void ItemUnit()
     {
-        Debug.Log("In progress");
+        if (selected && !doneAction)
+        {
+            Debug.Log("In progress");
+        }
     }
 
     void WaitUnit()
     {
-        Grid.instance.removeTileHighlight();
-        lastPosition.Clear();
-        isMoving = false;
-        isFighting = false;
-        isHealing = false;
-        activeStaffIndex = -1;
-        doneAction = true;
-        selected = false;
-        displayInventory = false;
-        selectedItemIndex = -1;
-        Grid.instance.totalDone++;
-        EventManager.TriggerEvent("DeselectUnit");
+        if (selected && !doneAction)
+        {
+            Grid.instance.removeTileHighlight();
+            lastPosition.Clear();
+            isMoving = false;
+            isFighting = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+            doneAction = true;
+            selected = false;
+            displayInventory = false;
+            selectedItemIndex = -1;
+            EventManager.TriggerEvent("DeselectUnit");
+            EventManager.TriggerEvent("DeselectUnitStats");
+            Grid.instance.totalDone++;
+        }
     }
 
     void EndUnit()
     {
-        Grid.instance.removeTileHighlight();
-        lastPosition.Clear();
-        isMoving = false;
-        isFighting = false;
-        isHealing = false;
-        activeStaffIndex = -1;
-        selected = false;
-        doneAction = true;
-        displayInventory = false;
-        selectedItemIndex = -1;
-        Grid.instance.nextTurn();
-        EventManager.TriggerEvent("DeselectUnit");
+        if (selected && !doneAction)
+        {
+            Grid.instance.removeTileHighlight();
+            lastPosition.Clear();
+            isMoving = false;
+            isFighting = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+            selected = false;
+            doneAction = true;
+            displayInventory = false;
+            selectedItemIndex = -1;
+            EventManager.TriggerEvent("DeselectUnit");
+            EventManager.TriggerEvent("DeselectUnitStats");
+            Grid.instance.nextTurn();
+        }
     }
 }

@@ -84,5 +84,9 @@ public class EventManager : MonoBehaviour {
             // Will call all listeners
             thisEvent.Invoke();
         }
+        else
+        {
+            Debug.LogError("This event doesn't exist!");
+        }
     }
 }
