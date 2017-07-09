@@ -12,11 +12,14 @@ public class GameOver : MonoBehaviour
 
 	void Update()
 	{
-		if (Grid.instance.units[2][0].currentHP <= 0)
+		int status = WinCon.checkWinCon(Grid.instance.mapName);
+		//Win conditions
+
+		if (status == 1)
 		{
 			anim.SetTrigger("GameOver");
 		}
-		else if (Grid.instance.units[1][0].currentHP <= 0)
+		else if (status == 2)
 		{
 			anim.SetTrigger("Victory");
 		}

@@ -13,9 +13,10 @@ public class Grid : MonoBehaviour {
     public GameObject terrainPrefab;
     public TextAsset mapConfig;
     public Camera mainCam;
+	public string mapName;
 
-	public int tilesPerRow;
-	public int tilesPerCol;
+	public int tilesPerRow = 0;
+	public int tilesPerCol = 0;
 
 	public int currentPlayer = -1;
 
@@ -44,15 +45,6 @@ public class Grid : MonoBehaviour {
 	 */
 	public int commander = -1;
 
-	/*
-	 * 0 = No wincon (deactivated)
-	 * 1 = Rout
-	 * 2 = Kill Boss
-	 * 3 = Survive
-	 * More to be added later
-	 * */
-	//public int winCon1;
-	//public int winCon2;
 
 	public bool victory = false;
 	public bool failure = false;
@@ -68,7 +60,7 @@ public class Grid : MonoBehaviour {
 		Item.instance.initialiseItems();
         CreateTerrain();
 		CreateTiles();
-		CreatePlayers();
+		CreatePlayers.generatePlayers(mapName);
 	}
 
 	// Update is called once per frame
@@ -80,9 +72,10 @@ public class Grid : MonoBehaviour {
             Application.Quit();
         }
 
+		int status = WinCon.checkWinCon(mapName);
 		//Win conditions
-		//If neutral unit dies
-		if (units[2][0].currentHP <= 0)
+		
+		if (status == 1)
 		{
 			foreach (List<Unit> u in units)
 			{
@@ -93,8 +86,8 @@ public class Grid : MonoBehaviour {
 			}
 			return;
 		}
-		//If boss dies
-		else if (units[1][0].currentHP <= 0)
+		
+		else if (status == 2)
 		{
 			foreach (List<Unit> u in units)
 			{
@@ -376,16 +369,25 @@ public class Grid : MonoBehaviour {
 	 * v1.1
 	 * By Jeffrey Goh
 	 * Added Rotation of tiles so they aren't upside down, flipped terrain generation to be the same as the txt file
-        * Reads text file MapConfig and generates the terrain
-        * Based on CreateGrid
-        * @author Wayne Neo
-        * @version 1.1 
-        * @updated 24/6/2017
-        */
+	 * 
+	 * v1.2
+	 * By Jeffrey Goh
+	 * tilesPerRow and tilesPerCol's value is defined here, so they adapt to the size of the map instead of needing manual input
+    * Reads text file MapConfig and generates the terrain
+    * Based on CreateGrid
+    * @author Wayne Neo
+    * @version 1.2
+    * @updated 24/6/2017
+    */
     void CreateTerrain()
     {
         // Splits the text file into lines
         string[] lines = mapConfig.text.Split("\n"[0]);
+
+		if (tilesPerCol == 0)
+		{
+			tilesPerCol = lines.Length;
+		}
 		System.Array.Reverse(lines);
         string[] line;
 
@@ -394,6 +396,11 @@ public class Grid : MonoBehaviour {
 			{
             // Splits the text file into strings containing individual integers
             line = lines[i].Split(" "[0]);
+
+			if (tilesPerRow == 0)
+			{
+				tilesPerRow = line.Length;
+			}
 			// Iterate through each Row
 			for (int j = 0; j < tilesPerRow; j++)
 			{
@@ -436,340 +443,6 @@ public class Grid : MonoBehaviour {
         
     }
 
-
-
-	/**
-	* Add units, both allies and enemies to the map
-	* Have to assign everything manually
-	* 
-	* v1.1 
-	* Added teams 
-	* Must assign the teams and indexes in the correct order
-	* 
-	* @author Jeffrey Goh
-	* @version 1.1
-	* @updated 7/6/2017
-	*/
-	void CreatePlayers()
-	{
-		PlayerUnit unit1 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 5 - Mathf.Floor(tilesPerRow / 2),0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit1.gridPosition = new Vector2(2, 5);
-
-		unit1.unitName = "Karel";
-		unit1.job = "Swordmaster";
-		unit1.lvl = 19;
-		unit1.exp = 0;
-		unit1.maxHP = 44;
-		unit1.currentHP = 44;
-		unit1.strength = 20;
-		unit1.mag = 5;
-		unit1.skl = 28;
-		unit1.spd = 23;
-		unit1.luk = 18;
-		unit1.def = 15;
-		unit1.res = 13;
-		unit1.con = 9;
-		unit1.mov = 6;
-
-		unit1.hpG = 210;
-		unit1.strG = 130;
-		unit1.magG = 0;
-		unit1.sklG = 140;
-		unit1.spdG = 140;
-		unit1.lukG = 120;
-		unit1.defG = 110;
-		unit1.resG = 100;
-
-		unit1.proficiency.Add("Sword");
-		Item.instance.equipWeapon(unit1, "Sword", "WoDao");
-		Item.instance.addWeapon(unit1, "Lance", "Spear");
-
-		map[2][5].occupied = unit1;
-
-		unit1.team = 0;
-		unit1.allies.Add(0);
-		unit1.index = 0;
-
-		PlayerUnit unit2 = ((GameObject)Instantiate(unitPrefab, new Vector3(2 - Mathf.Floor(tilesPerCol / 2), 6 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit2.gridPosition = new Vector2(2, 6);
-
-		unit2.unitName = "Sanaki";
-		unit2.job = "Empress";
-		unit2.lvl = 1;
-		unit2.exp = 0;
-		unit2.maxHP = 28;
-		unit2.currentHP = 28;
-		unit2.strength = 2;
-		unit2.mag = 33;
-		unit2.skl = 22;
-		unit2.spd = 23;
-		unit2.luk = 32;
-		unit2.def = 10;
-		unit2.res = 28;
-		unit2.con = 4;
-		unit2.mov = 6;
-
-		unit2.hpG = 70;
-		unit2.strG = 40;
-		unit2.magG = 60;
-		unit2.sklG = 60;
-		unit2.spdG = 35;
-		unit2.lukG = 55;
-		unit2.defG = 30;
-		unit2.resG = 50;
-
-		unit2.proficiency.Add("Tome");
-		Item.instance.equipWeapon(unit2, "Tome", "Fimbulvetr");
-		Item.instance.addItem(unit2, "StatBoost", "AngelicRobe");
-		
-
-		map[2][6].occupied = unit2;
-
-		unit2.team = 0;
-		unit2.allies.Add(0);
-		unit2.index = 1;
-
-		PlayerUnit unit4 = ((GameObject)Instantiate(unitPrefab, new Vector3(1 - Mathf.Floor(tilesPerCol / 2), 6 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-		unit4.gridPosition = new Vector2(1, 6);
-
-		unit4.unitName = "Shinon";
-		unit4.job = "Sniper";
-		unit4.classBonusA = 20;
-		unit4.classBonusB = 60;
-		unit4.lvl = 13;
-		unit4.exp = 0;
-		unit4.maxHP = 43;
-		unit4.currentHP = 43;
-		unit4.strength = 21;
-		unit4.mag = 7;
-		unit4.skl = 28;
-		unit4.spd = 24;
-		unit4.luk = 15;
-		unit4.def = 20;
-		unit4.res = 14;
-		unit4.con = 11;
-		unit4.mov = 7;
-
-		unit4.hpG = 50;
-		unit4.strG = 40;
-		unit4.magG = 15;
-		unit4.sklG = 70;
-		unit4.spdG = 65;
-		unit4.lukG = 30;
-		unit4.defG = 45;
-		unit4.resG = 20;
-
-		unit4.proficiency.Add("Bow");
-		Item.instance.addItem(unit4, "Consumable", "Herb");
-		Item.instance.equipWeapon(unit4, "Bow", "KillerBow");
-		Item.instance.equipWeapon(unit4, "Bow", "Longbow");
-
-		map[1][6].occupied = unit4;
-
-		unit4.team = 0;
-		unit4.allies.Add(0);
-		unit4.index = 2;
-
-		AIUnit unit3 = ((GameObject)Instantiate(enemyPrefab, new Vector3(10 - Mathf.Floor(tilesPerCol / 2), 7 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		unit3.gridPosition = new Vector2(10, 7);
-		unit3.ai_id = 2;
-
-		unit3.unitName = "Nino";
-		unit3.job = "Mage";
-		unit3.classBonusA = 0;
-		unit3.classBonusB = 0;
-		unit3.lvl = 5;
-		unit3.exp = 0;
-		unit3.maxHP = 19;
-		unit3.currentHP = 19;
-		unit3.strength = 1;
-		unit3.mag = 7;
-		unit3.skl = 8;
-		unit3.spd = 11;
-		unit3.luk = 10;
-		unit3.def = 4;
-		unit3.res = 7;
-		unit3.con = 3;
-		unit3.mov = 5;
-
-		unit3.hpG = 55;
-		unit3.strG = 35;
-		unit3.magG = 50;
-		unit3.sklG = 55;
-		unit3.spdG = 60;
-		unit3.lukG = 45;
-		unit3.defG = 15;
-		unit3.resG = 50;
-
-		unit3.proficiency.Add("Tome");
-		Item.instance.equipWeapon(unit3, "Tome", "Elfire");
-
-		map[10][7].occupied = unit3;
-
-		unit3.team = 2;
-		unit3.allies.Add(0);
-		unit3.allies.Add(2);
-		unit3.index = 0;
-
-
-
-
-		AIUnit boss1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(10 - Mathf.Floor(tilesPerCol / 2), 18 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		boss1.gridPosition = new Vector2(10, 18);
-		boss1.ai_id = 2;
-
-		boss1.unitName = "Lyon";
-		boss1.job = "Necromancer";
-		boss1.classBonusA = 20;
-		boss1.classBonusB = 60;
-		boss1.isBoss = 1;
-		boss1.lvl = 20;
-		boss1.exp = 0;
-		boss1.maxHP = 60;
-		boss1.currentHP = 60;
-		boss1.strength = 25;
-		boss1.mag = 22;
-		boss1.skl = 13;
-		boss1.spd = 11;
-		boss1.luk = 4;
-		boss1.def = 17;
-		boss1.res = 19;
-		boss1.con = 7;
-		boss1.mov = 6;
-
-		boss1.proficiency.Add("Tome");
-		Item.instance.equipWeapon(boss1, "Tome", "Fenrir");
-
-		map[10][18].occupied = boss1;
-
-		boss1.team = 1;
-		boss1.allies.Add(1);
-		boss1.index = 0;
-
-		AIUnit enemy1 = ((GameObject)Instantiate(enemyPrefab, new Vector3(10 - Mathf.Floor(tilesPerCol / 2), 13 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		enemy1.gridPosition = new Vector2(10, 13);
-		enemy1.ai_id = 1;
-
-		enemy1.unitName = "Riev";
-		enemy1.job = "Bishop";
-		enemy1.classBonusA = 20;
-		enemy1.classBonusB = 60;
-		enemy1.lvl = 17;
-		enemy1.exp = 0;
-		enemy1.maxHP = 51;
-		enemy1.currentHP = 51;
-		enemy1.strength = 0;
-		enemy1.mag = 16;
-		enemy1.skl = 22;
-		enemy1.spd = 20;
-		enemy1.luk = 11;
-		enemy1.def = 16;
-		enemy1.res = 20;
-		enemy1.con = 7;
-		enemy1.mov = 6;
-
-		enemy1.proficiency.Add("Tome");
-		Item.instance.equipWeapon(enemy1, "Tome", "Aura");
-
-		map[10][13].occupied = enemy1;
-
-		enemy1.team = 1;
-		enemy1.allies.Add(1);
-		enemy1.index = 1;
-
-
-		AIUnit enemy2 = ((GameObject)Instantiate(enemyPrefab, new Vector3(0 - Mathf.Floor(tilesPerCol / 2), 12 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		enemy2.gridPosition = new Vector2(0, 12);
-		enemy2.ai_id = 0;
-
-		enemy2.unitName = "Caellach";
-		enemy2.job = "Hero";
-		enemy2.classBonusA = 20;
-		enemy2.classBonusB = 60;
-		enemy2.lvl = 12;
-		enemy2.exp = 0;
-		enemy2.maxHP = 50;
-		enemy2.currentHP = 50;
-		enemy2.strength = 20;
-		enemy2.mag = 0;
-		enemy2.skl = 15;
-		enemy2.spd = 14;
-		enemy2.luk = 15;
-		enemy2.def = 16;
-		enemy2.res = 24;
-		enemy2.con = 13;
-		enemy2.mov = 6;
-
-		enemy2.proficiency.Add("Axe");
-		Item.instance.equipWeapon(enemy2, "Axe", "Tomahawk");
-
-		map[0][12].occupied = enemy2;
-
-		enemy2.team = 1;
-		enemy2.allies.Add(1);
-		enemy2.index = 2;
-
-		AIUnit enemy3 = ((GameObject)Instantiate(enemyPrefab, new Vector3(19 - Mathf.Floor(tilesPerCol / 2), 15 - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-		enemy3.gridPosition = new Vector2(19, 15);
-		enemy3.ai_id = 0;
-
-		enemy3.unitName = "Uhai";
-		enemy3.job = "Nomadic Trooper";
-		enemy2.classBonusA = 20;
-		enemy3.classBonusB = 60;
-		enemy3.lvl = 7;
-		enemy3.exp = 0;
-		enemy3.maxHP = 33;
-		enemy3.currentHP = 33;
-		enemy3.strength = 15;
-		enemy3.mag = 0;
-		enemy3.skl = 13;
-		enemy3.spd = 12;
-		enemy3.luk = 4;
-		enemy3.def = 12;
-		enemy3.res = 13;
-		enemy3.con = 10;
-		enemy3.mov = 8;
-
-		enemy3.proficiency.Add("Bow");
-		enemy3.proficiency.Add("Sword");
-		Item.instance.equipWeapon(enemy3, "Bow", "Longbow");
-
-		map[19][15].occupied = enemy3;
-
-		enemy3.team = 1;
-		enemy3.allies.Add(1);
-		enemy3.index = 3;
-
-		List<Unit> team0 = new List<Unit>();
-		List<Unit> team1 = new List<Unit>();
-		List<Unit> team2 = new List<Unit>();
-
-        unit1.mainCam = unit2.mainCam = unit3.mainCam = unit4.mainCam = enemy1.mainCam = enemy2.mainCam = enemy3.mainCam = boss1.mainCam = mainCam;
-
-		team0.Add(unit1);
-		team0.Add(unit2);
-		team0.Add(unit4);
-
-		units.Add(team0);
-
-		team1.Add(boss1);
-		team1.Add(enemy1);
-		team1.Add(enemy2);
-		team1.Add(enemy3);
-
-		units.Add(team1);
-
-
-		team2.Add(unit3);
-
-		units.Add(team2);
-
-
-		AITeams.Add(1);
-		AITeams.Add(2);
-
-	}
 
     /**
 	* A crude snap back of the camera to the first unit found

@@ -1455,7 +1455,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 583, y: 151.26}
+  m_AnchoredPosition: {x: 583, y: 151.26001}
   m_SizeDelta: {x: 718, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1581137971
@@ -2543,8 +2543,9 @@ MonoBehaviour:
     type: 2}
   mapConfig: {fileID: 4900000, guid: 0ab44b88dfee64f4c8fdeba07f113586, type: 3}
   mainCam: {fileID: 736736688}
-  tilesPerRow: 20
-  tilesPerCol: 20
+  mapName: milestone2
+  tilesPerRow: 0
+  tilesPerCol: 0
   currentPlayer: 0
   currentTeam: 0
   AITeams: 
