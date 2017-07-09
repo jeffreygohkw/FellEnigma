@@ -683,10 +683,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Boundary: 50
   speed: 5
-  min_x: 0
-  max_x: 0
-  min_y: -50
-  max_y: 0
+  horiSize: 3
+  vertSize: 15
 --- !u!1 &756449645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2543,9 +2541,8 @@ MonoBehaviour:
     type: 2}
   mapConfig: {fileID: 4900000, guid: a4d0d2de050c14d429ccae257ad0b8e2, type: 3}
   mainCam: {fileID: 736736688}
-  mapName: tutorial
-  tilesPerRow: 0
-  tilesPerCol: 0
+  tilesPerRow: 30
+  tilesPerCol: 30
   currentPlayer: 0
   currentTeam: 0
   AITeams: 

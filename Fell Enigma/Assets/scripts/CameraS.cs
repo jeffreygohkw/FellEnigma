@@ -6,22 +6,22 @@ public class CameraS : MonoBehaviour {
 
     public float Boundary = 0.05f; // distance from edge scrolling starts
     public float speed = 5;
-    public float min_x;
-    public float max_x;
-    public float min_y;
-    public float max_y;
+    private float min_x;
+    private float max_x;
+    private float min_y;
+    private float max_y;
+    public float horiSize;
+    public float vertSize;
 
-    private Vector2 screenDim;
     private Vector3 newPos;
 
 	// Use this for initialization
 	void Start ()
     {
-        screenDim = new Vector2(Screen.width, Screen.height);
-        min_x = transform.position.x - 5;
-        max_x = transform.position.x + 1;
-        min_y = transform.position.y - 10;
-        max_y = transform.position.y + 4;
+        min_x = transform.position.x - horiSize;
+        max_x = transform.position.x + horiSize - 0.5f;
+        min_y = transform.position.y - vertSize;
+        max_y = transform.position.y + vertSize - 6;
     }
 	
 	// Update is called once per frame
