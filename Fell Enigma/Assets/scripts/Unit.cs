@@ -17,6 +17,8 @@ public class Unit : MonoBehaviour {
 
 	public bool isMoving = false;
 	public bool isFighting = false;
+	public bool isHealing = false;
+	public int activeStaffIndex = -1;
 	public bool doneAction = false;
 	public bool doneMoving = false;
 	public bool willAttack = false;

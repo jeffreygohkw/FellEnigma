@@ -74,9 +74,13 @@ public class Tile : MonoBehaviour {
 
 	/**
 	* Allows currently selected unit to move to an empty tile or to attack the unit that's on the tile
+	* 
+	* v1.1
+	* Added healing
+	* 
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 2/6/2017
+	* @version 1.1
+	* @updated 9/7/2017
 	*/
 	private void OnMouseDown()
 	{
@@ -90,6 +94,10 @@ public class Tile : MonoBehaviour {
 			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting)
 			{
 				Grid.instance.attackWithCurrentUnit(this);
+			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing)
+			{
+				Grid.instance.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex);
 			}
 		}
 	}

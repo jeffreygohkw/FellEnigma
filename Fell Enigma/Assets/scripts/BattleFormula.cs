@@ -832,4 +832,205 @@ public class BattleFormula
 			return;
 		}
 	}
+
+	/**
+	* Heals the target unit, based on the equipped weapons
+	*
+	* 
+	* @param target The target of the attack
+	* @param staff The stats of the staff
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 9/7/2017
+	*/
+	public void healWithCurrentUnit(Unit target, string[] staff)
+	{
+		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].allies.Contains(target.team))
+		{
+			if (target.currentHP < target.maxHP)
+			{
+				int tempHP = target.currentHP;
+				// Heal based on staff Mt + caster's Mag
+				target.currentHP += int.Parse(staff[8]) + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag;
+
+				//HP caps at target's maxHP
+				if (target.currentHP > target.maxHP)
+				{
+					target.currentHP = target.maxHP;
+				}
+
+				Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has healed " + target.unitName + " for " + (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP - tempHP) + " HP!");
+				Debug.Log(target.unitName + "'s HP: "+ Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP + "/" + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP);
+
+				//Gain EXP based on staff used
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp += int.Parse(staff[7]);
+				Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + int.Parse(staff[7]) + " exp!");
+
+				//Level Up
+				while (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp >= 100)
+				{
+					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp -= 100;
+					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lvl += 1;
+					Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has levelled up to level " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lvl);
+					int roll;
+					int statup = 0;
+					int tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].hpG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP += statup;
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " HP!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].strG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].strength += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " STR!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].magG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " MAG!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].sklG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].skl += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SKL!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spdG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spd += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SPD!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lukG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " LUK!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].defG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].def += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " DEF!");
+						statup = 0;
+					}
+
+					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].resG;
+					do
+					{
+						roll = Random.Range(1, 100);
+						if (roll <= tempG)
+						{
+							statup += 1;
+						}
+						tempG -= 100;
+					} while (tempG > 0);
+					if (statup > 0)
+					{
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].res += statup;
+						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " RES!");
+						statup = 0;
+					}
+				}
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing = false;
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex = -1;
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
+				Grid.instance.totalDone++;
+				if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
+				{
+					Grid.instance.currentPlayer = -1;
+				}
+				Grid.instance.removeTileHighlight();
+				return;
+			}
+			else
+			{
+				Debug.Log(target.unitName + "'s HP is full.");
+			}
+		}
+		else
+		{
+			Debug.Log("Invalid target");
+		}
+	}
 }

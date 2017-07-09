@@ -2541,8 +2541,9 @@ MonoBehaviour:
     type: 2}
   mapConfig: {fileID: 4900000, guid: a4d0d2de050c14d429ccae257ad0b8e2, type: 3}
   mainCam: {fileID: 736736688}
-  tilesPerRow: 30
-  tilesPerCol: 30
+  mapName: tutorial
+  tilesPerRow: 0
+  tilesPerCol: 0
   currentPlayer: 0
   currentTeam: 0
   AITeams: 

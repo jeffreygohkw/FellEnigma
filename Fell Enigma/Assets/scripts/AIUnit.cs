@@ -375,23 +375,15 @@ public class AIUnit : Unit
 
 	private void OnMouseDown()
 	{
-		/*
-		highlighted = !highlighted;
-		if (highlighted)
-		{
-			Grid.instance.highlightTilesAt(gridPosition, Color.red, weaponMinRange, weaponMaxRange, false);
-		}
-		
-		else
-		{
-			Grid.instance.removeTileHighlight();
-		}
-		*/
 		if (Grid.instance.currentPlayer != -1)
 		{
 			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 			{
 				Grid.instance.battle.attackWithCurrentUnit(this);
+			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			{
+				Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
 			}
 		}
 	}

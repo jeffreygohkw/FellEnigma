@@ -108,7 +108,10 @@ public class PlayerUnit : Unit
 			{
 				if (u.selected && u != this)
 				{
-					// Don't select this unit if another unit is selected
+					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+					{
+						Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+					}
 					return;
 				}
 			}
@@ -125,8 +128,11 @@ public class PlayerUnit : Unit
 		{
 			Grid.instance.battle.attackWithCurrentUnit(this);
 		}
+		else 
 		isMoving = false;
 		isFighting = false;
+		isHealing = false;
+		activeStaffIndex = -1;
 	}
 
 	/**
@@ -185,10 +191,13 @@ public class PlayerUnit : Unit
 	/**
 	 * Uses an item in the PlayerUnit's inventory
 	 * 
+	 * v1.1
+	 * Added Healing
+	 * 
 	 * @param index index of the item
 	 * @author Jeffrey Goh
-	 * @version 1.0
-	 * @updated 6/7/2017
+	 * @version 1.1
+	 * @updated 9/7/2017
 	 */
 	public void useItem(int index)
 	{
@@ -201,7 +210,29 @@ public class PlayerUnit : Unit
 		{
 			if (inventory[index][0] == "Staff")
 			{
-				//Heal code here
+				if (proficiency.Contains("Staff"))
+				{
+					isHealing = !isHealing;
+					if (isHealing)
+					{
+						if (activeStaffIndex != index)
+						{
+							activeStaffIndex = index;
+							Grid.instance.highlightTilesAt(gridPosition, Color.yellow, int.Parse(inventory[index][3]), int.Parse(inventory[index][4]), false);
+						}
+					}
+					else
+					{
+						activeStaffIndex = -1;
+						Grid.instance.removeTileHighlight();
+					}
+					Debug.Log(activeStaffIndex);
+
+				}
+				else
+				{
+					Debug.Log(unitName + " cannot use staves!");
+				}
 			}
 			else if (inventory[index][0] == "StatBoost")
 			{
@@ -348,7 +379,8 @@ public class PlayerUnit : Unit
 						selectedItemIndex = -1;
 						Grid.instance.removeTileHighlight();
 						isFighting = false;
-
+						isHealing = false;
+						activeStaffIndex = -1;
 						if (isMoving)
 						{
 							isMoving = false;
@@ -370,6 +402,8 @@ public class PlayerUnit : Unit
 					if (lastPosition.Count != 0)
 					{
 						isFighting = false;
+						isHealing = false;
+						activeStaffIndex = -1;
 						Grid.instance.removeTileHighlight();
 						displayInventory = false;
 						selectedItemIndex = -1;
@@ -391,6 +425,8 @@ public class PlayerUnit : Unit
 				selectedItemIndex = -1;
 				Grid.instance.removeTileHighlight();
 				isMoving = false;
+				isHealing = false;
+				activeStaffIndex = -1;
 
 				if (isFighting)
 				{
@@ -410,11 +446,27 @@ public class PlayerUnit : Unit
 			if (GUI.Button(buttonRect, "Item"))
 			{
 				displayInventory = !displayInventory;
+				if (isFighting || isMoving)
+				{
+					Grid.instance.removeTileHighlight();
+					isHealing = false;
+					activeStaffIndex = -1;
+				}
+				if (!displayInventory)
+				{
+					Grid.instance.removeTileHighlight();
+					isHealing = false;
+					activeStaffIndex = -1;
+					selectedItemIndex = -1;
+				}
 			}
+
 
 			// The actual Items
 			if (displayInventory)
 			{
+				isMoving = false;
+				isFighting = false;
 				if (inventory.Count >= 1)
 				{
 					buttonRect = new Rect(151, Screen.height - 150, 150, 50);
@@ -431,7 +483,7 @@ public class PlayerUnit : Unit
 					}
 				}
 
-				
+
 				if (inventory.Count >= 2)
 				{
 					buttonRect = new Rect(150, Screen.height - 100, 150, 50);
@@ -447,7 +499,7 @@ public class PlayerUnit : Unit
 						}
 					}
 				}
-					
+
 				if (inventory.Count >= 3)
 				{
 					buttonRect = new Rect(150, Screen.height - 50, 150, 50);
@@ -464,6 +516,7 @@ public class PlayerUnit : Unit
 					}
 				}
 			}
+
 
 			//What you can do with the items
 			//Currently assuming weapons
@@ -500,6 +553,8 @@ public class PlayerUnit : Unit
 				lastPosition.Clear();
 				isMoving = false;
 				isFighting = false;
+				isHealing = false;
+				activeStaffIndex = -1;
 				doneAction = true;
 				selected = false;
 				displayInventory = false;
@@ -519,6 +574,8 @@ public class PlayerUnit : Unit
 				lastPosition.Clear();
 				isMoving = false;
 				isFighting = false;
+				isHealing = false;
+				activeStaffIndex = -1;
 				selected = false;
 				doneAction = true;
 				displayInventory = false;

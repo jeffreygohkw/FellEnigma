@@ -424,11 +424,11 @@ public class CreatePlayers : MonoBehaviour {
 			Item.instance.addItem(unit2, "Staff", "Heal");
 			Item.instance.addItem(unit2, "Consumable", "Herb");
 
-			Grid.instance.map[15][28].occupied = unit1;
+			Grid.instance.map[15][28].occupied = unit2;
 
-			unit1.team = 0;
-			unit1.allies.Add(0);
-			unit1.index = 0;
+			unit2.team = 0;
+			unit2.allies.Add(0);
+			unit2.index = 1;
 
 
 
@@ -439,7 +439,7 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.unitName = "Black Heart";
 			boss1.job = "Black Mage";
 			boss1.classBonusA = 0;
-			boss1.classBonusB = 60;
+			boss1.classBonusB = 0;
 			boss1.isBoss = 1;
 			boss1.lvl = 2;
 			boss1.exp = 0;
@@ -465,10 +465,40 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.index = 0;
 
 
+			AIUnit enemy1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(17 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 22 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy1.gridPosition = new Vector2(17, 22);
+			enemy1.ai_id = 1;
+
+			enemy1.unitName = "Bandit";
+			enemy1.job = "Bandit";
+			enemy1.classBonusA = 0;
+			enemy1.classBonusB = 0;
+			enemy1.lvl = 1;
+			enemy1.exp = 0;
+			enemy1.maxHP = 20;
+			enemy1.currentHP = 20;
+			enemy1.strength = 5;
+			enemy1.mag = 0;
+			enemy1.skl = 1;
+			enemy1.spd = 5;
+			enemy1.luk = 0;
+			enemy1.def = 3;
+			enemy1.res = 0;
+			enemy1.con = 12;
+			enemy1.mov = 5;
+
+			enemy1.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy1, "Axe", "IronAxe");
+
+			Grid.instance.map[17][22].occupied = enemy1;
+
+			enemy1.team = 1;
+			enemy1.allies.Add(1);
+			enemy1.index = 1;
+
+
 			List<Unit> team0 = new List<Unit>();
 			List<Unit> team1 = new List<Unit>();
-
-			unit1.mainCam = unit2.mainCam = boss1.mainCam = Grid.instance.mainCam;
 
 			team0.Add(unit1);
 			team0.Add(unit2);
@@ -476,10 +506,20 @@ public class CreatePlayers : MonoBehaviour {
 			Grid.instance.units.Add(team0);
 
 			team1.Add(boss1);
+			team1.Add(enemy1);
 
 			Grid.instance.units.Add(team1);
 
+
 			Grid.instance.AITeams.Add(1);
+
+			foreach (List<Unit> team in Grid.instance.units)
+			{
+				foreach (Unit u in team)
+				{
+					u.mainCam = Grid.instance.mainCam;
+				}
+			}
 		}
 
 	}

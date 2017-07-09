@@ -162,6 +162,8 @@ public class Grid : MonoBehaviour {
 				u.willAttack = false;
 				u.isMoving = false;
 				u.isFighting = false;
+				u.isHealing = false;
+				u.activeStaffIndex = -1;
 				u.highlighted = false;
 				u.displayInventory = false;
 				u.selectedItemIndex = -1;
@@ -364,8 +366,39 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
+	/**
+	* Heals the unit on the target tile
+	* 
+	* @param target destTile The tile our target is on
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 9/7/2017
+	*/
+	public void healWithCurrentUnit(Tile destTile, int staff)
+	{
+		if (destTile == null)
+		{
+			return;
+		}
+		else if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor() || AITeams.Contains(currentTeam))
+		{
+			Unit target = null;
+			foreach (List<Unit> i in units)
+			{
+				foreach (Unit u in i)
+				{
+					if (u.gridPosition == destTile.gridPosition)
+					{
+						target = u;
+						battle.healWithCurrentUnit(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+						break;
+					}
+				}
+			}
+		}
+	}
 
-    /**
+	/**
 	 * v1.1
 	 * By Jeffrey Goh
 	 * Added Rotation of tiles so they aren't upside down, flipped terrain generation to be the same as the txt file
@@ -379,7 +412,7 @@ public class Grid : MonoBehaviour {
     * @version 1.2
     * @updated 24/6/2017
     */
-    void CreateTerrain()
+	void CreateTerrain()
     {
         // Splits the text file into lines
         string[] lines = mapConfig.text.Split("\n"[0]);
