@@ -15,6 +15,7 @@ public class Actions : MonoBehaviour {
 		
 	}
 
+    // If Move button is pressed, linked in Inspector
     public void moveClick()
     {
         if (!hasMoved)
@@ -27,21 +28,26 @@ public class Actions : MonoBehaviour {
         }
     }
 
+    // If Attack button is pressed, linked in Inspector
     public void attackClick()
     {
         EventManager.TriggerEvent("AttackUnit");
+        EventManager.TriggerEvent("AttackUnitStats");
     }
 
+    // If Item button is pressed, linked in Inspector
     public void itemClick()
     {
         EventManager.TriggerEvent("ItemUnit");
     }
 
+    // If Wait button is pressed, linked in Inspector
     public void waitClick()
     {
         EventManager.TriggerEvent("WaitUnit");
     }
 
+    // If End button is pressed, linked in Inspector
     public void endClick()
     {
         EventManager.TriggerEvent("EndUnit");

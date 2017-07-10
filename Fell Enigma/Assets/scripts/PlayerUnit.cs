@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerUnit : Unit
 {
 	List<Vector2> lastPosition = new List<Vector2>();
-    
+    private bool onceisEnough = false;
+
+
 	// Use this for initialization
 	void Start()
 	{
@@ -19,25 +21,32 @@ public class PlayerUnit : Unit
 		//If it is your team's turn
 		if (Grid.instance.currentTeam == team)
 		{
-			// If the unit has finished its action, it is grey, if it is currently selected, it is blue, otherwise, it is cyan
-			if (doneAction)
-			{
-				GetComponent<Renderer>().material.color = Color.grey;
-			}
-			else if (selected)
-			{
-				GetComponent<Renderer>().material.color = Color.blue;
-			}
-			else
-			{
-				GetComponent<Renderer>().material.color = Color.cyan;
-			}
+            // If the unit has finished its action, it is grey, if it is currently selected, it is blue, otherwise, it is cyan
+            if (doneAction)
+            {
+                GetComponent<Renderer>().material.color = Color.grey;
+                if (!onceisEnough)
+                {
+                    EventManager.TriggerEvent("DeselectUnit");
+                    EventManager.TriggerEvent("DeselectUnitStats");
+                    onceisEnough = true;
+                }
+            }
+            else if (selected)
+            {
+                GetComponent<Renderer>().material.color = Color.blue;
+            }
+            else
+            {
+                GetComponent<Renderer>().material.color = Color.cyan;
+            }
 		}
 		else
 		{
 			//If it is not your team's turn, unit is grey
 			GetComponent<Renderer>().material.color = Color.grey;
 			lastPosition.Clear();
+            onceisEnough = false;
 		}
 
 		if (currentHP <= 0)
@@ -91,6 +100,8 @@ public class PlayerUnit : Unit
 							isMoving = false;
 							doneMoving = true;
                             EventManager.TriggerEvent("MovedUnit");
+                            EventManager.StopListening("MoveUnit", MoveUnit);
+                            EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
                         }
 					}
 				}
@@ -123,7 +134,6 @@ public class PlayerUnit : Unit
                     EventManager.TriggerEvent("SelectUnit");
                     EventManager.TriggerEvent("SelectUnitStats");
                     EventManager.StartListening("MoveUnit", MoveUnit);
-                    EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
                     EventManager.StartListening("AttackUnit", AttackUnit);
                     EventManager.StartListening("ItemUnit", ItemUnit);
                     EventManager.StartListening("WaitUnit", WaitUnit);
@@ -135,7 +145,6 @@ public class PlayerUnit : Unit
                     EventManager.TriggerEvent("DeselectUnit");
                     EventManager.TriggerEvent("DeselectUnitStats");
                     EventManager.StopListening("MoveUnit", MoveUnit);
-                    EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
                     EventManager.StopListening("AttackUnit", AttackUnit);
                     EventManager.StopListening("ItemUnit", ItemUnit);
                     EventManager.StopListening("WaitUnit", WaitUnit);
@@ -150,7 +159,7 @@ public class PlayerUnit : Unit
 		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 		{
 			Grid.instance.battle.attackWithCurrentUnit(this);
-		}
+        }
 		else 
 		isMoving = false;
 		isFighting = false;
@@ -644,22 +653,27 @@ public class PlayerUnit : Unit
     {
         if (selected && !doneAction)
         {
-            if (lastPosition.Count != 0)
+            if (doneMoving)
             {
-                isFighting = false;
-                isHealing = false;
-                activeStaffIndex = -1;
-                Grid.instance.removeTileHighlight();
-                displayInventory = false;
-                selectedItemIndex = -1;
-                Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
-                transform.position = Grid.instance.map[(int)lastPosition[0].x][(int)lastPosition[0].y].transform.position;
-                this.gridPosition = lastPosition[0];
-                Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = this;
+                if (lastPosition.Count != 0)
+                {
+                    isFighting = false;
+                    isHealing = false;
+                    activeStaffIndex = -1;
+                    Grid.instance.removeTileHighlight();
+                    displayInventory = false;
+                    selectedItemIndex = -1;
+                    Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+                    transform.position = Grid.instance.map[(int)lastPosition[0].x][(int)lastPosition[0].y].transform.position;
+                    this.gridPosition = lastPosition[0];
+                    Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = this;
+                }
+                lastPosition.Clear();
+                doneMoving = false;
+                EventManager.TriggerEvent("UndoMovedUnit");
+                EventManager.StartListening("MoveUnit", MoveUnit);
+                EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
             }
-            lastPosition.Clear();
-            doneMoving = false;
-            EventManager.TriggerEvent("UndoMovedUnit");
         }
     }
 
@@ -711,6 +725,12 @@ public class PlayerUnit : Unit
             selectedItemIndex = -1;
             EventManager.TriggerEvent("DeselectUnit");
             EventManager.TriggerEvent("DeselectUnitStats");
+            EventManager.StopListening("MoveUnit", MoveUnit);
+            EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+            EventManager.StopListening("AttackUnit", AttackUnit);
+            EventManager.StopListening("ItemUnit", ItemUnit);
+            EventManager.StopListening("WaitUnit", WaitUnit);
+            EventManager.StopListening("EndUnit", EndUnit);
             Grid.instance.totalDone++;
         }
     }
@@ -731,6 +751,11 @@ public class PlayerUnit : Unit
             selectedItemIndex = -1;
             EventManager.TriggerEvent("DeselectUnit");
             EventManager.TriggerEvent("DeselectUnitStats");
+            EventManager.StopListening("MoveUnit", MoveUnit);
+            EventManager.StopListening("AttackUnit", AttackUnit);
+            EventManager.StopListening("ItemUnit", ItemUnit);
+            EventManager.StopListening("WaitUnit", WaitUnit);
+            EventManager.StopListening("EndUnit", EndUnit);
             Grid.instance.nextTurn();
         }
     }

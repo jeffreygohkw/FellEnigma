@@ -18,7 +18,7 @@ public class ActionUI : MonoBehaviour
         EventManager.StartListening("SelectUnit", SelectUnit);
         EventManager.StartListening("MovedUnit", MovedUnit);
         
-
+        // Obtains the UI elements
         thisCanvas = this.GetComponent<CanvasGroup>();
         moveText = GetComponentsInChildren<Text>()[0];
         OffUI();
@@ -30,13 +30,30 @@ public class ActionUI : MonoBehaviour
 
     }
 
+    /**
+    * Activates UI, switches the listening for selection
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     void SelectUnit()
     {
         OnUI();
         EventManager.StopListening("SelectUnit", SelectUnit);
+        EventManager.StartListening("MovedUnit", MovedUnit);
         EventManager.StartListening("DeselectUnit", DeselectUnit);
     }
 
+    /**
+    * Deactivates UI, switches the listening for selection and resets the Move button
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     void DeselectUnit()
     {
         OffUI();
@@ -47,6 +64,14 @@ public class ActionUI : MonoBehaviour
         this.GetComponentInChildren<Actions>().hasMoved = false;
     }
 
+    /**
+    * Changes Move button, switches the listening for MovedUnit
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     void MovedUnit()
     {
         hasMoved = true;
@@ -54,9 +79,17 @@ public class ActionUI : MonoBehaviour
         this.GetComponentInChildren<Actions>().hasMoved = true;
         EventManager.StartListening("UndoMovedUnit", UndoMovedUnit);
         EventManager.StopListening("MovedUnit", MovedUnit);
-
+        Debug.Log("MovedUnit ran!");
     }
 
+    /**
+    * Changes Undo Move button, switches the listening for MovedUnit
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     void UndoMovedUnit()
     {
         hasMoved = false;
@@ -68,7 +101,14 @@ public class ActionUI : MonoBehaviour
 
 
 
-
+    /**
+    * Causes the UI to appear and be selectable
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     private void OnUI()
     {
         thisCanvas.alpha = 1f;
@@ -76,6 +116,14 @@ public class ActionUI : MonoBehaviour
         thisCanvas.blocksRaycasts = true;
     }
 
+    /**
+    * Causes the UI to disappear and be unselectable
+    * 
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 9/7/17
+    */
     private void OffUI()
     {
         thisCanvas.alpha = 0f;
