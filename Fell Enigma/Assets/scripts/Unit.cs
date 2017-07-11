@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour {
 	public bool isMoving = false;
 	public bool isFighting = false;
 	public bool isHealing = false;
+	public bool isTalking = false;
 	public int activeStaffIndex = -1;
 	public bool doneAction = false;
 	public bool doneMoving = false;
@@ -25,6 +26,11 @@ public class Unit : MonoBehaviour {
 	public bool highlighted = false;
 	public bool displayInventory = false;
 	public int selectedItemIndex = -1;
+	/*
+	 * 0: Recruit
+	 * 1: ???
+	 */
+	public Dictionary<string, int> canTalk = new Dictionary<string, int>();
 
 	public List<string> proficiency = new List<string>();
 
@@ -36,6 +42,7 @@ public class Unit : MonoBehaviour {
 	//1 for true
 	public int isBoss = 0;
 	public int isThief = 0;
+	public bool isHero = false;
 	public int classPower = 3;
 	public int classBonusA;
 	public int classBonusB = 0;
@@ -124,6 +131,11 @@ public class Unit : MonoBehaviour {
 	{
 
     }
+
+	public virtual void playerWait()
+	{
+
+	}
 
     // Updates UI only when mouseOver
    public void OnMouseOver()

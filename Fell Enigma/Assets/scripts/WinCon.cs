@@ -45,7 +45,42 @@ public class WinCon : MonoBehaviour {
 		}
 		else if (mapName == "tutorial")
 		{
-			return 0;
+			bool rout = true;
+			foreach (Unit u in Grid.instance.units[1])
+			{
+				if (u.currentHP > 0)
+				{
+					rout = false;
+				}
+			}
+
+			bool heroSlain = false;
+			foreach (List<Unit> team in Grid.instance.units)
+			{
+				foreach (Unit u in team)
+				{
+					if (u.isHero && u.currentHP <= 0)
+					{
+						heroSlain = true;
+						break;
+					}
+				}
+			}
+
+			//If a hero dies
+			if (heroSlain)
+			{
+				return 1;
+			}
+			//Rout
+			else if (rout)
+			{
+				return 2;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		else
 		{

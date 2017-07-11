@@ -10,6 +10,7 @@ public class TerrainS : MonoBehaviour
     private bool isPassable;
 
     public Material[] list;
+	public string[] nameList;
     public int[] movementCostList;
     public int[] avdList;
 	public int[] defList;
@@ -65,7 +66,12 @@ public class TerrainS : MonoBehaviour
     }
 
 
-    public int returnCost()
+
+	public string returnName()
+	{
+		return nameList[config];
+	}
+	public int returnCost()
     {
         return movementCostList[config];
     }

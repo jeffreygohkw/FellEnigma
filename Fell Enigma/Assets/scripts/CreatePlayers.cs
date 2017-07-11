@@ -350,11 +350,12 @@ public class CreatePlayers : MonoBehaviour {
 
 		else if (mapName == "tutorial")
 		{
-			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(14 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 28 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit1.gridPosition = new Vector2(14, 28);
+			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(15 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 28 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit1.gridPosition = new Vector2(15, 28);
 
-			unit1.unitName = "Prince";
+			unit1.unitName = "Naive Prince";
 			unit1.job = "Prince";
+			unit1.isHero = true;
 			unit1.lvl = 1;
 			unit1.exp = 0;
 			unit1.maxHP = 18;
@@ -382,7 +383,7 @@ public class CreatePlayers : MonoBehaviour {
 			Item.instance.equipWeapon(unit1, "Sword", "IronSword");
 			Item.instance.addItem(unit1, "Consumable", "Herb");
 
-			Grid.instance.map[14][28].occupied = unit1;
+			Grid.instance.map[15][28].occupied = unit1;
 
 			unit1.team = 0;
 			unit1.allies.Add(0);
@@ -390,45 +391,92 @@ public class CreatePlayers : MonoBehaviour {
 
 
 
-			PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(15 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 28 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit2.gridPosition = new Vector2(15, 28);
+			PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(14 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 28 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit2.gridPosition = new Vector2(14, 28);
 
-			unit2.unitName = "White Heart";
-			unit2.job = "White Mage";
-			unit2.lvl = 2;
+			unit2.unitName = "Young Rebel";
+			unit2.job = "Rogue";
+			unit2.isHero = true;
+			unit2.isThief = 1;
+			unit2.lvl = 1;
 			unit2.exp = 0;
-			unit2.maxHP = 19;
-			unit2.currentHP = 19;
-			unit2.strength = 0;
-			unit2.mag = 6;
-			unit2.skl = 6;
-			unit2.spd = 8;
-			unit2.luk = 2;
+			unit2.maxHP = 16;
+			unit2.currentHP = 16;
+			unit2.strength = 4;
+			unit2.mag = 0;
+			unit2.skl = 7;
+			unit2.spd = 9;
+			unit2.luk = 5;
 			unit2.def = 2;
-			unit2.res = 6;
-			unit2.con = 6;
+			unit2.res = 0;
+			unit2.con = 5;
 			unit2.mov = 5;
 
-			unit2.hpG = 55;
-			unit2.strG = 10;
-			unit2.magG = 50;
-			unit2.sklG = 50;
-			unit2.spdG = 40;
-			unit2.lukG = 25;
-			unit2.defG = 15;
-			unit2.resG = 55;
+			unit2.hpG = 70;
+			unit2.strG = 40;
+			unit2.magG = 20;
+			unit2.sklG = 60;
+			unit2.spdG = 60;
+			unit2.lukG = 55;
+			unit2.defG = 20;
+			unit2.resG = 30;
 
-			unit2.proficiency.Add("Tome");
-			unit2.proficiency.Add("Staff");
-			Item.instance.equipWeapon(unit2, "Tome", "Lightning");
-			Item.instance.addItem(unit2, "Staff", "Heal");
+			unit2.proficiency.Add("Sword");
+			Item.instance.equipWeapon(unit2, "Sword", "IronSword");
+			Item.instance.addItem(unit2, "Consumable", "Herb");
 			Item.instance.addItem(unit2, "Consumable", "Herb");
 
-			Grid.instance.map[15][28].occupied = unit2;
+			Grid.instance.map[14][28].occupied = unit2;
 
 			unit2.team = 0;
 			unit2.allies.Add(0);
 			unit2.index = 1;
+
+
+			AIUnit ally1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(15 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 26 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			ally1.gridPosition = new Vector2(15, 26);
+			ally1.ai_id = 2;
+			ally1.canTalk.Add("Naive Prince", 0);
+			ally1.canTalk.Add("Young Rebel", 0);
+
+			ally1.unitName = "White Soul";
+			ally1.job = "White Mage";
+			ally1.isHero = true;
+			ally1.lvl = 2;
+			ally1.exp = 0;
+			ally1.maxHP = 19;
+			ally1.currentHP = 19;
+			ally1.strength = 0;
+			ally1.mag = 6;
+			ally1.skl = 6;
+			ally1.spd = 8;
+			ally1.luk = 2;
+			ally1.def = 2;
+			ally1.res = 6;
+			ally1.con = 6;
+			ally1.mov = 5;
+
+			ally1.hpG = 55;
+			ally1.strG = 10;
+			ally1.magG = 50;
+			ally1.sklG = 50;
+			ally1.spdG = 40;
+			ally1.lukG = 25;
+			ally1.defG = 15;
+			ally1.resG = 55;
+
+			ally1.proficiency.Add("Tome");
+			ally1.proficiency.Add("Staff");
+			Item.instance.equipWeapon(ally1, "Tome", "Lightning");
+			Item.instance.addItem(ally1, "Staff", "Heal");
+			Item.instance.addItem(ally1, "Consumable", "Herb");
+
+			Grid.instance.map[15][26].occupied = ally1;
+
+			ally1.team = 2;
+			ally1.allies.Add(0);
+			ally1.allies.Add(2);
+			ally1.index = 0;
 
 
 
@@ -499,6 +547,7 @@ public class CreatePlayers : MonoBehaviour {
 
 			List<Unit> team0 = new List<Unit>();
 			List<Unit> team1 = new List<Unit>();
+			List<Unit> team2 = new List<Unit>();
 
 			team0.Add(unit1);
 			team0.Add(unit2);
@@ -510,8 +559,13 @@ public class CreatePlayers : MonoBehaviour {
 
 			Grid.instance.units.Add(team1);
 
+			team2.Add(ally1);
+			Grid.instance.units.Add(team2);
+
 
 			Grid.instance.AITeams.Add(1);
+			Grid.instance.AITeams.Add(2);
+
 
 			foreach (List<Unit> team in Grid.instance.units)
 			{

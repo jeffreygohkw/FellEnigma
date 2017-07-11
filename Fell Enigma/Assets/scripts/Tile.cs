@@ -99,6 +99,10 @@ public class Tile : MonoBehaviour {
 			{
 				Grid.instance.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex);
 			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking)
+			{
+				Grid.instance.talkWithCurrentUnit(this);
+			}
 		}
 	}
 

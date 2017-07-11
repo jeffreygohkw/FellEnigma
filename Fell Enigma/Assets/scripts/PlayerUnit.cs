@@ -126,6 +126,10 @@ public class PlayerUnit : Unit
 					return;
 				}
 			}
+			if (selected && doneMoving)
+			{
+				playerWait();
+			}
 			if (!doneAction)
 			{
 				selected = !selected;
@@ -346,12 +350,12 @@ public class PlayerUnit : Unit
 	}
 
 	/**
-		* Discards an item in the PlayerUnit's inventory
-		* @param index index of the item
-		* @author Jeffrey Goh
-		* @version 1.0
-		* @updated 5/7/2017
-		*/
+	* Discards an item in the PlayerUnit's inventory
+	* @param index index of the item
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 5/7/2017
+	*/
 	public void discardItem(int index)
 	{
 		// Don't discard if an invalid index is passed in
@@ -376,6 +380,31 @@ public class PlayerUnit : Unit
 		}
 	}
 
+	/**
+	* Makes the current unit wait
+	* Done to avoid typing this out every time
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 11/7/2017
+	*/
+	public override void playerWait()
+	{
+		Grid.instance.removeTileHighlight();
+		lastPosition.Clear();
+		isMoving = false;
+		isFighting = false;
+		isHealing = false;
+		activeStaffIndex = -1;
+		doneAction = true;
+		selected = false;
+		displayInventory = false;
+		selectedItemIndex = -1;
+		isTalking = false;
+
+		Grid.instance.totalDone++;
+
+		base.playerWait();
+	}
 
 
 	/**
@@ -392,14 +421,59 @@ public class PlayerUnit : Unit
 	* @version 1.2
 	* @updated 2/7/2017
 	*/
-	/*public override void OnGUI()
+
+	public override void OnGUI()
 	{
 		
 
 		if (selected && !doneAction)
 		{
-  
-            Rect buttonRect = new Rect(0, Screen.height - 250, 150, 50);
+			Rect buttonRect = new Rect(0, Screen.height - 350, 150, 50);
+			foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
+			{
+				if (t.occupied)
+				{
+					if (t.occupied.canTalk.ContainsKey(this.unitName))
+					{
+						if (GUI.Button(buttonRect, "Talk"))
+						{
+							isMoving = false;
+							isFighting = false;
+							isHealing = false;
+							activeStaffIndex = -1;
+							displayInventory = false;
+							selectedItemIndex = -1;
+
+							Debug.Log("Talking");
+							isTalking = !isTalking;
+							if (isTalking)
+							{
+								Grid.instance.highlightTilesAt(gridPosition, Color.yellow, 1, 1, false);
+							}
+							else
+							{
+								Grid.instance.removeTileHighlight();
+							}
+						}
+					}
+				}
+			}
+			
+				
+			
+
+
+			buttonRect = new Rect(0, Screen.height - 300, 150, 50);
+			if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village")
+			{
+				//Visit
+				if (GUI.Button(buttonRect, "Visit"))
+				{
+					Debug.Log("Visiting");
+				}
+			}
+
+			buttonRect = new Rect(0, Screen.height - 250, 150, 50);
 
 			if (!doneMoving)
 			{
@@ -414,6 +488,8 @@ public class PlayerUnit : Unit
 						isFighting = false;
 						isHealing = false;
 						activeStaffIndex = -1;
+						isTalking = false;
+
 						if (isMoving)
 						{
 							isMoving = false;
@@ -437,6 +513,8 @@ public class PlayerUnit : Unit
 						isFighting = false;
 						isHealing = false;
 						activeStaffIndex = -1;
+						isTalking = false;
+
 						Grid.instance.removeTileHighlight();
 						displayInventory = false;
 						selectedItemIndex = -1;
@@ -460,6 +538,8 @@ public class PlayerUnit : Unit
 				isMoving = false;
 				isHealing = false;
 				activeStaffIndex = -1;
+				isTalking = false;
+
 
 				if (isFighting)
 				{
@@ -500,6 +580,8 @@ public class PlayerUnit : Unit
 			{
 				isMoving = false;
 				isFighting = false;
+				isTalking = false;
+
 				if (inventory.Count >= 1)
 				{
 					buttonRect = new Rect(151, Screen.height - 150, 150, 50);
@@ -582,17 +664,7 @@ public class PlayerUnit : Unit
 			//Wait
 			if (GUI.Button(buttonRect, "Wait"))
 			{
-				Grid.instance.removeTileHighlight();
-				lastPosition.Clear();
-				isMoving = false;
-				isFighting = false;
-				isHealing = false;
-				activeStaffIndex = -1;
-				doneAction = true;
-				selected = false;
-				displayInventory = false;
-				selectedItemIndex = -1;
-				Grid.instance.totalDone++;
+				playerWait();
 			}
 
 
@@ -613,6 +685,8 @@ public class PlayerUnit : Unit
 				doneAction = true;
 				displayInventory = false;
 				selectedItemIndex = -1;
+				isTalking = false;
+
 				Grid.instance.nextTurn();
 			}
 			base.OnGUI();
@@ -620,7 +694,7 @@ public class PlayerUnit : Unit
         }
         
         
-    }*/
+    }
 
     void MoveUnit()
     {

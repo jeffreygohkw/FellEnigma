@@ -399,6 +399,139 @@ public class Grid : MonoBehaviour {
 	}
 
 	/**
+	* Talk to the target unit
+	* 
+	* @param target destTile The tile our target is on
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 9/7/2017
+	*/
+	public void talkWithCurrentUnit(Tile destTile)
+	{
+		if (destTile == null)
+		{
+			return;
+		}
+		else if (destTile.GetComponent<Renderer>().material.color != destTile.returnDefaultColor() || AITeams.Contains(currentTeam))
+		{
+			Unit target = null;
+			foreach (List<Unit> i in units)
+			{
+				foreach (Unit u in i)
+				{
+					if (u.gridPosition == destTile.gridPosition)
+					{
+						target = u;
+						talkWithCurrentUnit(target);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	* Talk to the target unit
+	* 
+	* @param target destTile The tile our target is on
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 9/7/2017
+	*/
+	public void talkWithCurrentUnit(Unit target)
+	{
+		if (target.currentHP <= 0)
+		{
+			return;
+		}
+		else if (target.canTalk.ContainsKey(units[currentPlayer][currentTeam].unitName))
+		{
+			//Recruit
+			if (target.canTalk[units[currentPlayer][currentTeam].unitName] == 0)
+			{
+				PlayerUnit recruit = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(target.gridPosition.x - Mathf.Floor(Grid.instance.tilesPerCol / 2), target.gridPosition.y - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+				recruit.gridPosition = new Vector2(target.gridPosition.x, target.gridPosition.y);
+
+				recruit.unitName = target.unitName;
+				recruit.job = target.job;
+				recruit.isThief = target.isThief;
+				recruit.lvl = target.lvl;
+				recruit.exp = target.exp;
+				recruit.maxHP = target.maxHP;
+				recruit.currentHP = target.currentHP;
+				recruit.strength = target.strength;
+				recruit.mag = target.mag;
+				recruit.skl = target.skl;
+				recruit.spd = target.spd;
+				recruit.luk = target.luk;
+				recruit.def = target.def;
+				recruit.res = target.res;
+				recruit.con = target.con;
+				recruit.mov = target.mov;
+
+				recruit.hpG = target.hpG;
+				recruit.strG = target.strG;
+				recruit.magG = target.magG;
+				recruit.sklG = target.sklG;
+				recruit.spdG = target.spdG;
+				recruit.lukG = target.lukG;
+				recruit.defG = target.defG;
+				recruit.resG = target.resG;
+
+				foreach (string weapon in target.proficiency)
+				{
+					recruit.proficiency.Add(weapon);
+				}
+
+				for (int i = 0; i < target.inventory.Count; i++)
+				{
+					if (i == target.equippedIndex)
+					{
+						Item.instance.equipWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
+					}
+					else if (target.inventory[i].Length == 13)
+					{
+						Item.instance.addWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
+					}
+					else
+					{
+						Item.instance.addItem(recruit, target.inventory[i][0], target.inventory[i][1]);
+					}
+				}
+
+				Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].occupied = recruit;
+
+				recruit.team = 0;
+				recruit.allies.Add(0);
+
+				// The recruited unit gets a turn
+				recruit.doneMoving = false;
+				recruit.doneAction = false;
+				recruit.selected = false;
+				recruit.willAttack = false;
+				recruit.isMoving = false;
+				recruit.isFighting = false;
+				recruit.isHealing = false;
+				recruit.activeStaffIndex = -1;
+				recruit.highlighted = false;
+				recruit.displayInventory = false;
+				recruit.selectedItemIndex = -1;
+
+				recruit.index = units[currentTeam].Count;
+				units[currentTeam].Add(recruit);
+
+				removeTileHighlight();
+
+				units[target.team][target.index].gameObject.SetActive(false);
+				units[target.team].RemoveAt(target.index);
+
+				units[currentTeam][currentPlayer].playerWait();
+				Debug.Log(recruit.unitName + "has joined!");
+			}
+		}
+	}
+
+	/**
 	 * v1.1
 	 * By Jeffrey Goh
 	 * Added Rotation of tiles so they aren't upside down, flipped terrain generation to be the same as the txt file
@@ -453,7 +586,7 @@ public class Grid : MonoBehaviour {
 	* @updated 2/6/2017
 	*/
     void CreateTiles()
-	{
+	{	
 		// Iterate through each column
 		for (int j = 0; j < tilesPerRow; j++)
 		{
