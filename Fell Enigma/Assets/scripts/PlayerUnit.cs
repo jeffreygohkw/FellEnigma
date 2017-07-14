@@ -160,15 +160,20 @@ public class PlayerUnit : Unit
 				Grid.instance.currentPlayer = index;
             }
 		}
-		if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+		if (Grid.instance.currentPlayer != -1)
 		{
-			Grid.instance.battle.attackWithCurrentUnit(this);
-        }
-		else 
-		isMoving = false;
-		isFighting = false;
-		isHealing = false;
-		activeStaffIndex = -1;
+			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			{
+				Grid.instance.battle.attackWithCurrentUnit(this);
+			}
+		}
+		else
+		{
+			isMoving = false;
+			isFighting = false;
+			isHealing = false;
+			activeStaffIndex = -1;
+		}
 	}
 
 	/**
@@ -424,8 +429,6 @@ public class PlayerUnit : Unit
 
 	public override void OnGUI()
 	{
-		
-
 		if (selected && !doneAction)
 		{
 			Rect buttonRect = new Rect(0, Screen.height - 350, 150, 50);
@@ -443,6 +446,7 @@ public class PlayerUnit : Unit
 							activeStaffIndex = -1;
 							displayInventory = false;
 							selectedItemIndex = -1;
+							displayTavern = false;
 
 							Debug.Log("Talking");
 							isTalking = !isTalking;
@@ -458,18 +462,68 @@ public class PlayerUnit : Unit
 					}
 				}
 			}
-			
-				
-			
-
 
 			buttonRect = new Rect(0, Screen.height - 300, 150, 50);
-			if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village")
+			if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village" && Grid.instance.villageLoot.ContainsKey(gridPosition))
 			{
 				//Visit
 				if (GUI.Button(buttonRect, "Visit"))
 				{
 					Debug.Log("Visiting");
+					// Check if reward is gold
+					if (Grid.instance.villageLoot[gridPosition].Length == 1)
+					{
+						Grid.instance.gold += int.Parse(Grid.instance.villageLoot[gridPosition][0]);
+						this.playerWait();
+					}
+					else if (inventory.Count < inventorySize)
+					{
+						//Add Weapon
+						if (Grid.instance.villageLoot[gridPosition].Length == 13)
+						{
+							Item.instance.addWeapon(this, Grid.instance.villageLoot[gridPosition][0], Grid.instance.villageLoot[gridPosition][1]);
+						}
+						//Add Item
+						else
+						{
+							Item.instance.addItem(this, Grid.instance.villageLoot[gridPosition][0], Grid.instance.villageLoot[gridPosition][1]);
+						}
+						this.playerWait();
+					}
+					else
+					{
+						Debug.Log("Inventory is full.");
+					}
+				}
+			}
+			else if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Tavern" && Grid.instance.tavernAndSpawn.ContainsKey(gridPosition))
+			{
+				//Tavern
+				if (GUI.Button(buttonRect, "Tavern"))
+				{
+					displayTavern = !displayTavern;
+					displayInventory = false;
+					selectedItemIndex = -1;
+					Grid.instance.removeTileHighlight();
+					isMoving = false;
+					isFighting = false;
+					isHealing = false;
+					activeStaffIndex = -1;
+					isTalking = false;
+				}
+			}
+
+			if (displayTavern)
+			{
+				int count = 1;
+				foreach (string s in TavernUnits.tavernUnits.Keys)
+				{
+					count++;
+					buttonRect = new Rect(150, Screen.height - 50 * count, 150, 50);
+					if (GUI.Button(buttonRect, s))
+					{
+						TavernUnits.tavernSpawn(s, gridPosition);
+					}
 				}
 			}
 
@@ -489,6 +543,7 @@ public class PlayerUnit : Unit
 						isHealing = false;
 						activeStaffIndex = -1;
 						isTalking = false;
+						displayTavern = false;
 
 						if (isMoving)
 						{
@@ -514,6 +569,7 @@ public class PlayerUnit : Unit
 						isHealing = false;
 						activeStaffIndex = -1;
 						isTalking = false;
+						displayTavern = false;
 
 						Grid.instance.removeTileHighlight();
 						displayInventory = false;
@@ -539,6 +595,7 @@ public class PlayerUnit : Unit
 				isHealing = false;
 				activeStaffIndex = -1;
 				isTalking = false;
+				displayTavern = false;
 
 
 				if (isFighting)
@@ -686,6 +743,7 @@ public class PlayerUnit : Unit
 				displayInventory = false;
 				selectedItemIndex = -1;
 				isTalking = false;
+				displayTavern = false;
 
 				Grid.instance.nextTurn();
 			}

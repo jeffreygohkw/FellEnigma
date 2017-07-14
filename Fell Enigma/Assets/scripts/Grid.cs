@@ -33,21 +33,21 @@ public class Grid : MonoBehaviour {
 
 	public Dictionary<Vector2, string[]> villageLoot = new Dictionary<Vector2, string[]>();
 
-	public int gold = 3000;
+	public Dictionary<Vector2, Vector2> tavernAndSpawn = new Dictionary<Vector2, Vector2>();
+	public int tavernLevel;
+	
+
+	public int gold = 1000;
 
 	/*
 	 * -1: None
 	 * 0: MC
-	 * 1: Law Male
-	 * 2: Law Female
-	 * 3: Chaos Male
-	 * 4: Chaos Female
+	 * 1: Naive Prince
+	 * 2: Kind Soul
+	 * 3: Young Rebel
+	 * 4: Black Heart
 	 */
 	public int commander = -1;
-
-
-	public bool victory = false;
-	public bool failure = false;
 
 	public void Awake()
 	{
@@ -61,6 +61,7 @@ public class Grid : MonoBehaviour {
         CreateTerrain();
 		CreateTiles();
 		CreatePlayers.generatePlayers(mapName);
+		CreateBuildings.generateBuildings(mapName);
 	}
 
 	// Update is called once per frame
@@ -167,6 +168,7 @@ public class Grid : MonoBehaviour {
 				u.highlighted = false;
 				u.displayInventory = false;
 				u.selectedItemIndex = -1;
+				u.displayTavern = false;
 			}
 		}
 
@@ -251,7 +253,7 @@ public class Grid : MonoBehaviour {
 	public void moveCurrentUnit(Tile destTile)
 	{
 
-		if ((destTile.GetComponent<Renderer>().material.color != destTile.colour || AITeams.Contains(currentTeam)) && destTile.occupied == null)
+		if ((destTile.GetComponent<Renderer>().material.color != destTile.colour || AITeams.Contains(currentTeam)) && (destTile.occupied == null || destTile.occupied == units[currentTeam][currentPlayer]))
 		{
 			// Don't let the unit move to a tile that's occupied
 

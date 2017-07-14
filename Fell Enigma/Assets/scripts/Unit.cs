@@ -26,6 +26,10 @@ public class Unit : MonoBehaviour {
 	public bool highlighted = false;
 	public bool displayInventory = false;
 	public int selectedItemIndex = -1;
+	public bool displayTavern = false;
+
+	public Vector2 targetTile;
+
 	/*
 	 * 0: Recruit
 	 * 1: ???

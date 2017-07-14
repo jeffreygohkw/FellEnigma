@@ -21,19 +21,25 @@ public class TileHighlight {
 	 * v1.3
 	 * Allows allies to pass through each other
 	 * 
+	 * v1.4
+	 * Fixed a bug with movement costs
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param minrange The minimum move or attack range of the unit
 	 * @param maxrange The maximum move or attack range of the unit
 	 * @param allies A list containing the allied teams of the current unit
 	 * @param moving whether we are calculating attack or movement
 	 * @author Jeffrey Goh
-	 * @version v1.3
-	 * @updated 12/6/2017
+	 * @version v1.4
+	 * @updated 12/7/2017
 	 */
 	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, List<int> allies, bool moving)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
+
+		Dictionary<Tile, int> costToReach = new Dictionary<Tile, int>();
+
 
 		// List of valid paths left that could be taken
 		List<TilePath> open = new List<TilePath>();
@@ -49,6 +55,8 @@ public class TileHighlight {
 
 		// Add original tile for now to help with the algorithm
 		closed.Add(originTile);
+		costToReach.Add(originTile, 0);
+
 
 		// Loop while there are valid paths left
 		while (open.Count > 0)
@@ -69,7 +77,14 @@ public class TileHighlight {
 				// If the neighbour is in closed, that tile can be visited and we continue
 				if (closed.Contains(t))
 				{
-					continue;
+					if (current.costofPath > costToReach[t])
+					{
+						continue;
+					}
+					else
+					{
+						costToReach[t] = current.costofPath;
+					}
 				}
 
 				// Otherwise, make a clone of the current path
@@ -122,6 +137,17 @@ public class TileHighlight {
 
 				// We add t to closed as we now know this tile can be visited
 				closed.Add(t);
+				if (costToReach.ContainsKey(t))
+				{
+					if (costToReach[t] < current.costofPath)
+					{
+						costToReach[t] = current.costofPath;
+					}
+				}
+				else
+				{
+					costToReach.Add(t, current.costofPath);
+				}
 			}
 		}
 		// Remove the origin tile as we don't want to attack ourselves or move to our current location

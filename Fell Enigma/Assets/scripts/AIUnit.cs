@@ -5,6 +5,8 @@ using UnityEngine;
 public class AIUnit : Unit
 {
 	Tile targetTile = null;
+	public Tile objectiveTile = null;
+	public Unit objectiveUnit = null;
 
 	/*
 	 * 0: Aggressive
@@ -74,12 +76,12 @@ public class AIUnit : Unit
 	{
 		if (positionQueue.Count > 0)
 		{
-            mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
+			mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 
-            if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
+			if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 			{
 				transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
-                mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
+				mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 				if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
 				{
 					transform.position = positionQueue[0];
@@ -192,7 +194,6 @@ public class AIUnit : Unit
 				// Find all enemies within range
 				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
 
-				Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
 
 				if (target == null)
@@ -207,7 +208,7 @@ public class AIUnit : Unit
 				}
 
 				//If we can reach a target, move to the appropriate tile
-				if (target[1] != null && tempMov == mov)
+				else if (target[1] != null && tempMov == mov)
 				{
 					isMoving = true;
 					doneMoving = true;
@@ -217,7 +218,7 @@ public class AIUnit : Unit
 				else
 				{
 					doneMoving = true;
-					
+
 				}
 			}
 			else if (ai_id == 2)
@@ -245,14 +246,103 @@ public class AIUnit : Unit
 					Grid.instance.totalDone++;
 				}
 
-				if (target[1] != null)
+				else if (target[1] != null)
 				{
 					doneMoving = true;
 					willAttack = true;
 				}
 			}
-		}
+			else if (ai_id == 3)
+			{
+				//Target AI
+				int tempMov = mov;
+				// Find all enemies within range
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				List<Tile> target = new List<Tile>();
+
+				// Find the best target to approach
+				while (true)
+				{
+					// Find all enemies within range
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+
+					Debug.Log("In Range: " + enemiesInRange.Count);
+					target = chooseTarget(enemiesInRange);
+					if (target == null)
+					{
+						target = new List<Tile>();
+						if (objectiveUnit != null)
+						{
+							target.Add(Grid.instance.map[(int)objectiveUnit.gridPosition.x][(int)objectiveUnit.gridPosition.y]);
+							break;
+						}
+						else if (objectiveTile != null)
+						{
+							target.Add(objectiveTile);
+							break;
+						}
+						else
+						{
+							Debug.Log("No target");
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				//If we can reach a target, move to the appropriate tile
+				if (target.Count > 1)
+				{
+					if (target[1] != null && tempMov == mov)
+					{
+						isMoving = true;
+						doneMoving = true;
+						Grid.instance.moveCurrentUnit(target[1]);
+						willAttack = true;
+					}
+				}
+				//If we are already on the target tile with no enemies in range, stay put
+				else if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y] == objectiveTile)
+				{
+					doneMoving = true;
+				}
+				//Move to the objective tile if we can reach
+				else if (TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, allies, true).Contains(target[0]))
+				{
+					isMoving = true;
+					doneMoving = true;
+					Grid.instance.moveCurrentUnit(target[0]);
+				}
+				else
+				{
+
+					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true);
+					int distanceTo = 1;
+					while (true)
+					{
+						// Otherwise, approach as close as possible
+
+						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true);
+
+						foreach (Tile t in possibilities)
+						{
+							if (available.Contains(t))
+							{
+								isMoving = true;
+								doneMoving = true;
+								Grid.instance.moveCurrentUnit(t);
+								return;
+							}
+						}
+						distanceTo++;
+					}
+				}
+			}
 			base.turnUpdate();
+		}
 	}
 
 	/**
