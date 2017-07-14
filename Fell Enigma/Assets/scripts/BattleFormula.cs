@@ -175,11 +175,13 @@ public class BattleFormula
 					{
 						tempattackerDmg = attackerDmg * 3;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
 					}
 					else
 					{
 						tempattackerDmg = attackerDmg;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
 					}
 
 					target.currentHP -= tempattackerDmg;
@@ -192,6 +194,7 @@ public class BattleFormula
 					Debug.Log("Hit Roll: " + hit);
 
 					Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
+                    CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
 				}
 
 				// Check if target is dead
@@ -199,6 +202,7 @@ public class BattleFormula
 				{
 					target.currentHP = 0;
 					Debug.Log(target.unitName + " has died!");
+                    CombatLog.instance.AddEvent(target.unitName + " has died!");
 
 					// Deactivate menu GUI and set unit to not attacking after the attack
 					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
@@ -232,6 +236,7 @@ public class BattleFormula
 				if (target.currentHP > 0 && canCounter)
 				{
 					Debug.Log(target.unitName + " counterattacks!");
+                    CombatLog.instance.AddEvent(target.unitName + " counterattacks!");
 
 					//Roll for hit
 					int counterHit = Random.Range(1, 100);
@@ -250,11 +255,13 @@ public class BattleFormula
 						{
 							tempdefenderDmg = defenderDmg * 3;
 							Debug.Log(target.unitName + " has critically hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+                            CombatLog.instance.AddEvent(target.unitName + " has critically hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
 						}
 						else
 						{
 							tempdefenderDmg = defenderDmg;
 							Debug.Log(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+                            CombatLog.instance.AddEvent(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
 						}
 
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP -= tempdefenderDmg;
@@ -266,12 +273,14 @@ public class BattleFormula
 						Debug.Log("Hit Roll: " + counterHit);
 
 						Debug.Log(target.unitName + " missed!");
-					}
+                        CombatLog.instance.AddEvent(target.unitName + " missed!");
+                    }
 
 					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP <= 0)
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP = 0;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
 
 						// Deactivate menu GUI and set unit to not attacking after the attack
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
@@ -306,6 +315,7 @@ public class BattleFormula
 				if (atkAS - defAS >= 4 && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP > 0)
 				{
 					Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " does a follow-up attack!");
+                    CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " does a follow-up attack!");
 
 					// Roll for hit
 					int hit1 = Random.Range(1, 100);
@@ -324,11 +334,13 @@ public class BattleFormula
 						{
 							tempattackerDmg = attackerDmg * 3;
 							Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+                            CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
 						}
 						else
 						{
 							tempattackerDmg = attackerDmg;
 							Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+                            CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
 						}
 
 						target.currentHP -= tempattackerDmg;
@@ -341,6 +353,7 @@ public class BattleFormula
 						Debug.Log("Hit Roll: " + hit1);
 
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
 					}
 
 
@@ -350,6 +363,7 @@ public class BattleFormula
 					{
 						target.currentHP = 0;
 						Debug.Log(target.unitName + " has died!");
+                        CombatLog.instance.AddEvent(target.unitName + " has died!");
 
 						// Deactivate menu GUI and set unit to not attacking after the attack
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
@@ -384,6 +398,7 @@ public class BattleFormula
 				if (target.currentHP > 0 && canCounter && defAS - atkAS >= 4)
 				{
 					Debug.Log(target.unitName + " does a follow up counterattack!");
+                    CombatLog.instance.AddEvent(target.unitName + " does a follow up counterattack!");
 					// Counterattack
 
 					//Roll for hit
@@ -403,11 +418,13 @@ public class BattleFormula
 						{
 							tempdefenderDmg = defenderDmg * 3;
 							Debug.Log(target.unitName + " has critically hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+                            CombatLog.instance.AddEvent(target.unitName + " has critically hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
 						}
 						else
 						{
 							tempdefenderDmg = defenderDmg;
 							Debug.Log(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+                            CombatLog.instance.AddEvent(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
 						}
 
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP -= tempdefenderDmg;
@@ -419,12 +436,14 @@ public class BattleFormula
 						Debug.Log("Hit Roll: " + counterHit);
 
 						Debug.Log(target.unitName + " missed!");
+                        CombatLog.instance.AddEvent(target.unitName + " missed!");
 					}
 
 					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP <= 0)
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP = 0;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
 					}
 					else
 					{
@@ -437,6 +456,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP = 0;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
 
 						// Deactivate menu GUI and set unit to not attacking after the attack
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
@@ -507,6 +527,8 @@ public class BattleFormula
 		{
 			Debug.Log("Invalid target");
 		}
+
+        //CombatLog.instance.PrintEvent();
 	}
 
 
@@ -693,12 +715,14 @@ public class BattleFormula
 			}
 			attacker.exp += expGain;
 			Debug.Log(attacker.unitName + " has gained " + expGain + " exp!");
+            CombatLog.instance.AddEvent(attacker.unitName + " has gained " + expGain + " exp!");
 			//Level up
 			while (attacker.exp >= 100)
 			{
 				attacker.exp -= 100;
 				attacker.lvl += 1;
 				Debug.Log(attacker.unitName + " has levelled up to level " + attacker.lvl);
+                CombatLog.instance.AddEvent(attacker.unitName + " has levelled up to level " + attacker.lvl);
 				int roll;
 				int statup = 0;
 				int tempG = attacker.hpG;
@@ -716,7 +740,8 @@ public class BattleFormula
 					attacker.maxHP += statup;
 					attacker.currentHP += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " HP!");
-					statup = 0;
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " HP!");
+                    statup = 0;
 				}
 				
 				tempG = attacker.strG;
@@ -733,6 +758,7 @@ public class BattleFormula
 				{
 					attacker.strength += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " STR!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " STR!");
 					statup = 0;
 				}
 
@@ -750,7 +776,9 @@ public class BattleFormula
 				{
 					attacker.mag += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " MAG!");
-					statup = 0;
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " MAG!");
+
+                    statup = 0;
 				}
 
 				tempG = attacker.sklG;
@@ -767,6 +795,7 @@ public class BattleFormula
 				{
 					attacker.skl += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " SKL!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " SKL!");
 					statup = 0;
 				}
 
@@ -784,6 +813,7 @@ public class BattleFormula
 				{
 					attacker.spd += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " SPD!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " SPD!");
 					statup = 0;
 				}
 
@@ -801,6 +831,7 @@ public class BattleFormula
 				{
 					attacker.luk += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " LUK!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " LUK!");
 					statup = 0;
 				}
 
@@ -818,6 +849,7 @@ public class BattleFormula
 				{
 					attacker.def += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " DEF!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " DEF!");
 					statup = 0;
 				}
 
@@ -835,6 +867,7 @@ public class BattleFormula
 				{
 					attacker.res += statup;
 					Debug.Log(attacker.unitName + " has gained " + statup + " RES!");
+                    CombatLog.instance.AddEvent(attacker.unitName + " has gained " + statup + " RES!");
 					statup = 0;
 				}
 			}
@@ -869,11 +902,13 @@ public class BattleFormula
 				}
 
 				Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has healed " + target.unitName + " for " + (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP - tempHP) + " HP!");
+                CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has healed " + target.unitName + " for " + (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP - tempHP) + " HP!");
 				Debug.Log(target.unitName + "'s HP: "+ Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP + "/" + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP);
 
 				//Gain EXP based on staff used
 				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp += int.Parse(staff[7]);
 				Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + int.Parse(staff[7]) + " exp!");
+                CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + int.Parse(staff[7]) + " exp!");
 
 				//Level Up
 				while (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp >= 100)
@@ -881,6 +916,7 @@ public class BattleFormula
 					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].exp -= 100;
 					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lvl += 1;
 					Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has levelled up to level " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lvl);
+                    CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has levelled up to level " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].lvl);
 					int roll;
 					int statup = 0;
 					int tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].hpG;
@@ -898,7 +934,9 @@ public class BattleFormula
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].maxHP += statup;
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " HP!");
-						statup = 0;
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " HP!");
+
+                        statup = 0;
 					}
 
 					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].strG;
@@ -915,6 +953,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].strength += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " STR!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " STR!");
 						statup = 0;
 					}
 
@@ -932,6 +971,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " MAG!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " MAG!");
 						statup = 0;
 					}
 
@@ -949,7 +989,9 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].skl += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SKL!");
-						statup = 0;
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SKL!");
+
+                        statup = 0;
 					}
 
 					tempG = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spdG;
@@ -966,6 +1008,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spd += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SPD!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " SPD!");
 						statup = 0;
 					}
 
@@ -983,6 +1026,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " LUK!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " LUK!");
 						statup = 0;
 					}
 
@@ -1000,6 +1044,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].def += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " DEF!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " DEF!");
 						statup = 0;
 					}
 
@@ -1017,6 +1062,7 @@ public class BattleFormula
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].res += statup;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " RES!");
+                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has gained " + statup + " RES!");
 						statup = 0;
 					}
 				}
@@ -1035,6 +1081,8 @@ public class BattleFormula
 			else
 			{
 				Debug.Log(target.unitName + "'s HP is full.");
+                CombatLog.instance.AddEvent(target.unitName + "'s HP is full.");
+                CombatLog.instance.PrintEvent();
 			}
 		}
 		else

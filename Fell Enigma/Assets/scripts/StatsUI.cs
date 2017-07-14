@@ -120,7 +120,7 @@ public class StatsUI : MonoBehaviour {
             int enemyHr = defenderAcc - attackerAvd;
 
             meAttUI.text = (dmgtoEnemy.ToString() + "\n" + myHr.ToString());
-            enemyAttUI.text = (dmgtoMe.ToString() + "\n" + myHr.ToString());
+            enemyAttUI.text = (dmgtoMe.ToString() + "\n" + enemyHr.ToString());
             OnForecast();
         }
         else //Normal hover

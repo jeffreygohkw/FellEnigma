@@ -202,6 +202,8 @@ public class Grid : MonoBehaviour {
 				}
 
 				Debug.Log(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
+                CombatLog.instance.AddEvent(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
+                CombatLog.instance.PrintEvent();
 				Debug.Log(u.unitName + "'s HP: " + u.currentHP + "/" + u.maxHP);
 			}
 		}

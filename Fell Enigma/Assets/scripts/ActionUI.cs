@@ -79,7 +79,6 @@ public class ActionUI : MonoBehaviour
         this.GetComponentInChildren<Actions>().hasMoved = true;
         EventManager.StartListening("UndoMovedUnit", UndoMovedUnit);
         EventManager.StopListening("MovedUnit", MovedUnit);
-        Debug.Log("MovedUnit ran!");
     }
 
     /**

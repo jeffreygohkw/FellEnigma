@@ -107,6 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPosition: {x: 0, y: 0}
   movementCost: 1
+  linkedTerrain: {fileID: 0}
   neighbours: []
   occupied: {fileID: 0}
   colour: {r: 0.85294116, g: 0.85294116, b: 0.85294116, a: 0}
