@@ -86,26 +86,29 @@ public class Tile : MonoBehaviour{
 	*/
 	private void OnMouseDown()
 	{
-        Debug.Log(gridPosition.x + " " + gridPosition.y);
-            if (Grid.instance.currentPlayer != -1)
-            {
-                if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isMoving)
-                {
-                    Grid.instance.moveCurrentUnit(this);
-                }
-                else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting)
-                {
-                    Grid.instance.attackWithCurrentUnit(this);
-                }
-                else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing)
-                {
-                    Grid.instance.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex);
-                }
-                else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking)
-                {
-                    Grid.instance.talkWithCurrentUnit(this);
-                }
-            }
+		if (!EventSystem.current.IsPointerOverGameObject())
+		{
+			Debug.Log(gridPosition.x + " " + gridPosition.y);
+			if (Grid.instance.currentPlayer != -1)
+			{
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isMoving)
+				{
+					Grid.instance.moveCurrentUnit(this);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting)
+				{
+					Grid.instance.attackWithCurrentUnit(this);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing)
+				{
+					Grid.instance.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking)
+				{
+					Grid.instance.talkWithCurrentUnit(this);
+				}
+			}
+		}
 	}
 
     /**

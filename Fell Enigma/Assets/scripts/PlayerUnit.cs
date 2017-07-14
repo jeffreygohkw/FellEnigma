@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerUnit : Unit
 {
@@ -113,66 +114,69 @@ public class PlayerUnit : Unit
 
 	private void OnMouseDown()
 	{
-		if (Grid.instance.currentTeam == team)
+		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
+			if (Grid.instance.currentTeam == team)
 			{
-				if (u.selected && u != this)
+				foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
 				{
-					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+					if (u.selected && u != this)
 					{
-						Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+						{
+							Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+						}
+						return;
 					}
-					return;
+				}
+				if (selected && doneMoving)
+				{
+					playerWait();
+				}
+				if (!doneAction)
+				{
+					selected = !selected;
+					if (selected)
+					{
+						EventManager.TriggerEvent("SelectUnit");
+						EventManager.TriggerEvent("SelectUnitStats");
+						EventManager.StartListening("MoveUnit", MoveUnit);
+						EventManager.StartListening("AttackUnit", AttackUnit);
+						EventManager.StartListening("ItemUnit", ItemUnit);
+						EventManager.StartListening("WaitUnit", WaitUnit);
+						EventManager.StartListening("EndUnit", EndUnit);
+
+					}
+					else
+					{
+						EventManager.TriggerEvent("DeselectUnit");
+						EventManager.TriggerEvent("DeselectUnitStats");
+						EventManager.StopListening("MoveUnit", MoveUnit);
+						EventManager.StopListening("AttackUnit", AttackUnit);
+						EventManager.StopListening("ItemUnit", ItemUnit);
+						EventManager.StopListening("WaitUnit", WaitUnit);
+						EventManager.StopListening("EndUnit", EndUnit);
+					}
+				}
+				if (selected && !doneAction)
+				{
+					Grid.instance.currentPlayer = index;
 				}
 			}
-			if (selected && doneMoving)
+			if (Grid.instance.currentPlayer != -1)
 			{
-				playerWait();
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.battle.attackWithCurrentUnit(this);
+				}
 			}
-			if (!doneAction)
+			else
 			{
-				selected = !selected;
-                if (selected)
-                {
-                    EventManager.TriggerEvent("SelectUnit");
-                    EventManager.TriggerEvent("SelectUnitStats");
-                    EventManager.StartListening("MoveUnit", MoveUnit);
-                    EventManager.StartListening("AttackUnit", AttackUnit);
-                    EventManager.StartListening("ItemUnit", ItemUnit);
-                    EventManager.StartListening("WaitUnit", WaitUnit);
-                    EventManager.StartListening("EndUnit", EndUnit);
-
-                }
-                else
-                {
-                    EventManager.TriggerEvent("DeselectUnit");
-                    EventManager.TriggerEvent("DeselectUnitStats");
-                    EventManager.StopListening("MoveUnit", MoveUnit);
-                    EventManager.StopListening("AttackUnit", AttackUnit);
-                    EventManager.StopListening("ItemUnit", ItemUnit);
-                    EventManager.StopListening("WaitUnit", WaitUnit);
-                    EventManager.StopListening("EndUnit", EndUnit);
-                }
+				isMoving = false;
+				isFighting = false;
+				isHealing = false;
+				activeStaffIndex = -1;
 			}
-			if (selected && !doneAction)
-			{
-				Grid.instance.currentPlayer = index;
-            }
-		}
-		if (Grid.instance.currentPlayer != -1)
-		{
-			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-			{
-				Grid.instance.battle.attackWithCurrentUnit(this);
-			}
-		}
-		else
-		{
-			isMoving = false;
-			isFighting = false;
-			isHealing = false;
-			activeStaffIndex = -1;
 		}
 	}
 

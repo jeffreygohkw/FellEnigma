@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class AIUnit : Unit
 {
@@ -465,19 +466,22 @@ public class AIUnit : Unit
 
 	private void OnMouseDown()
 	{
-		if (Grid.instance.currentPlayer != -1)
+		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			if (Grid.instance.currentPlayer != -1)
 			{
-				Grid.instance.battle.attackWithCurrentUnit(this);
-			}
-			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-			{
-				Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
-			}
-			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-			{
-				Grid.instance.talkWithCurrentUnit(this);
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.battle.attackWithCurrentUnit(this);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.talkWithCurrentUnit(this);
+				}
 			}
 		}
 	}
