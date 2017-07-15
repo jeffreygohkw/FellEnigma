@@ -425,23 +425,37 @@ public class PlayerUnit : Unit
 	* v1.2
 	* Added Undo Move
 	* 
+	* v1.3
+	* Added Objective Specific, Inventory, Talk, Visit, Tavern
+	* 
 	* @param destTile The destination tile
 	* @author Jeffrey Goh
-	* @version 1.2
-	* @updated 2/7/2017
+	* @version 1.3
+	* @updated 15/7/2017
 	*/
 
 	public override void OnGUI()
 	{
 		if (selected && !doneAction)
 		{
-			Rect buttonRect = new Rect(0, Screen.height - 350, 150, 50);
+			Rect buttonRect = new Rect(0, Screen.height - 400, 150, 50);
+			if (Grid.instance.ultCharge == 100 && Grid.instance.commander >= 0 && Grid.instance.commander <= 4 && Grid.instance.ultActive == false)
+			{
+				if (GUI.Button(buttonRect, "Ult"))
+				{
+					Grid.instance.castUlt();
+				}
+			}
+
+
+			buttonRect = new Rect(0, Screen.height - 350, 150, 50);
 			foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
 			{
 				if (t.occupied)
 				{
 					if (t.occupied.canTalk.ContainsKey(this.unitName))
 					{
+						//Talk to other units
 						if (GUI.Button(buttonRect, "Talk"))
 						{
 							isMoving = false;
@@ -468,35 +482,27 @@ public class PlayerUnit : Unit
 			}
 
 			buttonRect = new Rect(0, Screen.height - 300, 150, 50);
-			if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village" && Grid.instance.villageLoot.ContainsKey(gridPosition))
+			if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village" && Grid.instance.villageStatus.ContainsKey(gridPosition))
 			{
 				//Visit
-				if (GUI.Button(buttonRect, "Visit"))
+				if (GUI.Button(buttonRect, "Capture"))
 				{
-					Debug.Log("Visiting");
 					// Check if reward is gold
-					if (Grid.instance.villageLoot[gridPosition].Length == 1)
+					if (Grid.instance.villageStatus[gridPosition][0] != team)
 					{
-						Grid.instance.gold += int.Parse(Grid.instance.villageLoot[gridPosition][0]);
-						this.playerWait();
-					}
-					else if (inventory.Count < inventorySize)
-					{
-						//Add Weapon
-						if (Grid.instance.villageLoot[gridPosition].Length == 13)
+						Grid.instance.villageStatus[gridPosition][1] -= 1;
+						Debug.Log("Capturing Village");
+						if (Grid.instance.villageStatus[gridPosition][1] == 0)
 						{
-							Item.instance.addWeapon(this, Grid.instance.villageLoot[gridPosition][0], Grid.instance.villageLoot[gridPosition][1]);
+							//Convert the village to your side
+							Grid.instance.villageStatus[gridPosition][0] = team;
+							Grid.instance.villageStatus[gridPosition][1] = 2;
+							Debug.Log("Village has been captured.");
 						}
-						//Add Item
-						else
-						{
-							Item.instance.addItem(this, Grid.instance.villageLoot[gridPosition][0], Grid.instance.villageLoot[gridPosition][1]);
-						}
-						this.playerWait();
 					}
 					else
 					{
-						Debug.Log("Inventory is full.");
+						Debug.Log("Village has already been captured");
 					}
 				}
 			}
@@ -514,6 +520,14 @@ public class PlayerUnit : Unit
 					isHealing = false;
 					activeStaffIndex = -1;
 					isTalking = false;
+				}
+			}
+			else if (Grid.instance.objectiveSpecificTiles.ContainsKey(gridPosition))
+			{
+				//Seize, escape etc.
+				if (GUI.Button(buttonRect, Grid.instance.objectiveSpecificTiles[gridPosition]))
+				{
+					Grid.instance.objectiveComplete = Grid.instance.objectiveSpecificTiles[gridPosition];
 				}
 			}
 
@@ -590,27 +604,30 @@ public class PlayerUnit : Unit
 			buttonRect = new Rect(0, Screen.height - 200, 150, 50);
 
 			//Attack
-			if (GUI.Button(buttonRect, "Attack"))
+			if (equippedIndex != -1)
 			{
-				displayInventory = false;
-				selectedItemIndex = -1;
-				Grid.instance.removeTileHighlight();
-				isMoving = false;
-				isHealing = false;
-				activeStaffIndex = -1;
-				isTalking = false;
-				displayTavern = false;
-
-
-				if (isFighting)
+				if (GUI.Button(buttonRect, "Attack"))
 				{
-					isFighting = false;
+					displayInventory = false;
+					selectedItemIndex = -1;
 					Grid.instance.removeTileHighlight();
-				}
-				else
-				{
-					isFighting = true;
-					Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f,0f,0f,0.5f), weaponMinRange, weaponMaxRange, false);
+					isMoving = false;
+					isHealing = false;
+					activeStaffIndex = -1;
+					isTalking = false;
+					displayTavern = false;
+
+
+					if (isFighting)
+					{
+						isFighting = false;
+						Grid.instance.removeTileHighlight();
+					}
+					else
+					{
+						isFighting = true;
+						Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange + weaponRangeBuff, false);
+					}
 				}
 			}
 

@@ -31,13 +31,14 @@ public class Grid : MonoBehaviour {
 	public List<List<Tile>> map = new List<List<Tile>>();
     public List<List<Unit>> units = new List<List<Unit>>();
 
-	public Dictionary<Vector2, string[]> villageLoot = new Dictionary<Vector2, string[]>();
+	//1st element in int[] is the team that controls the village, the second is the number of captures to take over the village
+	public Dictionary<Vector2, int[]> villageStatus = new Dictionary<Vector2, int[]>();
 
 	public Dictionary<Vector2, Vector2> tavernAndSpawn = new Dictionary<Vector2, Vector2>();
 	public int tavernLevel;
-	
 
-	public int gold = 1000;
+	public int gold;
+	public int goldCap;
 
 	/*
 	 * -1: None
@@ -47,7 +48,13 @@ public class Grid : MonoBehaviour {
 	 * 3: Young Rebel
 	 * 4: Black Heart
 	 */
-	public int commander = -1;
+	public int commander;
+	public int ultCharge;
+	public bool ultActive = false;
+
+	public Dictionary<Vector2, string> objectiveSpecificTiles = new Dictionary<Vector2, string>();
+	public string objectiveComplete;
+
 
 	public void Awake()
 	{
@@ -144,15 +151,22 @@ public class Grid : MonoBehaviour {
 	 * v1.1
 	 * Added FE style turn order
 	 * 
+	 * v1.2
+	 * Added income from villages
+	 * 
 	 * @author Jeffrey Goh
-	 * @version v1.1
-	 * @updated 7/6/2017
+	 * @version v1.2
+	 * @updated 15/7/2017
 	 */
 
 	public void nextTurn()
 	{
-        resetCamera();
+		resetCamera();
 		removeTileHighlight();
+		if (ultActive)
+		{
+			dispelUlt();
+		}
 		foreach (Unit u in units[currentTeam])
 		{
 			if (u.currentHP > 0)
@@ -194,7 +208,7 @@ public class Grid : MonoBehaviour {
 			{
 				float percent = (float)map[(int)u.gridPosition.x][(int)u.gridPosition.y].linkedTerrain.returnHeal() / (float)100;
 				u.currentHP += (int)(percent * (float)u.maxHP);
-				
+
 				// Set the current HP to the max HP if it overshoots
 				if (u.currentHP > u.maxHP)
 				{
@@ -202,10 +216,27 @@ public class Grid : MonoBehaviour {
 				}
 
 				Debug.Log(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
-                CombatLog.instance.AddEvent(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
-                CombatLog.instance.PrintEvent();
+				CombatLog.instance.AddEvent(u.unitName + " has healed for " + (int)(percent * (float)u.maxHP) + " HP.");
+				CombatLog.instance.PrintEvent();
 				Debug.Log(u.unitName + "'s HP: " + u.currentHP + "/" + u.maxHP);
 			}
+		}
+
+		//Gain 200 gold per village controlled on player turn (Needs playtesting and balancing)
+		if (currentTeam == 0)
+		{
+			foreach (Vector2 k in villageStatus.Keys)
+			{
+				if (villageStatus[k][0] == 0)
+				{
+					gold += 200;
+					if (gold > goldCap)
+					{
+						gold = goldCap;
+					}
+				}
+			}
+			Debug.Log("Current gold: " + gold);
 		}
 	}
 
@@ -535,6 +566,175 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
+
+	/**
+	 * Casts an ultimate ability depending on the current commander
+     * 
+     * @author Jeffrey Goh
+     * @version 1.0
+     * @updated 15/7/2017
+    */
+	public void castUlt()
+	{
+		if (commander == 0)
+		{
+			//MC
+			//Increases Attack and Move Range of all units by 1
+			foreach (Unit u in units[currentTeam])
+			{
+				u.weaponRangeBuff = 1;
+				u.mov += 1;
+			}
+			ultActive = true;
+			Debug.Log("All allies gained 1 extra mov and 1 extra weapon range!");
+		}
+		else if (commander == 1)
+		{
+			//Naive Prince
+			//Buff stats of all units on the team by 5
+			//Everything from hp to res, no con or mov
+			foreach (Unit u in units[currentTeam])
+			{
+				u.maxHP += 5;
+				u.currentHP += 5;
+				u.strength += 5;
+				u.mag += 5;
+				u.skl += 5;
+				u.spd += 5;
+				u.luk += 5;
+				u.def += 5;
+				u.res += 5;
+			}
+			ultActive = true;
+			Debug.Log("All allies gained 5 to all stats!");
+		}
+		else if (commander == 2)
+		{
+			//Kind Soul
+			//Restore 30% hp to all units on the team
+			foreach (Unit u in units[currentTeam])
+			{
+				if (u.currentHP > 0)
+				{
+					u.currentHP += (int)((double)u.maxHP * 0.3);
+					if (u.currentHP > u.maxHP)
+					{
+						u.currentHP = u.maxHP;
+					}
+				}
+			}
+			ultActive = true;
+			Debug.Log("All allies have been healed!");
+		}
+		else if (commander == 3)
+		{
+			//Young Rebel
+			//Cancels the target's counterattack, improves all units' hit and crit
+			//The code for the above is in BattleFormula, we just switch a bool to trigger it or not here
+			foreach (Unit u in units[currentTeam])
+			{
+				u.rebelBuff = true;
+			}
+			ultActive = true;
+			Debug.Log("All allies no longer receive counterattacks, and have improved hit and crit rates!");
+		}
+		else if (commander == 4)
+		{
+			//Black Heart
+			//Attacks every non friendly unit for 10 damage, non lethal
+			for (int i = 0; i < units.Count; i++)
+			{
+				if (!units[currentTeam][0].allies.Contains(i))
+				{
+					foreach (Unit u in units[i])
+					{
+						if (u.currentHP > 1)
+						{
+							u.currentHP -= 10;
+							if (u.currentHP < 1)
+							{
+								u.currentHP = 1;
+							}
+						}
+					}
+				}
+			}
+			ultActive = true;
+			Debug.Log("All enemies have taken 10 damage!");
+		}
+		else
+		{
+			Debug.Log("No Commander set, can't cast ult.");
+		}
+	}
+
+
+	/**
+	 * Dispels an ultimate ability at the end of turn
+	 * 
+	 * @author Jeffrey Goh
+	 * @version 1.0
+	 * @updated 15/7/2017
+	*/
+	public void dispelUlt()
+	{
+		if (commander == 0)
+		{
+			//MC
+			//Resets Attack Range of all units
+			foreach (Unit u in units[currentTeam])
+			{
+				u.weaponRangeBuff = 0;
+				u.mov -= 1;
+			}
+			ultActive = false;
+		}
+		else if (commander == 1)
+		{
+			//Naive Prince
+			//Reset stats
+			foreach (Unit u in units[currentTeam])
+			{
+				u.maxHP -= 5;
+				u.currentHP -= 5;
+				u.strength -= 5;
+				u.mag -= 5;
+				u.skl -= 5;
+				u.spd -= 5;
+				u.luk -= 5;
+				u.def -= 5;
+				u.res -= 5;
+			}
+			ultActive = false;
+		}
+		else if (commander == 2)
+		{
+			//Kind Soul
+			//None needed
+			ultActive = false;
+		}
+		else if (commander == 3)
+		{
+			//Young Rebel
+			//Switch off rebelBuff
+			foreach (Unit u in units[currentTeam])
+			{
+				u.rebelBuff = false;
+			}
+			ultActive = false;
+		}
+		else if (commander == 4)
+		{
+			//Black Heart
+			//Nothing needed
+			ultActive = false;
+		}
+		else
+		{
+			Debug.Log("No Commander set, can't dispel ult.");
+		}
+	}
+
 	/**
 	 * v1.1
 	 * By Jeffrey Goh
@@ -543,11 +743,15 @@ public class Grid : MonoBehaviour {
 	 * v1.2
 	 * By Jeffrey Goh
 	 * tilesPerRow and tilesPerCol's value is defined here, so they adapt to the size of the map instead of needing manual input
+	 * 
+	 * v1.3
+	 * By Jeffrey Goh
+	 * Added villageStatus 
     * Reads text file MapConfig and generates the terrain
     * Based on CreateGrid
     * @author Wayne Neo
-    * @version 1.2
-    * @updated 24/6/2017
+    * @version 1.3
+    * @updated 15/7/2017
     */
 	void CreateTerrain()
     {
@@ -576,8 +780,12 @@ public class Grid : MonoBehaviour {
 			{
                 TerrainS terrain = ((GameObject)Instantiate(terrainPrefab, new Vector3(j - Mathf.Floor(tilesPerCol / 2), i - Mathf.Floor(tilesPerRow / 2), 1), Quaternion.Euler(new Vector3(0, 180, 0)))).GetComponent<TerrainS>();
                 terrain.LoadTerrain(System.Int32.Parse(line[j]));
-           
-            }
+				if (System.Int32.Parse(line[j]) == 6)
+				{
+					int[] village = new int[] { -1, 2 };
+					villageStatus.Add(new Vector2(j,i), village);
+				}
+			}
  
         }
     }
@@ -603,6 +811,7 @@ public class Grid : MonoBehaviour {
 				Tile tile = ((GameObject)Instantiate(tilePrefab, new Vector3(j - Mathf.Floor(tilesPerCol / 2), i - Mathf.Floor(tilesPerRow / 2), 0), Quaternion.Euler(new Vector3()))).GetComponent<Tile>();
 				
 				tile.gridPosition = new Vector2(j, i);
+			
 				// Add tile to the row
 				row.Add(tile);
 			}

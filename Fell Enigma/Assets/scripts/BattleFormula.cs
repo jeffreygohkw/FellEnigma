@@ -52,10 +52,12 @@ public class BattleFormula
 
 				int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)target.gridPosition.y);
 
-				if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
+				if (target.weaponMinRange <= dist && target.weaponMaxRange + target.weaponRangeBuff >= dist)
 				{
 					canCounter = true;
 				}
+
+
 
 				// Accuracy
 
@@ -155,6 +157,16 @@ public class BattleFormula
 
 				int atkAS = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].spd - atkBurden;
 				int defAS = target.spd - defBurden;
+
+				//Cancel counterattack and upgrade hit and crit if rebelBuff is on for the attacker
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].rebelBuff)
+				{
+					canCounter = false;
+					attackerHit += 50;
+					attackerCritChance += 30;
+				}
+
+
 
 				//The actual attack
 
@@ -609,9 +621,15 @@ public class BattleFormula
 
 			int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)target.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)target.gridPosition.y);
 
-			if (target.weaponMinRange <= dist && target.weaponMaxRange >= dist)
+			if (target.weaponMinRange <= dist && target.weaponMaxRange + target.weaponRangeBuff >= dist)
 			{
 				canCounter = true;
+			}
+
+			//Cancel counterattack if rebelBuff is on for the attacker
+			if (attacker.rebelBuff)
+			{
+				canCounter = false;
 			}
 
 			//Attack Speed

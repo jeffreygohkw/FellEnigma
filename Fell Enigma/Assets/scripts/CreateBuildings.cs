@@ -38,6 +38,12 @@ public class CreateBuildings : MonoBehaviour
 
 			//Set level of units that can be recruited
 			Grid.instance.tavernLevel = 1;
+
+			Grid.instance.gold = 400;
+			Grid.instance.goldCap = 1000;
+
+			Grid.instance.commander = 0;
+			Grid.instance.ultCharge = 100;
 		}
 	}
 }

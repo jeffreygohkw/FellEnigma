@@ -29,20 +29,44 @@ public class AIUnit : Unit
 		//If it is your team's turn
 		if (Grid.instance.currentTeam == team)
 		{
-			// If the unit has finished its action, it is grey, otherwise, it is cyan
 			if (doneAction)
 			{
-				GetComponent<Renderer>().material.color = Color.grey;
+				if (allies.Contains(0))
+				{
+					//If ally has done action
+					GetComponent<Renderer>().material.color = Color.white;
+				}
+				else
+				{
+					//If enemy has done action
+					GetComponent<Renderer>().material.color = Color.magenta;
+				}
+			}
+			else
+			{
+				if (allies.Contains(0))
+				{
+					//If ally
+					GetComponent<Renderer>().material.color = Color.green;
+				}
+				else
+				{
+					GetComponent<Renderer>().material.color = Color.red;
+				}
+			}
+		}
+		else
+		{
+			//If it is not your team's turn
+			if (allies.Contains(0))
+			{
+				//If ally
+				GetComponent<Renderer>().material.color = Color.white;
 			}
 			else
 			{
 				GetComponent<Renderer>().material.color = Color.magenta;
 			}
-		}
-		else
-		{
-			//If it is not your team's turn, unit is grey
-			GetComponent<Renderer>().material.color = Color.grey;
 		}
 
 		if (currentHP <= 0)
@@ -123,14 +147,14 @@ public class AIUnit : Unit
 				//Agressive AI
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
 				while (true)
 				{
 					// Find all enemies within range
-					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 
 					Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
@@ -189,11 +213,11 @@ public class AIUnit : Unit
 				// Replace this with 0 and don't increment for stationary enemies
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 				List<Tile> target = new List<Tile>();
 
 				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 
 				target = chooseTarget(enemiesInRange);
 
@@ -227,11 +251,11 @@ public class AIUnit : Unit
 				//Stationary AI
 				int tempMov = 0;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 				List<Tile> target = new List<Tile>();
 
 				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 
 				Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
@@ -258,14 +282,14 @@ public class AIUnit : Unit
 				//Target AI
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
 				while (true)
 				{
 					// Find all enemies within range
-					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
 
 					Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);

@@ -92,6 +92,11 @@ public class Unit : MonoBehaviour {
 	public int inventorySize = 3;
 	public List<string[]> inventory = new List<string[]>();
 
+	//Ults
+	public int weaponRangeBuff = 0;
+	public bool rebelBuff = false;
+
+
 
 	//movement animation
 	public List<Vector2> positionQueue = new List<Vector2>();

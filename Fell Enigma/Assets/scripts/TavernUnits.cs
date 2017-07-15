@@ -18,6 +18,15 @@ public class TavernUnits : MonoBehaviour {
 
 	public static Dictionary<string, List<string[]>> tavernUnits = new Dictionary<string, List<string[]>>();
 
+
+	/**
+	* Initialize the generic units that will spawn from the tavern
+	* 
+	* @param destTile The destination tile
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 13/7/2017
+	*/
 	public void initUnits()
 	{
 		// Splits the text file into lines
@@ -44,6 +53,19 @@ public class TavernUnits : MonoBehaviour {
 		}
 	}
 
+
+	/**
+	* Checks if a unit should spawn, then spawn the unit from the tavern
+	* 
+	* v1.1
+	* Added increased stats if a unit is spawned at a higher level
+	* 
+	* @param unitClass The class of the unit to spawn
+	* @param tavernLocation The tavern this unit is being requested to spawn from
+	* @author Jeffrey Goh
+	* @version 1.1
+	* @updated 15/7/2017
+	*/
 	public static void tavernSpawn(string unitClass, Vector2 tavernLocation)
 	{
 		if (Grid.instance.tavernAndSpawn.ContainsKey(tavernLocation))
@@ -61,17 +83,17 @@ public class TavernUnits : MonoBehaviour {
 						unit1.job = unitClass;
 						unit1.lvl = Grid.instance.tavernLevel;
 						unit1.exp = 0;
-						unit1.maxHP = int.Parse(tavernUnits[unitClass][2][0]);
-						unit1.currentHP = int.Parse(tavernUnits[unitClass][2][0]);
-						unit1.strength = int.Parse(tavernUnits[unitClass][2][1]);
-						unit1.mag = int.Parse(tavernUnits[unitClass][2][2]);
-						unit1.skl = int.Parse(tavernUnits[unitClass][2][3]);
-						unit1.spd = int.Parse(tavernUnits[unitClass][2][4]);
-						unit1.luk = int.Parse(tavernUnits[unitClass][2][5]);
-						unit1.def = int.Parse(tavernUnits[unitClass][2][6]);
-						unit1.res = int.Parse(tavernUnits[unitClass][2][7]);
-						unit1.con = int.Parse(tavernUnits[unitClass][2][9]);
-						unit1.mov = int.Parse(tavernUnits[unitClass][2][8]);
+						unit1.maxHP = (int)(double.Parse(tavernUnits[unitClass][2][0]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][0]) * 0.01);
+						unit1.currentHP = (int)(double.Parse(tavernUnits[unitClass][2][0]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][0]) * 0.01);
+						unit1.strength = (int)(double.Parse(tavernUnits[unitClass][2][1]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][1]) * 0.01);
+						unit1.mag = (int)(double.Parse(tavernUnits[unitClass][2][2]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][2]) * 0.01);
+						unit1.skl = (int)(double.Parse(tavernUnits[unitClass][2][3]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][3]) * 0.01);
+						unit1.spd = (int)(double.Parse(tavernUnits[unitClass][2][4]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][4]) * 0.01);
+						unit1.luk = (int)(double.Parse(tavernUnits[unitClass][2][5]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][5]) * 0.01);
+						unit1.def = (int)(double.Parse(tavernUnits[unitClass][2][6]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][6]) * 0.01);
+						unit1.res = (int)(double.Parse(tavernUnits[unitClass][2][7]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][7]) * 0.01);
+						unit1.con = (int)(double.Parse(tavernUnits[unitClass][2][9]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][9]) * 0.01);
+						unit1.mov = (int)(double.Parse(tavernUnits[unitClass][2][8]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][8]) * 0.01);
 
 						unit1.hpG = int.Parse(tavernUnits[unitClass][3][0]);
 						unit1.strG = int.Parse(tavernUnits[unitClass][3][1]);
