@@ -8,6 +8,7 @@ public class TerrainS : MonoBehaviour
 
     private int config;
     private bool isPassable;
+	
 
     public Material[] list;
 	public string[] nameList;
@@ -15,6 +16,8 @@ public class TerrainS : MonoBehaviour
     public int[] avdList;
 	public int[] defList;
 	public int[] healList;
+
+	public Material defaultColour;
 
 
 	/* Type 0: Normal tile
@@ -47,12 +50,14 @@ public class TerrainS : MonoBehaviour
     * 
     * @param i is extracted from the text file mapConfig found in Grid
     * @author Wayne Neo
-    * @version 1.0
+    * @version 1.1
     * @updated on 9/6/17
     */
     public void LoadTerrain(int i)
     {
-        this.config = i;
+		defaultColour = list[i];
+
+		this.config = i;
         GetComponent<Renderer>().material = list[config];
         if (typeList[config] == 1)
         {

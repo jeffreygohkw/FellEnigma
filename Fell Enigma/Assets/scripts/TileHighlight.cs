@@ -24,16 +24,19 @@ public class TileHighlight {
 	 * v1.4
 	 * Fixed a bug with movement costs
 	 * 
+	 * v1.5
+	 * Added flying compatibility
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param minrange The minimum move or attack range of the unit
 	 * @param maxrange The maximum move or attack range of the unit
 	 * @param allies A list containing the allied teams of the current unit
 	 * @param moving whether we are calculating attack or movement
 	 * @author Jeffrey Goh
-	 * @version v1.4
-	 * @updated 12/7/2017
+	 * @version v1.5
+	 * @updated 16/7/2017
 	 */
-	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, List<int> allies, bool moving)
+	public static List<Tile> FindHighlight(Tile originTile, int minRange, int maxRange, List<int> allies, bool moving, bool flying)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
@@ -93,7 +96,12 @@ public class TileHighlight {
 				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
 				if (moving)
 				{
-					if (current.costofPath + t.movementCost > maxRange)
+					int movCost = t.movementCost;
+					if (flying)
+					{
+						movCost = 1;
+					}
+					if (current.costofPath + movCost > maxRange)
 					{
 						continue;
 					}
@@ -116,7 +124,7 @@ public class TileHighlight {
                     }
                     // Otherwise, we add that tile and its movement cost to the newTilePath
                     newTilePath.addTile(t);
-					newTilePath.addCost(t.movementCost);
+					newTilePath.addCost(movCost);
 
 				}
 				else
@@ -174,9 +182,9 @@ public class TileHighlight {
 	 * @version v1.0
 	 * @updated 12/6/2017
 	 */
-	public static Dictionary<Tile, List<Tile>> FindTarget(Tile originTile, int minRange, int maxRange, int minAttack, int maxAttack, List<int> allies, bool attacking)
+	public static Dictionary<Tile, List<Tile>> FindTarget(Tile originTile, int minRange, int maxRange, int minAttack, int maxAttack, List<int> allies, bool attacking, bool flying)
 	{
-		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true);
+		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true, flying);
 		moveRange.Add(originTile);
 
 		// Dictionary of tiles
@@ -190,7 +198,7 @@ public class TileHighlight {
 			if (t.occupied == null || t == originTile)
 			{
 				//If tile is not occupied, find the tiles it can attack from that tile
-				List<Tile> attackRange = FindHighlight(t, minAttack, maxAttack, allies, false);
+				List<Tile> attackRange = FindHighlight(t, minAttack, maxAttack, allies, false, flying);
 				foreach (Tile a in attackRange)
 				{
 					if (a.occupied != null && a.occupied.currentHP > 0)
@@ -219,5 +227,49 @@ public class TileHighlight {
 			}
 		}
 		return targets;
+	}
+
+	/**
+	 * Uses Find Highlight to return a list of tiles that is in the total attack range of the unit
+	 * 
+	 * @param originTile The tile our unit is on
+	 * @param minrange The minimum move range of the unit
+	 * @param maxrange The maximum move range of the unit
+	 * @param minAttack The minimum attack range of the unit
+	 * @param maxAttack The maximum attack range of the unit
+	 * @param allies A list containing the allied teams of the current unit
+	 * @param attacking Whether the unit is attacking or not
+	 * @author Jeffrey Goh
+	 * @version v1.0
+	 * @updated 15/7/2017
+	 */
+	public static List<Tile> FindAttackRange(Tile originTile, int minRange, int maxRange, int minAttack, int maxAttack, List<int> allies, bool attacking, bool flying)
+	{
+		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true, flying);
+		moveRange.Add(originTile);
+
+		List<Tile> output = new List<Tile>();
+
+		foreach (Tile t in moveRange)
+		{
+			// For each tile in the unit's move range
+			if (t.occupied == null || t == originTile)
+			{
+				//If tile is not occupied, find the tiles it can attack from that tile
+				List<Tile> attackRange = FindHighlight(t, minAttack, maxAttack, allies, false, flying);
+				foreach (Tile a in attackRange)
+				{
+					if (output.Contains(a))
+					{
+						continue;
+					}
+					else
+					{
+						output.Add(a);
+					}
+				}
+			}
+		}
+		return output;
 	}
 }

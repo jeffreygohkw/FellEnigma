@@ -239,10 +239,13 @@ public class PlayerUnit : Unit
 	 * v1.1
 	 * Added Healing
 	 * 
+	 * v1.2
+	 * Prints a line when a consumable is used
+	 * 
 	 * @param index index of the item
 	 * @author Jeffrey Goh
-	 * @version 1.1
-	 * @updated 9/7/2017
+	 * @version 1.2
+	 * @updated 16/7/2017
 	 */
 	public void useItem(int index)
 	{
@@ -263,7 +266,7 @@ public class PlayerUnit : Unit
 						if (activeStaffIndex != index)
 						{
 							activeStaffIndex = index;
-							Grid.instance.highlightTilesAt(gridPosition, Color.yellow, int.Parse(inventory[index][3]), int.Parse(inventory[index][4]), false);
+							Grid.instance.highlightTilesAt(gridPosition, Color.yellow, int.Parse(inventory[index][3]), int.Parse(inventory[index][4]), false, isFlying);
 						}
 					}
 					else
@@ -277,6 +280,9 @@ public class PlayerUnit : Unit
 				else
 				{
 					Debug.Log(unitName + " cannot use staves!");
+					CombatLog.instance.AddEvent(unitName + " cannot use staves!");
+					CombatLog.instance.PrintEvent();
+
 				}
 			}
 			else if (inventory[index][0] == "StatBoost")
@@ -338,11 +344,16 @@ public class PlayerUnit : Unit
 				}
 				else
 				{
+					int tempHP = currentHP;
 					currentHP += int.Parse(inventory[index][4]);
 					if (currentHP > maxHP)
 					{
 						currentHP = maxHP;
 					}
+					tempHP = currentHP - tempHP;
+					Debug.Log(unitName + " has healed for " + tempHP + " HP!");
+					CombatLog.instance.AddEvent(unitName + " has healed for " + tempHP + " HP!");
+					CombatLog.instance.PrintEvent();
 					discardItem(index);
 					selectedItemIndex = -1;
 				}
@@ -360,10 +371,14 @@ public class PlayerUnit : Unit
 
 	/**
 	* Discards an item in the PlayerUnit's inventory
+	* 
+	* v1.1
+	* Prints a line when an object is discarded
+	* 
 	* @param index index of the item
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 5/7/2017
+	* @version 1.1
+	* @updated 16/7/2017
 	*/
 	public void discardItem(int index)
 	{
@@ -374,6 +389,7 @@ public class PlayerUnit : Unit
 		}
 		else
 		{
+			string name = inventory[index][1];
 			// Discard their weapon
 			inventory.RemoveAt(index);
 			// Make the unit unequipped if you discard their weapon
@@ -386,6 +402,9 @@ public class PlayerUnit : Unit
 				weaponWt = 0;
 				weaponCrit = 0;
 			}
+			Debug.Log(name + " discarded");
+			CombatLog.instance.AddEvent(name + " discarded");
+			CombatLog.instance.PrintEvent();
 		}
 	}
 
@@ -411,6 +430,7 @@ public class PlayerUnit : Unit
 		isTalking = false;
 
 		Grid.instance.totalDone++;
+		Grid.instance.currentPlayer = -1;
 
 		base.playerWait();
 	}
@@ -470,7 +490,7 @@ public class PlayerUnit : Unit
 							isTalking = !isTalking;
 							if (isTalking)
 							{
-								Grid.instance.highlightTilesAt(gridPosition, Color.yellow, 1, 1, false);
+								Grid.instance.highlightTilesAt(gridPosition, Color.yellow, 1, 1, false, isFlying);
 							}
 							else
 							{
@@ -571,7 +591,7 @@ public class PlayerUnit : Unit
 						else
 						{
 							isMoving = true;
-							Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+							Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true, isFlying);
 						}
 					}
 				}
@@ -626,7 +646,7 @@ public class PlayerUnit : Unit
 					else
 					{
 						isFighting = true;
-						Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange + weaponRangeBuff, false);
+						Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange + weaponRangeBuff, false, isFlying);
 					}
 				}
 			}
@@ -767,6 +787,7 @@ public class PlayerUnit : Unit
 				displayTavern = false;
 
 				Grid.instance.nextTurn();
+				Grid.instance.currentPlayer = -1;
 			}
 			base.OnGUI();
             
@@ -795,7 +816,7 @@ public class PlayerUnit : Unit
                 else
                 {
                     isMoving = true;
-                    Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true);
+                    Grid.instance.highlightTilesAt(gridPosition, new Vector4(0f, 1f, 0f, 0.5f), 1, mov, true, isFlying);
                 }
             }
         }
@@ -849,7 +870,7 @@ public class PlayerUnit : Unit
             else
             {
                 isFighting = true;
-                Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false);
+                Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false, isFlying);
             }
         }
     }

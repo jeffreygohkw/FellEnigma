@@ -76,6 +76,11 @@ public class AIUnit : Unit
 
             //Object disappears if dead
             gameObject.SetActive(false);
+
+			if (Grid.instance.highlightedEnemies.Contains(this))
+			{
+				Grid.instance.highlightedEnemies.Remove(this);
+			}
            
 
 			//Turn the tile this unit was standing on free
@@ -147,14 +152,14 @@ public class AIUnit : Unit
 				//Agressive AI
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
 				while (true)
 				{
 					// Find all enemies within range
-					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 					Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
@@ -185,13 +190,13 @@ public class AIUnit : Unit
 				else
 				{
 
-					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true);
+					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true, isFlying);
 					int distanceTo = 1;
 					while (true)
 					{
 						// Otherwise, approach as close as possible
 
-						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true);
+						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true, isFlying);
 
 						foreach (Tile t in possibilities)
 						{
@@ -213,11 +218,11 @@ public class AIUnit : Unit
 				// Replace this with 0 and don't increment for stationary enemies
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 				target = chooseTarget(enemiesInRange);
 
@@ -251,11 +256,11 @@ public class AIUnit : Unit
 				//Stationary AI
 				int tempMov = 0;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 				Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
@@ -282,14 +287,14 @@ public class AIUnit : Unit
 				//Target AI
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
 				while (true)
 				{
 					// Find all enemies within range
-					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true);
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 					Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
@@ -335,7 +340,7 @@ public class AIUnit : Unit
 					doneMoving = true;
 				}
 				//Move to the objective tile if we can reach
-				else if (TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, allies, true).Contains(target[0]))
+				else if (TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, allies, true, isFlying).Contains(target[0]))
 				{
 					isMoving = true;
 					doneMoving = true;
@@ -344,13 +349,13 @@ public class AIUnit : Unit
 				else
 				{
 
-					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true);
+					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true, isFlying);
 					int distanceTo = 1;
 					while (true)
 					{
 						// Otherwise, approach as close as possible
 
-						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true);
+						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true, isFlying);
 
 						foreach (Tile t in possibilities)
 						{
@@ -492,19 +497,28 @@ public class AIUnit : Unit
 	{
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			if (Grid.instance.currentPlayer != -1)
+			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 			{
-				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				Grid.instance.battle.attackWithCurrentUnit(this);
+			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			{
+				Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+			}
+			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			{
+				Grid.instance.talkWithCurrentUnit(this);
+			}
+			else
+			{
+				//Danger Range
+				if (Grid.instance.highlightedEnemies.Contains(this))
 				{
-					Grid.instance.battle.attackWithCurrentUnit(this);
+					Grid.instance.highlightedEnemies.Remove(this);
 				}
-				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				else
 				{
-					Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
-				}
-				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-				{
-					Grid.instance.talkWithCurrentUnit(this);
+					Grid.instance.highlightedEnemies.Add(this);
 				}
 			}
 		}

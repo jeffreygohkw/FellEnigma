@@ -105,11 +105,11 @@ public class StationaryUnit : Unit {
 		{
 			int tempMov = 0;
 			// Find all enemies within range
-			Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+			Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true, isFlying);
 			List<Tile> target = new List<Tile>();
 
 			// Find all enemies within range
-			enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true);
+			enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange, allies, true, isFlying);
 
 			Debug.Log("In Range: " + enemiesInRange.Count);
 			target = chooseTarget(enemiesInRange);

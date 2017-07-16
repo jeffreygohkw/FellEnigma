@@ -55,6 +55,9 @@ public class Grid : MonoBehaviour {
 	public Dictionary<Vector2, string> objectiveSpecificTiles = new Dictionary<Vector2, string>();
 	public string objectiveComplete;
 
+	public List<Unit> highlightedEnemies = new List<Unit>();
+
+	GameObject HUDCanvas;
 
 	public void Awake()
 	{
@@ -64,6 +67,8 @@ public class Grid : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		HUDCanvas = GameObject.Find("HUDCanvas");
+		HUDCanvas.SetActive(false);
 		Item.instance.initialiseItems();
         CreateTerrain();
 		CreateTiles();
@@ -74,6 +79,7 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+		Debug.Log(currentPlayer);
         //Force shut game
         if (Input.GetKey(KeyCode.Escape))
         {
@@ -85,10 +91,12 @@ public class Grid : MonoBehaviour {
 		
 		if (status == 1)
 		{
+			HUDCanvas.SetActive(true);
 			foreach (List<Unit> u in units)
 			{
 				foreach (Unit v in u)
 				{
+					
 					v.gameObject.SetActive(false);
 				}
 			}
@@ -97,6 +105,7 @@ public class Grid : MonoBehaviour {
 		
 		else if (status == 2)
 		{
+			HUDCanvas.SetActive(true);
 			foreach (List<Unit> u in units)
 			{
 				foreach (Unit v in u)
@@ -106,7 +115,46 @@ public class Grid : MonoBehaviour {
 			}
 			return;
 		}
-		
+
+		// For highlighting of enemy range
+		removeTerrainHighlight();
+
+		List<Tile> dangerRange = new List<Tile>();
+		foreach (Unit u in highlightedEnemies)
+		{
+			Debug.Log("C" + highlightedEnemies.Count);
+			List<Tile> enemiesInRange = TileHighlight.FindAttackRange(Grid.instance.map[(int)u.gridPosition.x][(int)u.gridPosition.y], 1, u.mov, u.weaponMinRange, u.weaponMaxRange + u.weaponRangeBuff, u.allies, true, u.isFlying);
+			foreach (Tile t in enemiesInRange)
+			{
+				t.linkedTerrain.GetComponent<Renderer>().material.color = Color.magenta;
+			}
+		}
+
+		// To indicate ownership of village at a glance
+		foreach (Vector2 v in villageStatus.Keys)
+		{
+			if (villageStatus[v][0] == -1)
+			{
+				//Non controlled are white
+				Grid.instance.map[(int)v.x][(int)v.y].linkedTerrain.GetComponent<Renderer>().material.color = Color.grey;
+			}
+			if (villageStatus[v][0] == 0)
+			{
+				//Player controlled cities are cyan
+				Grid.instance.map[(int)v.x][(int)v.y].linkedTerrain.GetComponent<Renderer>().material.color = Color.cyan;
+			}
+			else if (villageStatus[v][0] == 1)
+			{
+				//Enemy controlled are red
+				Grid.instance.map[(int)v.x][(int)v.y].linkedTerrain.GetComponent<Renderer>().material.color = Color.red;
+			}
+			else if (villageStatus[v][0] == 2)
+			{
+				//Neutral controlled are yellow
+				Grid.instance.map[(int)v.x][(int)v.y].linkedTerrain.GetComponent<Renderer>().material.color = Color.yellow;
+			}
+		}
+
 		// Skip turn if entire team is dead
 		if (units[currentTeam].Count == 0 || totalDone == units[currentTeam].Count || currentPlayer == units[currentTeam].Count)
 		{
@@ -285,7 +333,6 @@ public class Grid : MonoBehaviour {
 	*/
 	public void moveCurrentUnit(Tile destTile)
 	{
-
 		if ((destTile.GetComponent<Renderer>().material.color != destTile.colour || AITeams.Contains(currentTeam)) && (destTile.occupied == null || destTile.occupied == units[currentTeam][currentPlayer]))
 		{
 			// Don't let the unit move to a tile that's occupied
@@ -296,7 +343,7 @@ public class Grid : MonoBehaviour {
 			map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y].occupied = null;
 
 			// Get the path from the unit's current position to its final position
-			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y], units[currentTeam][currentPlayer].allies).tileList;
+			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y], units[currentTeam][currentPlayer].allies, Grid.instance.units[currentTeam][currentPlayer].isFlying).tileList;
 			foreach (Tile t in path)
 			{
 				units[currentTeam][currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
@@ -329,9 +376,9 @@ public class Grid : MonoBehaviour {
 	 * @version 1.1
 	 * @updated 2/6/2017
 	 */
-	public void highlightTilesAt(Vector2 origin, Color highlightcolour, int minActionRange, int maxActionRange, bool move)
+	public void highlightTilesAt(Vector2 origin, Color highlightcolour, int minActionRange, int maxActionRange, bool move, bool flying)
 	{
-		List<Tile> highlightedTiles = TileHighlight.FindHighlight(map[(int)origin.x][(int)origin.y], minActionRange, maxActionRange, units[currentTeam][currentPlayer].allies, move);
+		List<Tile> highlightedTiles = TileHighlight.FindHighlight(map[(int)origin.x][(int)origin.y], minActionRange, maxActionRange, units[currentTeam][currentPlayer].allies, move, flying);
 
 		foreach (Tile t in highlightedTiles)
 		{
@@ -362,6 +409,25 @@ public class Grid : MonoBehaviour {
 			for (int j = 0; j < tilesPerRow; j++)
 			{
 				map[i][j].resetDefaultColor();
+			}
+		}
+	}
+
+	/**
+	 * Removes highlights on terrain
+     * 
+     * 
+	 * @author Jeffrey Goh
+	 * @version 1.1
+	 * @updated 6/6/2017 by Wayne Neo
+	 */
+	public void removeTerrainHighlight()
+	{
+		for (int i = 0; i < tilesPerCol; i++)
+		{
+			for (int j = 0; j < tilesPerRow; j++)
+			{
+				map[i][j].linkedTerrain.GetComponent<Renderer>().material = map[i][j].linkedTerrain.defaultColour;
 			}
 		}
 	}

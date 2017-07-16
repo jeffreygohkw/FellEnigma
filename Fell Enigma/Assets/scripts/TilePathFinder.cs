@@ -10,15 +10,18 @@ public class TilePathFinder : MonoBehaviour {
 	 * v1.1
 	 * Allowed allies to pass through each other
 	 * 
+	 * v1.2
+	 * Added Flying compatibility
+	 * 
 	 * @param originTile The tile our unit is on
 	 * @param range The move or attack range of the unit
 	 * @param destinationTile The tile we want our unit to move to
 	 * @param allies A list containing the allied teams of the current unit
 	 * @author Jeffrey Goh
-	 * @version v1.1
-	 * @updated 12/6/2017
+	 * @version v1.2
+	 * @updated 15/7/2017
 	 */
-	public static TilePath FindPath(Tile originTile, int range, Tile destinationTile, List<int> allies)
+	public static TilePath FindPath(Tile originTile, int range, Tile destinationTile, List<int> allies, bool flying)
 	{
 		// List of tiles to highlight
 		List<Tile> closed = new List<Tile>();
@@ -63,7 +66,12 @@ public class TilePathFinder : MonoBehaviour {
 				// Otherwise, make a clone of the current path
 				TilePath newTilePath = new TilePath(current);
 
-				if (current.costofPath + t.movementCost > range)
+				int movCost = t.movementCost;
+				if (flying)
+				{
+					movCost = 1;
+				}
+				if (current.costofPath + movCost > range)
 				{
 					continue;
 				}
@@ -83,7 +91,7 @@ public class TilePathFinder : MonoBehaviour {
 
 				// Otherwise, we add that tile and its movement cost to the newTilePath
 				newTilePath.addTile(t);
-				newTilePath.addCost(t.movementCost);
+				newTilePath.addCost(movCost);
 
 
 				// We add newTilePath to open so we can consider it again

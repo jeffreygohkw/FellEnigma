@@ -65,7 +65,7 @@ public class Unit : MonoBehaviour {
 	public int con;
 	public int mov;
 
-	//public Dictionary<string, int> stats = new Dictionary<string, int>();
+	public bool isFlying = false;
 	
 
 	//Growths
