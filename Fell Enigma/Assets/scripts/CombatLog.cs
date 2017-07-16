@@ -12,7 +12,9 @@ public class CombatLog : MonoBehaviour{
     private string nowtoPrint;
     private Text textBar;
 
-    public int maxLines = 100;
+    private bool fullLogOut = false;
+
+    public int maxLines = 10;
 
     // Use this for initialization
     void Start () {
@@ -30,7 +32,14 @@ public class CombatLog : MonoBehaviour{
 	}
 
    
-
+    /**
+     * Adds a string to the bar to be printed afterwards
+     *
+     * 
+     * @author Wayne Neo
+     * @version 1.0
+     * @updated on 14/7/17
+     */
     public void AddEvent(string eventString)
     {
         if (Eventlog.Count >= maxLines)
@@ -47,19 +56,66 @@ public class CombatLog : MonoBehaviour{
 
     }
 
+    /**
+    * Prints all the strings stored
+    *
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 14/7/17
+    */
     public void PrintEvent()
     {
         if (Eventlog.Count != 0)
-        StartCoroutine(ExecuteAfterTime(2f));
+        StartCoroutine(ExecuteAfterTime(1f));
     }
 
+    /**
+    * Creates a delay between each print
+    *
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 14/7/17
+    */
     public IEnumerator ExecuteAfterTime(float time)
     {
         while (Eventlog.Count != 0)
         {
             yield return new WaitForSeconds(time);
+            if (Eventlog.Count != 0)
             textBar.text = Eventlog.Dequeue();
         }
     }
+    /**
+    * If user clicks on the bar, a full log is produced
+    *
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 14/7/17
+    */
+    public void ShowFullLog()
+    {
+        fullLogOut = true;
+    }
 
+    /**
+   * If user clicks on the bar when log is shown, the full log is hidden
+   *
+   * 
+   * @author Wayne Neo
+   * @version 1.0
+   * @updated on 14/7/17
+   */
+    public void HideFullLog()
+    {
+        fullLogOut = false;
+    }
+
+    private void OnGUI()
+    {
+        if (fullLogOut)
+        GUI.Label(new Rect(0, Screen.height - (Screen.height / 1.1f), Screen.width, Screen.height / 1.35f), fullLog, GUI.skin.textArea);
+    }
 }

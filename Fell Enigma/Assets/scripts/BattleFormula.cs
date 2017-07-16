@@ -486,8 +486,8 @@ public class BattleFormula
 							Grid.instance.currentPlayer = -1;
 						}
 						Grid.instance.removeTileHighlight();
-						
-						return;
+                        CombatLog.instance.PrintEvent();
+                        return;
 					}
 					else
 					{
@@ -533,14 +533,14 @@ public class BattleFormula
 				Grid.instance.currentPlayer = -1;
 			}
 			Grid.instance.removeTileHighlight();
-			return;
+            CombatLog.instance.PrintEvent();
+            return;
 		}
 		else
 		{
 			Debug.Log("Invalid target");
 		}
 
-        //CombatLog.instance.PrintEvent();
 	}
 
 
@@ -889,7 +889,8 @@ public class BattleFormula
 					statup = 0;
 				}
 			}
-			return;
+            CombatLog.instance.PrintEvent();
+            return;
 		}
 	}
 
@@ -1094,7 +1095,8 @@ public class BattleFormula
 					Grid.instance.currentPlayer = -1;
 				}
 				Grid.instance.removeTileHighlight();
-				return;
+                CombatLog.instance.PrintEvent();
+                return;
 			}
 			else
 			{

@@ -858,8 +858,57 @@ public class PlayerUnit : Unit
     {
         if (selected && !doneAction)
         {
-            Debug.Log("In progress");
+            ItemUI.instance.setUnit(this);
+            displayInventory = !displayInventory;
+            if (isFighting || isMoving)
+            {
+                Grid.instance.removeTileHighlight();
+                isHealing = false;
+                activeStaffIndex = -1;
+            }
+
+            if (displayInventory)
+            {
+                EventManager.TriggerEvent("ItemUION");
+                EventManager.StartListening("EquipUseItem", EquipUseItem);
+                EventManager.StartListening("DiscardItem", DiscardItem);
+            }
+            else
+            {
+                EventManager.TriggerEvent("ItemUIOFF");
+                Grid.instance.removeTileHighlight();
+                isHealing = false;
+                activeStaffIndex = -1;
+                selectedItemIndex = -1;
+                EventManager.StopListening("EquipUseItem", EquipUseItem);
+                EventManager.StopListening("DiscardItem", DiscardItem);
+            }
         }
+    }
+
+    void EquipUseItem()
+    {
+        selectedItemIndex = ItemUI.instance.getItemIndex();
+        if (inventory[selectedItemIndex].Length == 13)
+        {
+            equipItem(selectedItemIndex);
+        }
+        else
+        {
+            useItem(selectedItemIndex);
+        }
+
+        EventManager.TriggerEvent("ItemUIOFF");
+        displayInventory = !displayInventory;
+    }
+
+    void DiscardItem()
+    {
+        selectedItemIndex = ItemUI.instance.getItemIndex();
+        discardItem(selectedItemIndex);
+        selectedItemIndex = -1;
+        EventManager.TriggerEvent("ItemUIOFF");
+        displayInventory = !displayInventory;
     }
 
     void WaitUnit()
@@ -912,4 +961,5 @@ public class PlayerUnit : Unit
             Grid.instance.nextTurn();
         }
     }
+
 }

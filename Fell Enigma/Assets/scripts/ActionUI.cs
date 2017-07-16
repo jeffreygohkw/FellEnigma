@@ -59,6 +59,7 @@ public class ActionUI : MonoBehaviour
         OffUI();
         EventManager.StartListening("SelectUnit", SelectUnit);
         EventManager.StopListening("DeselectUnit", DeselectUnit);
+        EventManager.TriggerEvent("ItemUIOFF");
         hasMoved = false;
         moveText.GetComponent<Text>().text = "Move";
         this.GetComponentInChildren<Actions>().hasMoved = false;

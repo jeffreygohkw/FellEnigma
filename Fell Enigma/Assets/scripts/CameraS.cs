@@ -10,23 +10,36 @@ public class CameraS : MonoBehaviour {
     private float max_x;
     private float min_y;
     private float max_y;
-    public float horiSize;
-    public float vertSize;
+    private float horiSize = 0;
+    private float vertSize = 0;
+    private bool justOnce = true;
 
     private Vector3 newPos;
 
 	// Use this for initialization
 	void Start ()
     {
-        min_x = transform.position.x - horiSize;
-        max_x = transform.position.x + horiSize - 0.5f;
-        min_y = transform.position.y - vertSize;
-        max_y = transform.position.y + vertSize - 6;
+        
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        // Now camera adjusts according to the grid size. Hopefully this works for all cases
+        if (horiSize == 0 && vertSize == 0)
+        {
+            horiSize = Grid.instance.tilesPerRow;
+            vertSize = Grid.instance.tilesPerCol;
+        }
+
+        if (justOnce)
+        {
+            min_x = transform.position.x - horiSize + 23.5f;
+            max_x = transform.position.x + horiSize - 24;
+            min_y = transform.position.y - vertSize + 16.5f;
+            max_y = transform.position.y + vertSize - 20.6f;
+            justOnce = false;
+        }
 
         newPos = transform.position;
 
