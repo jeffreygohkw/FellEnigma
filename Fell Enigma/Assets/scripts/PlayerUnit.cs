@@ -361,6 +361,114 @@ public class PlayerUnit : Unit
 			else if (inventory[index][0] == "Key")
 			{
 				// Unlock door code here
+				if (inventory[index][1] == "ChestKey")
+				{
+					if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Chest")
+					{
+						if (Grid.instance.chestLoot.ContainsKey(gridPosition))
+						{
+							//Discard Key
+							discardItem(selectedItemIndex);
+							//Add Item
+							inventory.Add(Grid.instance.chestLoot[gridPosition]);
+							//Change Chest to OpenChest
+							Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.LoadTerrain(10);
+
+							Debug.Log("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
+							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
+							CombatLog.instance.PrintEvent();
+							playerWait();
+						}
+						else
+						{
+							Debug.Log("Chest loot not found");
+						}
+					}
+				}
+				else if (inventory[index][1] == "DoorKey")
+				{
+					bool unlockedADoor = false;
+					foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
+					{
+						if (t.linkedTerrain.returnName() == "Door")
+						{
+							unlockedADoor = true;
+							Grid.instance.map[(int)t.gridPosition.x][(int)t.gridPosition.y].linkedTerrain.LoadTerrain(12);
+						}
+					}
+					if (unlockedADoor)
+					{
+						//Discard Key
+						discardItem(selectedItemIndex);
+						playerWait();
+
+						Debug.Log("Door unlocked");
+						CombatLog.instance.AddEvent("Door unlocked");
+						CombatLog.instance.PrintEvent();
+					}
+					else
+					{
+						Debug.Log("No doors found");
+					}
+				}
+				else if (inventory[index][1] == "Lockpick")
+				{
+					//Both Chest Key and Door Key
+					if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Chest")
+					{
+						if (Grid.instance.chestLoot.ContainsKey(gridPosition))
+						{
+							//Discard Key
+							discardItem(selectedItemIndex);
+							//Add Item
+							inventory.Add(Grid.instance.chestLoot[gridPosition]);
+							//Change Chest to OpenChest
+							Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.LoadTerrain(10);
+
+							Debug.Log("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
+							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
+							CombatLog.instance.PrintEvent();
+
+							playerWait();
+						}
+						else
+						{
+							Debug.Log("Chest is empty");
+							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
+							CombatLog.instance.PrintEvent();
+						}
+					}
+
+					bool unlockedADoor = false;
+					foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
+					{
+						if (t.linkedTerrain.returnName() == "Door")
+						{
+							unlockedADoor = true;
+							Grid.instance.map[(int)t.gridPosition.x][(int)t.gridPosition.y].linkedTerrain.LoadTerrain(12);
+						}
+					}
+					if (unlockedADoor)
+					{
+						//Discard Key
+						discardItem(selectedItemIndex);
+						playerWait();
+
+						Debug.Log("Door unlocked");
+						CombatLog.instance.AddEvent("Door unlocked");
+						CombatLog.instance.PrintEvent();
+					}
+					else
+					{
+						Debug.Log("No doors found");
+					}
+				}
+				else
+				{
+					Debug.Log("There's nothing to unlock");
+					CombatLog.instance.AddEvent("Door unlocked");
+					CombatLog.instance.PrintEvent();
+				}
 			}
 			else
 			{

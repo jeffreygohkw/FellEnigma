@@ -422,7 +422,7 @@ public class CreatePlayers : MonoBehaviour {
 
 			unit2.proficiency.Add("Sword");
 			Item.instance.equipWeapon(unit2, "Sword", "IronSword");
-			Item.instance.addItem(unit2, "Consumable", "Potion");
+			Item.instance.addItem(unit2, "Key", "Lockpick");
 			Item.instance.addItem(unit2, "Consumable", "Potion");
 
 			Grid.instance.map[5][26].occupied = unit2;

@@ -57,6 +57,8 @@ public class Grid : MonoBehaviour {
 
 	public List<Unit> highlightedEnemies = new List<Unit>();
 
+	public Dictionary<Vector2, string[]> chestLoot = new Dictionary<Vector2, string[]>();
+
 	GameObject HUDCanvas;
 
 	public void Awake()
@@ -79,7 +81,6 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
-		Debug.Log(currentPlayer);
         //Force shut game
         if (Input.GetKey(KeyCode.Escape))
         {
