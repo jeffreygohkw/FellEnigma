@@ -8,12 +8,12 @@ public class PlayerUnit : Unit
 	List<Vector2> lastPosition = new List<Vector2>();
     private bool onceisEnough = false;
 
-
 	// Use this for initialization
 	void Start()
 	{
+       
 
-	}
+    }
 
 	// Update is called once per frame
 
@@ -30,6 +30,23 @@ public class PlayerUnit : Unit
                 {
                     EventManager.TriggerEvent("DeselectUnit");
                     EventManager.TriggerEvent("DeselectUnitStats");
+                    EventManager.TriggerEvent("ItemUIOFF");
+                    EventManager.TriggerEvent("AttackUnitStatsOFF");
+                    EventManager.TriggerEvent("HealUnitStatsOFF");
+                    ActionOtherUI.instance.OffAllUI();
+                    EventManager.StopListening("MoveUnit", MoveUnit);
+                    EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+                    EventManager.StopListening("AttackUnit", AttackUnit);
+                    EventManager.StopListening("ItemUnit", ItemUnit);
+                    EventManager.StopListening("WaitUnit", WaitUnit);
+                    EventManager.StopListening("EndUnit", EndUnit);
+                    EventManager.StopListening("OtherUnit", OtherUnit);
+                    EventManager.StopListening("TalkUnit", TalkUnit);
+                    EventManager.StopListening("CapUnit", CapUnit);
+                    EventManager.StopListening("TavUnit", TavUnit);
+                    EventManager.StopListening("ObjUnit", ObjUnit);
+                    EventManager.StopListening("EquipUseItem", EquipUseItem);
+                    EventManager.StopListening("DiscardItem", DiscardItem);
                     onceisEnough = true;
                 }
             }
@@ -48,7 +65,7 @@ public class PlayerUnit : Unit
 			GetComponent<Renderer>().material.color = Color.grey;
 			lastPosition.Clear();
             onceisEnough = false;
-		}
+        }
 
 		if (currentHP <= 0)
 		{
@@ -101,8 +118,6 @@ public class PlayerUnit : Unit
 							isMoving = false;
 							doneMoving = true;
                             EventManager.TriggerEvent("MovedUnit");
-                            EventManager.StopListening("MoveUnit", MoveUnit);
-                            EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
                         }
 					}
 				}
@@ -140,23 +155,42 @@ public class PlayerUnit : Unit
 					{
 						EventManager.TriggerEvent("SelectUnit");
 						EventManager.TriggerEvent("SelectUnitStats");
-						EventManager.StartListening("MoveUnit", MoveUnit);
-						EventManager.StartListening("AttackUnit", AttackUnit);
-						EventManager.StartListening("ItemUnit", ItemUnit);
-						EventManager.StartListening("WaitUnit", WaitUnit);
-						EventManager.StartListening("EndUnit", EndUnit);
-
-					}
+                        EventManager.StartListening("MoveUnit", MoveUnit);
+                        EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
+                        EventManager.StartListening("AttackUnit", AttackUnit);
+                        EventManager.StartListening("ItemUnit", ItemUnit);
+                        EventManager.StartListening("WaitUnit", WaitUnit);
+                        EventManager.StartListening("EndUnit", EndUnit);
+                        EventManager.StartListening("OtherUnit", OtherUnit);
+                        EventManager.StartListening("TalkUnit", TalkUnit);
+                        EventManager.StartListening("CapUnit", CapUnit);
+                        EventManager.StartListening("TavUnit", TavUnit);
+                        EventManager.StartListening("ObjUnit", ObjUnit);
+                        EventManager.StartListening("EquipUseItem", EquipUseItem);
+                        EventManager.StartListening("DiscardItem", DiscardItem);
+                    }
 					else
 					{
 						EventManager.TriggerEvent("DeselectUnit");
 						EventManager.TriggerEvent("DeselectUnitStats");
-						EventManager.StopListening("MoveUnit", MoveUnit);
-						EventManager.StopListening("AttackUnit", AttackUnit);
-						EventManager.StopListening("ItemUnit", ItemUnit);
-						EventManager.StopListening("WaitUnit", WaitUnit);
-						EventManager.StopListening("EndUnit", EndUnit);
-					}
+                        EventManager.TriggerEvent("ItemUIOFF");
+                        EventManager.TriggerEvent("HealUnitStatsOFF");
+                        EventManager.TriggerEvent("AttackUnitStatsOFF");
+                        ActionOtherUI.instance.OffAllUI();
+                        EventManager.StopListening("MoveUnit", MoveUnit);
+                        EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+                        EventManager.StopListening("AttackUnit", AttackUnit);
+                        EventManager.StopListening("ItemUnit", ItemUnit);
+                        EventManager.StopListening("WaitUnit", WaitUnit);
+                        EventManager.StopListening("EndUnit", EndUnit);
+                        EventManager.StopListening("OtherUnit", OtherUnit);
+                        EventManager.StopListening("TalkUnit", TalkUnit);
+                        EventManager.StopListening("CapUnit", CapUnit);
+                        EventManager.StopListening("TavUnit", TavUnit);
+                        EventManager.StopListening("ObjUnit", ObjUnit);
+                        EventManager.StopListening("EquipUseItem", EquipUseItem);
+                        EventManager.StopListening("DiscardItem", DiscardItem);
+                    }
 				}
 				if (selected && !doneAction)
 				{
@@ -265,13 +299,15 @@ public class PlayerUnit : Unit
 					{
 						if (activeStaffIndex != index)
 						{
+                            EventManager.TriggerEvent("HealUnitStatsON");
 							activeStaffIndex = index;
 							Grid.instance.highlightTilesAt(gridPosition, Color.yellow, int.Parse(inventory[index][3]), int.Parse(inventory[index][4]), false, isFlying);
 						}
 					}
 					else
 					{
-						activeStaffIndex = -1;
+                        EventManager.TriggerEvent("HealUnitStatsOFF");
+                        activeStaffIndex = -1;
 						Grid.instance.removeTileHighlight();
 					}
 					Debug.Log(activeStaffIndex);
@@ -333,7 +369,8 @@ public class PlayerUnit : Unit
 					Debug.Log("Something's wrong with your stat booster");
 					return;
 				}
-				discardItem(index);
+                EventManager.TriggerEvent("ItemUIOFF");
+                discardItem(index);
 				selectedItemIndex = -1;
 			}
 			else if (inventory[index][0] == "Consumable")
@@ -356,7 +393,8 @@ public class PlayerUnit : Unit
 					CombatLog.instance.PrintEvent();
 					discardItem(index);
 					selectedItemIndex = -1;
-				}
+                    EventManager.TriggerEvent("ItemUIOFF");
+                }
 			}
 			else if (inventory[index][0] == "Key")
 			{
@@ -377,7 +415,8 @@ public class PlayerUnit : Unit
 							Debug.Log("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.PrintEvent();
-							playerWait();
+                            EventManager.TriggerEvent("ItemUIOFF");
+                            playerWait();
 						}
 						else
 						{
@@ -400,7 +439,8 @@ public class PlayerUnit : Unit
 					{
 						//Discard Key
 						discardItem(selectedItemIndex);
-						playerWait();
+                        EventManager.TriggerEvent("ItemUIOFF");
+                        playerWait();
 
 						Debug.Log("Door unlocked");
 						CombatLog.instance.AddEvent("Door unlocked");
@@ -428,8 +468,8 @@ public class PlayerUnit : Unit
 							Debug.Log("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.PrintEvent();
-
-							playerWait();
+                            EventManager.TriggerEvent("ItemUIOFF");
+                            playerWait();
 						}
 						else
 						{
@@ -452,7 +492,8 @@ public class PlayerUnit : Unit
 					{
 						//Discard Key
 						discardItem(selectedItemIndex);
-						playerWait();
+                        EventManager.TriggerEvent("ItemUIOFF");
+                        playerWait();
 
 						Debug.Log("Door unlocked");
 						CombatLog.instance.AddEvent("Door unlocked");
@@ -544,7 +585,7 @@ public class PlayerUnit : Unit
 	}
 
 
-	/**
+    /**
 	* GUI buttons
 	* 
 	* v1.1
@@ -562,7 +603,7 @@ public class PlayerUnit : Unit
 	* @updated 15/7/2017
 	*/
 
-	public override void OnGUI()
+    public override void OnGUI()
 	{
 		if (selected && !doneAction)
 		{
@@ -904,6 +945,18 @@ public class PlayerUnit : Unit
         
     }
 
+
+
+    /**
+    * EventMangager: Activates Move function when the move button is pressed
+    * 
+    * v1.1
+    * updated to follow original
+    * 
+    * @author Jeffery Goh
+    * @version 1.1
+    * @updated on 19/7/17 by Wayne
+    */
     void MoveUnit()
     {
         if (selected && !doneAction)
@@ -916,6 +969,8 @@ public class PlayerUnit : Unit
                 isFighting = false;
                 isHealing = false;
                 activeStaffIndex = -1;
+                isTalking = false;
+                displayTavern = false;
                 if (isMoving)
                 {
                     isMoving = false;
@@ -928,9 +983,15 @@ public class PlayerUnit : Unit
                 }
             }
         }
-        
     }
 
+    /**
+    * EventManager: Activates Undo Move function when the Undo Move button is pressed
+    * 
+    * @author Jeffery Goh
+    * @version 1.0
+    * @updated on 19/7/17 by Wayne
+    */ 
     void UndoMoveUnit()
     {
         if (selected && !doneAction)
@@ -942,6 +1003,9 @@ public class PlayerUnit : Unit
                     isFighting = false;
                     isHealing = false;
                     activeStaffIndex = -1;
+                    isTalking = false;
+                    displayTavern = false;
+
                     Grid.instance.removeTileHighlight();
                     displayInventory = false;
                     selectedItemIndex = -1;
@@ -953,12 +1017,17 @@ public class PlayerUnit : Unit
                 lastPosition.Clear();
                 doneMoving = false;
                 EventManager.TriggerEvent("UndoMovedUnit");
-                EventManager.StartListening("MoveUnit", MoveUnit);
-                EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
             }
         }
     }
 
+    /**
+     * EventManager: Activates the Attack function when the Attack button is pressed
+     *
+     * @author Jeffrey Goh
+     * @version 1.0
+     * @updated by 19/7/17 by Wayne
+     */
     void AttackUnit()
     {
         if (selected && !doneAction)
@@ -974,6 +1043,7 @@ public class PlayerUnit : Unit
             {
                 isFighting = false;
                 Grid.instance.removeTileHighlight();
+                EventManager.TriggerEvent("AttackUnitStatsOFF");
             }
             else
             {
@@ -983,6 +1053,13 @@ public class PlayerUnit : Unit
         }
     }
 
+    /**
+    * EventManager: Activates the Item function when the Item button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
     void ItemUnit()
     {
         if (selected && !doneAction)
@@ -998,9 +1075,10 @@ public class PlayerUnit : Unit
 
             if (displayInventory)
             {
+                isMoving = false;
+                isFighting = false;
+                isTalking = false;
                 EventManager.TriggerEvent("ItemUION");
-                EventManager.StartListening("EquipUseItem", EquipUseItem);
-                EventManager.StartListening("DiscardItem", DiscardItem);
             }
             else
             {
@@ -1009,12 +1087,18 @@ public class PlayerUnit : Unit
                 isHealing = false;
                 activeStaffIndex = -1;
                 selectedItemIndex = -1;
-                EventManager.StopListening("EquipUseItem", EquipUseItem);
-                EventManager.StopListening("DiscardItem", DiscardItem);
             }
         }
     }
 
+
+    /**
+    * EventManager: Activates the Equip/Use function when the Equip/Use button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
     void EquipUseItem()
     {
         selectedItemIndex = ItemUI.instance.getItemIndex();
@@ -1027,10 +1111,17 @@ public class PlayerUnit : Unit
             useItem(selectedItemIndex);
         }
 
-        EventManager.TriggerEvent("ItemUIOFF");
         displayInventory = !displayInventory;
     }
 
+
+    /**
+    * EventManager: Activates the Discard Item function when the Discard Item button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
     void DiscardItem()
     {
         selectedItemIndex = ItemUI.instance.getItemIndex();
@@ -1040,6 +1131,164 @@ public class PlayerUnit : Unit
         displayInventory = !displayInventory;
     }
 
+
+    /**
+    * EventManager: Activates the Other Actions function when the Actions button is pressed.
+    * This searches for the available actions the unit can take and updates the ActionsOtherUI accordingly
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
+    void OtherUnit()
+    {
+        if (selected && !doneAction)
+        {
+            foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
+            {
+                if (t.occupied && t.occupied.canTalk.ContainsKey(this.unitName))
+                {
+                    ActionOtherUI.instance.canTalk = true;
+                }
+            }
+
+            if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Village" && Grid.instance.villageStatus.ContainsKey(gridPosition))
+            {
+                ActionOtherUI.instance.canCap = true;
+            }
+            else if (Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].linkedTerrain.returnName() == "Tavern" && Grid.instance.tavernAndSpawn.ContainsKey(gridPosition))
+            {
+                ActionOtherUI.instance.canTav = true;
+            }
+            else if (Grid.instance.objectiveSpecificTiles.ContainsKey(gridPosition))
+            {
+                ActionOtherUI.instance.canOther = true;
+            }
+
+            if (!ActionOtherUI.instance.canOther)
+            {
+                ActionOtherUI.instance.ToggleUI();
+            }
+            else
+            {
+                ActionOtherUI.instance.ToggleUI(Grid.instance.objectiveSpecificTiles[gridPosition]);
+            }
+        }
+    }
+
+    /**
+    * EventManager: Activates the Talk function when the Talk button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
+    void TalkUnit()
+    {
+        if (selected && !doneAction)
+        {
+            isMoving = false;
+            isFighting = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+            displayInventory = false;
+            selectedItemIndex = -1;
+            displayTavern = false;
+
+            Debug.Log("Talking");
+            isTalking = !isTalking;
+            if (isTalking)
+            {
+                Grid.instance.highlightTilesAt(gridPosition, Color.yellow, 1, 1, false, isFlying);
+            }
+            else
+            {
+                Grid.instance.removeTileHighlight();
+            }
+        }
+    }
+
+    /**
+    * EventManager: Activates the Capture function when the Capture button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
+    void CapUnit()
+    {
+        if (selected && !doneAction)
+        {
+            // Check if reward is gold
+            if (Grid.instance.villageStatus[gridPosition][0] != team)
+            {
+                Grid.instance.villageStatus[gridPosition][1] -= 1;
+                Debug.Log("Capturing Village");
+                if (Grid.instance.villageStatus[gridPosition][1] == 0)
+                {
+                    //Convert the village to your side
+                    Grid.instance.villageStatus[gridPosition][0] = team;
+                    Grid.instance.villageStatus[gridPosition][1] = 2;
+                    Debug.Log("Village has been captured.");
+                }
+            }
+            else
+            {
+                Debug.Log("Village has already been captured");
+            }
+        }
+    }
+
+    /**
+    * EventManager: Activates the Tavern function when the Tavern button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
+    void TavUnit()
+    {
+
+        if (selected && !doneAction)
+        {
+            displayTavern = !displayTavern;
+            ActionOtherUI.instance.ToggleTavUI(this);
+
+            displayInventory = false;
+            selectedItemIndex = -1;
+            Grid.instance.removeTileHighlight();
+            isMoving = false;
+            isFighting = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+            isTalking = false;
+        }
+    }
+
+
+    /**
+    * EventManager: Activates the Special Objective function when the Special Objective button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
+    void ObjUnit()
+    {
+        if (selected && !doneAction)
+        {
+            Grid.instance.objectiveComplete = Grid.instance.objectiveSpecificTiles[gridPosition];
+        }
+    }
+
+
+    /**
+    * EventManager: Activates the Wait function when the Wait button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
     void WaitUnit()
     {
         if (selected && !doneAction)
@@ -1056,16 +1305,34 @@ public class PlayerUnit : Unit
             selectedItemIndex = -1;
             EventManager.TriggerEvent("DeselectUnit");
             EventManager.TriggerEvent("DeselectUnitStats");
+            EventManager.TriggerEvent("AttackUnitStatsOFF");
+            EventManager.TriggerEvent("HealUnitStatsOFF");
+            ActionOtherUI.instance.OffAllUI();
             EventManager.StopListening("MoveUnit", MoveUnit);
             EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
             EventManager.StopListening("AttackUnit", AttackUnit);
             EventManager.StopListening("ItemUnit", ItemUnit);
             EventManager.StopListening("WaitUnit", WaitUnit);
             EventManager.StopListening("EndUnit", EndUnit);
+            EventManager.StopListening("OtherUnit", OtherUnit);
+            EventManager.StopListening("TalkUnit", TalkUnit);
+            EventManager.StopListening("CapUnit", CapUnit);
+            EventManager.StopListening("TavUnit", TavUnit);
+            EventManager.StopListening("ObjUnit", ObjUnit);
+            EventManager.StopListening("EquipUseItem", EquipUseItem);
+            EventManager.StopListening("DiscardItem", DiscardItem);
             Grid.instance.totalDone++;
+
         }
     }
 
+    /**
+    * EventManager: Activates the End function when the End button is pressed
+    *
+    * @author Jeffrey Goh
+    * @version 1.0
+    * @updated by 19/7/17 by Wayne
+    */
     void EndUnit()
     {
         if (selected && !doneAction)
@@ -1082,11 +1349,22 @@ public class PlayerUnit : Unit
             selectedItemIndex = -1;
             EventManager.TriggerEvent("DeselectUnit");
             EventManager.TriggerEvent("DeselectUnitStats");
+            EventManager.TriggerEvent("AttackUnitStatsOFF");
+            EventManager.TriggerEvent("HealUnitStatsOFF");
+            ActionOtherUI.instance.OffAllUI();
             EventManager.StopListening("MoveUnit", MoveUnit);
+            EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
             EventManager.StopListening("AttackUnit", AttackUnit);
             EventManager.StopListening("ItemUnit", ItemUnit);
             EventManager.StopListening("WaitUnit", WaitUnit);
             EventManager.StopListening("EndUnit", EndUnit);
+            EventManager.StopListening("OtherUnit", OtherUnit);
+            EventManager.StopListening("TalkUnit", TalkUnit);
+            EventManager.StopListening("CapUnit", CapUnit);
+            EventManager.StopListening("TavUnit", TavUnit);
+            EventManager.StopListening("ObjUnit", ObjUnit);
+            EventManager.StopListening("EquipUseItem", EquipUseItem);
+            EventManager.StopListening("DiscardItem", DiscardItem);
             Grid.instance.nextTurn();
         }
     }

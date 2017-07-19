@@ -16,6 +16,7 @@ public class TriggerFullLog : MonoBehaviour {
 		
 	}
 
+    // When the combat log bar is clicked
     public void ButtonPress()
     {
         if (!hasClicked)

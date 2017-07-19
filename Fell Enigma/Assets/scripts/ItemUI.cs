@@ -22,7 +22,8 @@ public class ItemUI : MonoBehaviour {
         EventManager.StartListening("ItemUION", ItemUION);
         EventManager.StartListening("ItemUIOFF", ItemUIOFF);
 
-
+        // Obtains the various components under the UI prefab
+        // Note that components need to be in order (aka don't change the order in Inspector)
         window = this.GetComponentsInChildren<CanvasGroup>()[0];
 
         for (int i = 0; i <= 2; i++)
@@ -44,7 +45,8 @@ public class ItemUI : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
+        
+        // If no item is selected
         if (selectedItemIndex == -1)
         {
             buttons2.alpha = 0;
@@ -65,13 +67,23 @@ public class ItemUI : MonoBehaviour {
                 buttons2Text.text = "Use";
             }
 
+            // Activates second window
             buttons2.alpha = 1;
             buttons2.interactable = true;
             buttons2.blocksRaycasts = true;
         }
 
     }
-
+    /**
+    * EventManager: Activates the first ItemUI window
+    * 
+    * v1.1
+    * Resets selectedItemIndex as well.
+    * 
+    * @author Wayne Neo
+    * @version 1.1
+    * @updated on 19/7/17
+    */
     void ItemUION()
     {
         for (int i = 0; i < selectedUnit.inventory.Count; i++) {
@@ -85,9 +97,17 @@ public class ItemUI : MonoBehaviour {
         window.alpha = 1;
         window.interactable = true;
         window.interactable = true;
+        selectedItemIndex = -1;
 
     }
 
+    /**
+     * EventManager: Deactivates all ItemUI 
+     *
+     * @author Wayne Neo
+     * @version 1.0
+     * @updated on 19/7/17
+     */
     void ItemUIOFF()
     {
         for (int i = 0; i < 3; i++)
@@ -101,23 +121,28 @@ public class ItemUI : MonoBehaviour {
         window.interactable = false;
         window.interactable = false;
         selectedItemIndex = -1;
+
     }
 
+    // Sets selected item index whose function in playerUnit checks
     public void setItemIndex(int i)
     {
         selectedItemIndex = i;
     }
 
+    // Returns selected item index whose function in playerUnit checks
     public int getItemIndex()
     {
         return selectedItemIndex;
     }
 
+    // Sets selected unit whose function in playerUnit checks
     public void setUnit(Unit dude)
     {
         selectedUnit = dude;
     }
 
+    // Returns accordingly if item is selected, whose function in playerUnit checks
     public void setItemSelected(bool value)
     {
         itemIsSelected = value;

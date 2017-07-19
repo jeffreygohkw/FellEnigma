@@ -15,6 +15,7 @@ public class TriggerItem : MonoBehaviour {
 		
 	}
 
+    // When the first item slot is selected, linked in inspector
     public void selectItem0()
     {
         if (ItemUI.instance.getItemIndex() != 0)
@@ -24,9 +25,9 @@ public class TriggerItem : MonoBehaviour {
         }
         else
             ItemUI.instance.setItemIndex(-1);
-        
     }
 
+    // When the second item slot is selected, linked in inspector
     public void selectItem1()
     {
         if (ItemUI.instance.getItemIndex() != 1)
@@ -39,6 +40,7 @@ public class TriggerItem : MonoBehaviour {
 
     }
 
+    // When the third item slot is selected, linked in inspector
     public void selectItem2()
     {
         if (ItemUI.instance.getItemIndex() != 2)
@@ -50,11 +52,13 @@ public class TriggerItem : MonoBehaviour {
             ItemUI.instance.setItemIndex(-1);
     }
 
+    // When equip/use is selected, linked in inspector
     public void equipUseItem()
     {
         EventManager.TriggerEvent("EquipUseItem");
     }
 
+    // When discard is selected, linked in inspector
     public void discardItem()
     {
         EventManager.TriggerEvent("DiscardItem");

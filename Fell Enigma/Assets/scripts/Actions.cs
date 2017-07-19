@@ -20,6 +20,9 @@ public class Actions : MonoBehaviour {
     // If Move button is pressed, linked in Inspector
     public void moveClick()
     {
+        EventManager.TriggerEvent("AttackUnitStatsOFF");
+        EventManager.TriggerEvent("ItemUIOFF");
+        ActionOtherUI.instance.OffAllUI();
         if (!hasMoved)
         {
             EventManager.TriggerEvent("MoveUnit");
@@ -33,13 +36,18 @@ public class Actions : MonoBehaviour {
     // If Attack button is pressed, linked in Inspector
     public void attackClick()
     {
+        ActionOtherUI.instance.OffAllUI();
+        EventManager.TriggerEvent("AttackUnitStatsON");
         EventManager.TriggerEvent("AttackUnit");
-        EventManager.TriggerEvent("AttackUnitStats");
+        
+        
     }
 
     // If Item button is pressed, linked in Inspector
     public void itemClick()
     {
+        ActionOtherUI.instance.OffAllUI();
+        EventManager.TriggerEvent("AttackUnitStatsOFF");
         EventManager.TriggerEvent("ItemUnit");
     }
 
@@ -53,5 +61,13 @@ public class Actions : MonoBehaviour {
     public void endClick()
     {
         EventManager.TriggerEvent("EndUnit");
+    }
+
+    // If Other button is pressed, linked in Inspector
+    public void otherClick()
+    {
+        EventManager.TriggerEvent("AttackUnitStatsOFF");
+        EventManager.TriggerEvent("ItemUIOFF");
+        EventManager.TriggerEvent("OtherUnit");
     }
 }

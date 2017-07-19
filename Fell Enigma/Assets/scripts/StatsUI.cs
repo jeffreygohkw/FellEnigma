@@ -15,17 +15,22 @@ public class StatsUI : MonoBehaviour {
     // Battle Forecast
     private CanvasGroup canvasB;
     private RawImage enemyProfile;
-    private Image attIcon;
+    /*private Image attIcon;
     private Image hrIcon;
     private Image attIconB;
-    private Image hrIconB;
+    private Image hrIconB;*/
+
+    private Text myForecastUI;
+    private Text enemyForecastUI;
+    private Text myForecastStatsUI;
+    private Text enemyForecastStatsUI;
 
     // Profile Pic
     private CanvasGroup canvasC;
-    private RawImage profile;
-
-    private Text meAttUI;
-    private Text enemyAttUI;
+    private RawImage displayProfile;
+    public Texture[] profiles = new Texture[5];
+    private Rect defaultRect;
+   
 
     private Unit currUnit;
     private Unit selectedUnit;
@@ -39,27 +44,35 @@ public class StatsUI : MonoBehaviour {
         EventManager.StartListening("GetStats", GetStats);
         EventManager.StartListening("RemoveStats", RemoveStats);
         EventManager.StartListening("SelectUnitStats", SelectUnitStats);
-        EventManager.StartListening("AttackUnitStats", AttackUnitStats);
+        EventManager.StartListening("AttackUnitStatsON", AttackUnitStatsON);
+        EventManager.StartListening("AttackUnitStatsOFF", AttackUnitStatsOFF);
+        EventManager.StartListening("HealUnitStatsON", HealUnitStatsON);
+        EventManager.StartListening("HealUnitStatsOFF", HealUnitStatsOFF);
 
         // Obtains the various components under the UI prefab
         // Note that components need to be in order (aka don't change the order in Inspector)
+
+        // Canvas A: Healthbar,stats,name
         canvasA = this.GetComponentsInChildren<CanvasGroup>()[0];
         displayName = this.GetComponentsInChildren<Text>()[0];
         displayStats = this.GetComponentsInChildren<Text>()[1];
         healthBar = this.GetComponentInChildren<Slider>();
 
+        // Canvas B: Battle/Heal Forecast
         canvasB = this.GetComponentsInChildren<CanvasGroup>()[1];
-        enemyProfile = this.GetComponentsInChildren<RawImage>()[1];
+        enemyProfile = this.GetComponentsInChildren<RawImage>()[0];
         /*attIcon = this.GetComponentsInChildren<Image>()[0];
         attIconB = this.GetComponentsInChildren<Image>()[1];
         hrIcon = this.GetComponentsInChildren<Image>()[2];
         hrIconB = this.GetComponentsInChildren<Image>()[3];*/
-        meAttUI = this.GetComponentsInChildren<Text>()[2];
-        enemyAttUI = this.GetComponentsInChildren<Text>()[3];
+        myForecastUI = this.GetComponentsInChildren<Text>()[2];
+        enemyForecastUI = this.GetComponentsInChildren<Text>()[3];
+        myForecastStatsUI = this.GetComponentsInChildren<Text>()[4];
+        enemyForecastStatsUI = this.GetComponentsInChildren<Text>()[5];
 
+        // Canvas C: My profile pic
         canvasC = this.GetComponentsInChildren<CanvasGroup>()[2];
-        profile = this.GetComponentsInChildren<RawImage>()[0];
-
+        displayProfile = this.GetComponentsInChildren<RawImage>()[1];
 
         OffUI();
     }
@@ -79,10 +92,12 @@ public class StatsUI : MonoBehaviour {
     * v1.2
     * Added Battle Forecast. Note a minor bug, where the battleforecast will run once before the unit deselects itself.
     * 
+    * v1.3
+    * Added Heal Forecast and Profile Functionality Expanded Battle Forecast.
     * 
     * @author Wayne Neo
-    * @version 1.2
-    * @updated on 10/7/17
+    * @version 1.3
+    * @updated on 19/7/17
     */
     void GetStats()
     {
@@ -108,23 +123,165 @@ public class StatsUI : MonoBehaviour {
 
         if (unitIsAttacking) //Battle forecast
         {
-            // Copied from BattleFormula
-            int dmgtoMe = Grid.instance.battle.battleForecast(currUnit, selectedUnit);
-            int dmgtoEnemy = Grid.instance.battle.battleForecast(selectedUnit, currUnit);
-            int attackerAcc = selectedUnit.weaponAcc + selectedUnit.skl * 2 + selectedUnit.luk / 2;
-            int attackerAvd = selectedUnit.spd * 2 + selectedUnit.luk + Grid.instance.map[(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x][(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y].linkedTerrain.returnAvd();
-            int defenderAcc = currUnit.weaponAcc + currUnit.skl * 2 + currUnit.luk / 2;
-            int defenderAvd = currUnit.spd * 2 + currUnit.luk + Grid.instance.map[(int)currUnit.gridPosition.x][(int)currUnit.gridPosition.y].linkedTerrain.returnAvd();
+            if (currUnit != selectedUnit && !(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].allies.Contains(currUnit.team)))
+            {
+                // Copied from BattleFormula
+                int dmgtoMe = Grid.instance.battle.battleForecast(currUnit, selectedUnit);
+                int dmgtoEnemy = Grid.instance.battle.battleForecast(selectedUnit, currUnit);
+                int attackerAcc = selectedUnit.weaponAcc + selectedUnit.skl * 2 + selectedUnit.luk / 2;
+                int attackerAvd = selectedUnit.spd * 2 + selectedUnit.luk + Grid.instance.map[(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x][(int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y].linkedTerrain.returnAvd();
+                int defenderAcc = currUnit.weaponAcc + currUnit.skl * 2 + currUnit.luk / 2;
+                int defenderAvd = currUnit.spd * 2 + currUnit.luk + Grid.instance.map[(int)currUnit.gridPosition.x][(int)currUnit.gridPosition.y].linkedTerrain.returnAvd();
 
-            int myHr = attackerAcc - defenderAvd;
-            int enemyHr = defenderAcc - attackerAvd;
+                int myHr = Mathf.Min(attackerAcc - defenderAvd,100);
+                int enemyHr = Mathf.Min(defenderAcc - attackerAvd,100);
 
-            meAttUI.text = (dmgtoEnemy.ToString() + "\n" + myHr.ToString());
-            enemyAttUI.text = (dmgtoMe.ToString() + "\n" + enemyHr.ToString());
-            OnForecast();
+                int attackerCritRate = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].weaponCrit + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].skl / 2;
+                int attackerCritAvd = Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].luk;
+                int defenderCritRate = currUnit.weaponCrit + currUnit.skl / 2;
+                int defenderCritAvd = currUnit.luk;
+                int myCrit = Mathf.Max(attackerCritRate - defenderCritAvd, 0);
+                int enemyCrit = Mathf.Max(defenderCritRate - attackerCritAvd, 0);
+
+                myForecastUI.text = (selectedUnit.currentHP).ToString() + " => " + Mathf.Max((selectedUnit.currentHP - dmgtoMe),0).ToString();
+                enemyForecastUI.text = (currUnit.currentHP).ToString() + " => " + Mathf.Max((currUnit.currentHP - dmgtoEnemy), 0).ToString();
+              
+                if (myHr == 100)
+                {
+                    if (selectedUnit.spd - currUnit.spd >= 4)
+                    {
+                        myForecastStatsUI.text = selectedUnit.inventory[selectedUnit.equippedIndex][1] + " (x2)" + "\n" + myHr.ToString() + "%\t\t" + myCrit.ToString() + "%";
+                    }
+                    else
+                    {
+                        myForecastStatsUI.text = selectedUnit.inventory[selectedUnit.equippedIndex][1] + "\n" + myHr.ToString() + "%\t\t" + myCrit.ToString() + "%";
+                    }
+                }
+                else
+                {
+                    if (selectedUnit.spd - currUnit.spd >= 4)
+                    {
+                        myForecastStatsUI.text = "\t" + selectedUnit.inventory[selectedUnit.equippedIndex][1] + " (x2)" + "\n" + myHr.ToString() + "%\t\t\t" + myCrit.ToString() + "%";
+                    }
+                    else
+                    {
+                        myForecastStatsUI.text = "\t" + selectedUnit.inventory[selectedUnit.equippedIndex][1] + "\n" + myHr.ToString() + "%\t\t\t" + myCrit.ToString() + "%";
+                    }
+                }
+                if (enemyHr == 100)
+                {
+                    if (currUnit.spd - selectedUnit.spd >= 4)
+                    {
+                        enemyForecastStatsUI.text = currUnit.inventory[currUnit.equippedIndex][1] + " (x2)" + "\n" + enemyCrit.ToString() + "%\t\t" + enemyHr.ToString() + "%";
+                    }
+                    else
+                    {
+                        enemyForecastStatsUI.text = currUnit.inventory[currUnit.equippedIndex][1] + "\n" + enemyCrit.ToString() + "%\t\t" + enemyHr.ToString() + "%";
+                    }
+                }
+                else
+                {
+                    if (currUnit.spd - selectedUnit.spd >= 4)
+                    {
+                        enemyForecastStatsUI.text = "\t" + currUnit.inventory[currUnit.equippedIndex][1] + " (x2)" + "\n" + enemyCrit.ToString() + "%\t\t\t" + enemyHr.ToString() + "%";
+                    }
+                    else
+                    {
+                        enemyForecastStatsUI.text = "\t" + currUnit.inventory[currUnit.equippedIndex][1] + "\n" + enemyCrit.ToString() + "%\t\t\t" + enemyHr.ToString() + "%";
+                    }
+                }
+
+                if (currUnit.unitName.Equals("Naive Prince"))
+                {
+                    enemyProfile.texture = profiles[0];
+                    enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Kind Soul"))
+                {
+                    enemyProfile.texture = profiles[1];
+                    enemyProfile.uvRect = new Rect(0.55f, 0.3f, 0.4f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Young Rebel"))
+                {
+                    enemyProfile.texture = profiles[2];
+                    enemyProfile.uvRect = new Rect(0.67f, 0.38f, 0.28f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Black Heart"))
+                {
+                    enemyProfile.texture = profiles[3];
+                    enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader"))
+                {
+                    enemyProfile.texture = profiles[4];
+                    enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+                }
+
+                OnForecastAttack();
+            }
+        }
+        else if (unitIsHealing) //Heal forecast
+        {
+            if (currUnit != selectedUnit && (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].allies.Contains(currUnit.team)))
+            {
+                int amtHealed = int.Parse(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex][8]) + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag;
+                myForecastUI.text = "Healing";
+                myForecastStatsUI.text = " ";
+                enemyForecastUI.text = currUnit.currentHP + " => " + Mathf.Min(currUnit.currentHP + amtHealed, currUnit.maxHP).ToString();
+                enemyForecastStatsUI.text = " ";
+
+                if (currUnit.unitName.Equals("Naive Prince"))
+                {
+                    enemyProfile.texture = profiles[0];
+                    enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Kind Soul"))
+                {
+                    enemyProfile.texture = profiles[1];
+                    enemyProfile.uvRect = new Rect(0.55f, 0.3f, 0.4f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Young Rebel"))
+                {
+                    enemyProfile.texture = profiles[2];
+                    enemyProfile.uvRect = new Rect(0.67f, 0.38f, 0.28f, 0.55f);
+                }
+                else if (currUnit.unitName.Equals("Black Heart"))
+                {
+                    enemyProfile.texture = profiles[3];
+                    enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+                }
+                
+                OnForecastHeal();
+            }
         }
         else //Normal hover
         {
+            if (currUnit.unitName.Equals("Naive Prince"))
+            {
+                displayProfile.texture = profiles[0];
+                displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+            }
+            else if (currUnit.unitName.Equals("Kind Soul"))
+            {
+                displayProfile.texture = profiles[1];
+                displayProfile.uvRect = new Rect(0.55f, 0.3f, 0.4f, 0.55f);
+            }
+            else if (currUnit.unitName.Equals("Young Rebel"))
+            {
+                displayProfile.texture = profiles[2];
+                displayProfile.uvRect = new Rect(0.67f, 0.38f, 0.28f, 0.55f);
+            }
+            else if (currUnit.unitName.Equals("Black Heart"))
+            {
+                displayProfile.texture = profiles[3];
+                displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+            }
+            else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader"))
+            {
+                displayProfile.texture = profiles[4];
+                displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+            }
+
             displayName.text = currUnit.unitName;
             healthBar.value = Mathf.Floor(((float)currUnit.currentHP / (float)currUnit.maxHP) * 100);
             displayStats.text = "HP = " + currUnit.currentHP.ToString() + "/" + currUnit.maxHP.ToString() + " STR = " + currUnit.strength.ToString() + " MAG = " + currUnit.mag.ToString() + " SKL = " + currUnit.skl.ToString() + "\n"
@@ -134,13 +291,16 @@ public class StatsUI : MonoBehaviour {
 
     }
     /**
-     * Called when the mouse no longer hovers over a unit
+     * EventManager: Called when the mouse no longer hovers over a unit
      * 
      * v1.1
      * Now stays when a unit is selected
      * 
+     * v1.2
+     * Updated for profile change
+     * 
      * @author Wayne Neo
-     * @version 1.1
+     * @version 1.2
      * @updated on 9/7/17
      */
     void RemoveStats()
@@ -151,6 +311,28 @@ public class StatsUI : MonoBehaviour {
         }
         else
         {
+            if (selectedUnit.unitName.Equals("Naive Prince"))
+            {
+                displayProfile.texture = profiles[0];
+                displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+            }
+            else if (selectedUnit.unitName.Equals("Kind Soul"))
+            {
+                displayProfile.texture = profiles[1];
+                displayProfile.uvRect = new Rect(0.55f, 0.3f, 0.4f, 0.55f);
+            }
+            else if (selectedUnit.unitName.Equals("Young Rebel"))
+            {
+                displayProfile.texture = profiles[2];
+                displayProfile.uvRect = new Rect(0.67f, 0.38f, 0.28f, 0.55f);
+            }
+            else if (selectedUnit.unitName.Equals("Black Heart"))
+            {
+                displayProfile.texture = profiles[3];
+                displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+            }
+
+
             displayName.text = selectedUnit.unitName;
             healthBar.value = Mathf.Floor(((float)selectedUnit.currentHP / (float)selectedUnit.maxHP) * 100);
             displayStats.text = "HP = " + selectedUnit.currentHP.ToString() + "/" + selectedUnit.maxHP.ToString() + " STR = " + selectedUnit.strength.ToString() + " MAG = " + selectedUnit.mag.ToString() + " SKL = " + selectedUnit.skl.ToString() + "\n"
@@ -161,7 +343,7 @@ public class StatsUI : MonoBehaviour {
     }
 
     /**
-    * Sets the most recent Unit hovered to be the 'selected' unit to remember, switches the listening as well
+    * EventManager: Sets the most recent Unit hovered to be the 'selected' unit to remember, switches the listening as well
     * 
     * @author Wayne Neo
     * @version 1.0
@@ -176,7 +358,7 @@ public class StatsUI : MonoBehaviour {
     }
 
     /**
-    * Deactivates UI, switches the listening as well
+    * EventManager: Deactivates UI, switches the listening as well
     * 
     * v1.1
     * Added attacking and healing resets
@@ -196,19 +378,55 @@ public class StatsUI : MonoBehaviour {
     }
 
     /**
-    * Updates bool for GetStats
+    * EventManager: Updates bool for GetStats
     * 
     * @author Wayne Neo
     * @version 1.0
     * @updated on 10/7/17
     */
-    void AttackUnitStats()
+    void AttackUnitStatsON()
     {
-        unitIsAttacking = !unitIsAttacking;
+        unitIsAttacking = true;
     }
 
     /**
-    * Deactivates UI
+    * EventManager: Updates bool for GetStats
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 10/7/17
+    */
+    void AttackUnitStatsOFF()
+    {
+        unitIsAttacking = false;
+    }
+
+    /**
+    * EventManager: Updates bool for GetStats
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 19/7/17
+    */
+    void HealUnitStatsON()
+    {
+        unitIsHealing = true;
+    }
+
+    /**
+    * EventManager: Updates bool for GetStats
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 19/7/17
+    */
+    void HealUnitStatsOFF()
+    {
+        unitIsHealing = false;
+    }
+
+    /**
+    * Deactivates All UI
     * 
     * 
     * @author Wayne Neo
@@ -236,13 +454,27 @@ public class StatsUI : MonoBehaviour {
         canvasC.alpha = 1f;
     }
     /**
-    * Activates Forecast UI
+    * Activates Forecast UI for attacking
     * 
     * @author Wayne Neo
     * @version 1.0
     * @updated on 10/7/17
     */
-    private void OnForecast()
+    private void OnForecastAttack()
+    {
+        canvasA.alpha = 0f;
+        canvasB.alpha = 1f;
+        canvasC.alpha = 1f;
+    }
+
+    /**
+    * Activates Forecast UI for healing
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 10/7/17
+    */
+    private void OnForecastHeal()
     {
         canvasA.alpha = 0f;
         canvasB.alpha = 1f;

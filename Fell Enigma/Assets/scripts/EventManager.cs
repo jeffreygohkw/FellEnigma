@@ -86,7 +86,7 @@ public class EventManager : MonoBehaviour {
         }
         else
         {
-            Debug.LogError("This event doesn't exist!");
+            Debug.LogError("This event" + eventName + "doesn't exist!");
         }
     }
 }
