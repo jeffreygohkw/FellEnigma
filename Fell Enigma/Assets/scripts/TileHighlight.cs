@@ -178,6 +178,7 @@ public class TileHighlight {
 	 * @param maxAttack The maximum attack range of the unit
 	 * @param allies A list containing the allied teams of the current unit
 	 * @param attacking Whether the unit is attacking or not
+	 * @param flying Whether the unit is flying or not
 	 * @author Jeffrey Goh
 	 * @version v1.0
 	 * @updated 12/6/2017
@@ -230,6 +231,41 @@ public class TileHighlight {
 	}
 
 	/**
+	 * Uses Find Highlight to return a List of Tiles containing capturable cities
+	 * For AI usage mainly
+	 * 
+	 * @param originTile The tile our unit is on
+	 * @param minrange The minimum move range of the unit
+	 * @param maxrange The maximum move range of the unit
+	 * @param allies A list containing the allied teams of the current unit
+	 * @param flying Whether the unit is glying or not
+	 * @author Jeffrey Goh
+	 * @version v1.0
+	 * @updated 19/7/2017
+	 */
+	public static List<Tile> FindCities(Tile originTile, int minRange, int maxRange, List<int> allies, bool flying)
+	{
+		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true, flying);
+
+		List<Tile> toReturn =  new List<Tile>();
+
+		// Dictionary of tiles
+		// Key is a tile that can be attacked
+		// The value is a list of the tiles that the unit can attack the key tile from
+		Dictionary<Tile, List<Tile>> targets = new Dictionary<Tile, List<Tile>>();
+
+		foreach (Tile t in moveRange)
+		{
+			if (t.linkedTerrain.returnName() == "Village" && Grid.instance.villageStatus[t.gridPosition][0] != Grid.instance.currentTeam)
+			{
+				toReturn.Add(t);
+			}
+		}
+		return toReturn;
+	}
+
+
+	/**
 	 * Uses Find Highlight to return a list of tiles that is in the total attack range of the unit
 	 * 
 	 * @param originTile The tile our unit is on
@@ -272,4 +308,5 @@ public class TileHighlight {
 		}
 		return output;
 	}
+
 }

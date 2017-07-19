@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class AIUnit : Unit
 {
-	Tile targetTile = null;
+	public Tile targetTile;
 	public Tile objectiveTile = null;
 	public Unit objectiveUnit = null;
 
@@ -98,19 +98,24 @@ public class AIUnit : Unit
 	*
 	* v1.2
 	* Added Passive and Stationary AI
+	* 
+	* v1.3
+	* Updated movement to fix rare bug
+	* 
 	* @author Jeffrey Goh
-	* @version 1.2
-	* @updated 24/6/2017
+	* @version 1.3
+	* @updated 19/7/2017
 	*/
 	public override void turnUpdate()
 	{
 		if (positionQueue.Count > 0)
 		{
+
 			mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 
 			if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 			{
-				transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
+				transform.position = Vector3.MoveTowards(transform.position, (Vector3)positionQueue[0], moveSpeed * Time.deltaTime);
 				mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 				if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
 				{
@@ -133,6 +138,23 @@ public class AIUnit : Unit
 				isFighting = true;
 				Grid.instance.attackWithCurrentUnit(targetTile);
 			}
+			else if (foundCity)
+			{
+				if (Grid.instance.villageStatus[gridPosition][0] != team)
+				{
+					Grid.instance.villageStatus[gridPosition][1] -= 1;
+					Debug.Log("Capturing Village");
+					if (Grid.instance.villageStatus[gridPosition][1] == 0)
+					{
+						//Convert the village to your side
+						Grid.instance.villageStatus[gridPosition][0] = team;
+						Grid.instance.villageStatus[gridPosition][1] = 2;
+						Debug.Log("Village has been captured.");
+					}
+					foundCity = false;
+					playerWait();
+				}
+			}
 			else
 			{
 				//End turn
@@ -150,26 +172,29 @@ public class AIUnit : Unit
 			if (ai_id == 0)
 			{
 				//Agressive AI
+				int tempMove = 1;
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], tempMove, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
 				while (true)
 				{
 					// Find all enemies within range
-					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], tempMove, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
-					Debug.Log("In Range: " + enemiesInRange.Count);
+					//Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
 					if (target == null)
 					{
+						tempMove = tempMov;
 						tempMov++;
 						continue;
 					}
 					else if (target[0] == null)
 					{
+						tempMove = tempMov;
 						tempMov++;
 						continue;
 					}
@@ -262,7 +287,7 @@ public class AIUnit : Unit
 				// Find all enemies within range
 				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
-				Debug.Log("In Range: " + enemiesInRange.Count);
+				//Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
 
 				if (target == null)
@@ -296,7 +321,7 @@ public class AIUnit : Unit
 					// Find all enemies within range
 					enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
-					Debug.Log("In Range: " + enemiesInRange.Count);
+					//Debug.Log("In Range: " + enemiesInRange.Count);
 					target = chooseTarget(enemiesInRange);
 					if (target == null)
 					{
@@ -356,6 +381,63 @@ public class AIUnit : Unit
 						// Otherwise, approach as close as possible
 
 						List<Tile> possibilities = TileHighlight.FindHighlight(target[0], distanceTo, distanceTo, allies, true, isFlying);
+
+						foreach (Tile t in possibilities)
+						{
+							if (available.Contains(t))
+							{
+								isMoving = true;
+								doneMoving = true;
+								Grid.instance.moveCurrentUnit(t);
+								return;
+							}
+						}
+						distanceTo++;
+					}
+				}
+			}
+			else if (ai_id == 4)
+			{
+				//City seeking AI
+				int tempMove = 1;
+				int tempMov = mov;
+				// Find all enemies within range
+				List<Tile> citiesInRange = TileHighlight.FindCities(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], tempMove, tempMov, allies, isFlying);
+
+				// Find the best target to approach
+				while (true)
+				{
+					// Find all enemies within range
+					citiesInRange = TileHighlight.FindCities(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], tempMove, tempMov, allies, isFlying);
+
+					if (citiesInRange.Count == 0)
+					{
+						tempMove = tempMov;
+						tempMov++;
+						continue;
+					}
+					else
+					{
+						break;
+					}
+					
+				}
+				if (tempMove == 1)
+				{
+					isMoving = true;
+					doneMoving = true;
+					Grid.instance.moveCurrentUnit(citiesInRange[0]);
+					foundCity = true;
+				}
+				else
+				{
+					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true, isFlying);
+					int distanceTo = 1;
+					while (true)
+					{
+						// Otherwise, approach as close as possible
+
+						List<Tile> possibilities = TileHighlight.FindHighlight(citiesInRange[0], distanceTo, distanceTo, allies, true, isFlying);
 
 						foreach (Tile t in possibilities)
 						{
@@ -491,6 +573,32 @@ public class AIUnit : Unit
 			// If there are no enemies in range to begin with, return null
 			return null;
 		}
+	}
+
+	/**
+	* Makes the current unit wait
+	* Done to avoid typing this out every time
+	* @author Jeffrey Goh
+	* @version 1.0
+	* @updated 11/7/2017
+	*/
+	public override void playerWait()
+	{
+		Grid.instance.removeTileHighlight();
+		isMoving = false;
+		isFighting = false;
+		isHealing = false;
+		activeStaffIndex = -1;
+		doneAction = true;
+		selected = false;
+		displayInventory = false;
+		selectedItemIndex = -1;
+		isTalking = false;
+
+		Grid.instance.totalDone++;
+		Grid.instance.currentPlayer = -1;
+
+		base.playerWait();
 	}
 
 	private void OnMouseDown()

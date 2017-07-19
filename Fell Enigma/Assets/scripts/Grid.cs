@@ -123,7 +123,6 @@ public class Grid : MonoBehaviour {
 		List<Tile> dangerRange = new List<Tile>();
 		foreach (Unit u in highlightedEnemies)
 		{
-			Debug.Log("C" + highlightedEnemies.Count);
 			List<Tile> enemiesInRange = TileHighlight.FindAttackRange(Grid.instance.map[(int)u.gridPosition.x][(int)u.gridPosition.y], 1, u.mov, u.weaponMinRange, u.weaponMaxRange + u.weaponRangeBuff, u.allies, true, u.isFlying);
 			foreach (Tile t in enemiesInRange)
 			{
@@ -278,7 +277,7 @@ public class Grid : MonoBehaviour {
 			{
 				if (villageStatus[k][0] == 0)
 				{
-					gold += 200;
+					gold += 100;
 					if (gold > goldCap)
 					{
 						gold = goldCap;
@@ -345,8 +344,10 @@ public class Grid : MonoBehaviour {
 
 			// Get the path from the unit's current position to its final position
 			List <Tile> path = TilePathFinder.FindPath(map[(int)units[currentTeam][currentPlayer].gridPosition.x][(int)units[currentTeam][currentPlayer].gridPosition.y], units[currentTeam][currentPlayer].mov, map[(int)destTile.gridPosition.x][(int)destTile.gridPosition.y], units[currentTeam][currentPlayer].allies, Grid.instance.units[currentTeam][currentPlayer].isFlying).tileList;
+			//Debug.Log("Start");
 			foreach (Tile t in path)
 			{
+				//Debug.Log(t.gridPosition.x + " " + t.gridPosition.y);
 				units[currentTeam][currentPlayer].positionQueue.Add(map[(int)t.gridPosition.x][(int)t.gridPosition.y].transform.position);
 			}
 			// Set gridPosition of the unit to the destination tile
@@ -497,6 +498,7 @@ public class Grid : MonoBehaviour {
 					}
 				}
 			}
+
 		}
 	}
 
@@ -535,10 +537,13 @@ public class Grid : MonoBehaviour {
 	/**
 	* Talk to the target unit
 	* 
+	* v1.1
+	* Bug fixes
+	* 
 	* @param target destTile The tile our target is on
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 9/7/2017
+	* @version 1.1
+	* @updated 19/7/2017
 	*/
 	public void talkWithCurrentUnit(Unit target)
 	{
@@ -546,10 +551,10 @@ public class Grid : MonoBehaviour {
 		{
 			return;
 		}
-		else if (target.canTalk.ContainsKey(units[currentPlayer][currentTeam].unitName))
+		else if (target.canTalk.ContainsKey(units[currentTeam][currentPlayer].unitName))
 		{
 			//Recruit
-			if (target.canTalk[units[currentPlayer][currentTeam].unitName] == 0)
+			if (target.canTalk[units[currentTeam][currentPlayer].unitName] == 0)
 			{
 				PlayerUnit recruit = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(target.gridPosition.x - Mathf.Floor(Grid.instance.tilesPerCol / 2), target.gridPosition.y - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
 				recruit.gridPosition = new Vector2(target.gridPosition.x, target.gridPosition.y);
@@ -628,8 +633,12 @@ public class Grid : MonoBehaviour {
 				units[target.team].RemoveAt(target.index);
 
 				units[currentTeam][currentPlayer].playerWait();
-				Debug.Log(recruit.unitName + "has joined!");
+				Debug.Log(recruit.unitName + " has joined!");
 			}
+		}
+		else
+		{
+			Debug.Log("Can't talk");
 		}
 	}
 
@@ -643,6 +652,7 @@ public class Grid : MonoBehaviour {
     */
 	public void castUlt()
 	{
+		ultCharge = 0;
 		if (commander == 0)
 		{
 			//MC

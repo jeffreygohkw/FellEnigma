@@ -60,11 +60,14 @@ public class TavernUnits : MonoBehaviour {
 	* v1.1
 	* Added increased stats if a unit is spawned at a higher level
 	* 
+	* v1.2
+	* Fixed bug with mov and con
+	* 
 	* @param unitClass The class of the unit to spawn
 	* @param tavernLocation The tavern this unit is being requested to spawn from
 	* @author Jeffrey Goh
-	* @version 1.1
-	* @updated 15/7/2017
+	* @version 1.2
+	* @updated 19/7/2017
 	*/
 	public static void tavernSpawn(string unitClass, Vector2 tavernLocation)
 	{
@@ -92,8 +95,8 @@ public class TavernUnits : MonoBehaviour {
 						unit1.luk = (int)(double.Parse(tavernUnits[unitClass][2][5]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][5]) * 0.01);
 						unit1.def = (int)(double.Parse(tavernUnits[unitClass][2][6]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][6]) * 0.01);
 						unit1.res = (int)(double.Parse(tavernUnits[unitClass][2][7]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][7]) * 0.01);
-						unit1.con = (int)(double.Parse(tavernUnits[unitClass][2][9]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][9]) * 0.01);
-						unit1.mov = (int)(double.Parse(tavernUnits[unitClass][2][8]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][8]) * 0.01);
+						unit1.con = int.Parse(tavernUnits[unitClass][2][9]);
+						unit1.mov = int.Parse(tavernUnits[unitClass][2][8]);
 
 						unit1.hpG = int.Parse(tavernUnits[unitClass][3][0]);
 						unit1.strG = int.Parse(tavernUnits[unitClass][3][1]);

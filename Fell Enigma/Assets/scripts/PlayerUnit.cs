@@ -93,10 +93,14 @@ public class PlayerUnit : Unit
 	* 
 	* v1.3
 	* Added compatibility for undo move, units can now only move once per turn
+	* 
+	* v1.4
+	* Updated movement to fix rare bug
+	* 
 	* @param destTile The destination tile
 	* @author Jeffrey Goh
-	* @version 1.3
-	* @updated 2/7/2017
+	* @version 1.4
+	* @updated 19/7/2017
 	*/
 	public override void turnUpdate()
 	{
@@ -107,7 +111,7 @@ public class PlayerUnit : Unit
 			{
 				if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 				{
-					transform.position += ((Vector3)positionQueue[0] - transform.position).normalized * moveSpeed * Time.deltaTime;
+					transform.position = Vector3.MoveTowards(transform.position, (Vector3)positionQueue[0], moveSpeed * Time.deltaTime);
 
 					if (Vector3.Distance(positionQueue[0], transform.position) <= 0.1f)
 					{
@@ -276,10 +280,13 @@ public class PlayerUnit : Unit
 	 * v1.2
 	 * Prints a line when a consumable is used
 	 * 
+	 * v1.3
+	 * Fixed bug where unit doesn't wait after items are used
+	 * 
 	 * @param index index of the item
 	 * @author Jeffrey Goh
-	 * @version 1.2
-	 * @updated 16/7/2017
+	 * @version 1.3
+	 * @updated 19/7/2017
 	 */
 	public void useItem(int index)
 	{
@@ -311,14 +318,12 @@ public class PlayerUnit : Unit
 						Grid.instance.removeTileHighlight();
 					}
 					Debug.Log(activeStaffIndex);
-
 				}
 				else
 				{
 					Debug.Log(unitName + " cannot use staves!");
 					CombatLog.instance.AddEvent(unitName + " cannot use staves!");
 					CombatLog.instance.PrintEvent();
-
 				}
 			}
 			else if (inventory[index][0] == "StatBoost")
@@ -372,6 +377,7 @@ public class PlayerUnit : Unit
                 EventManager.TriggerEvent("ItemUIOFF");
                 discardItem(index);
 				selectedItemIndex = -1;
+				playerWait();
 			}
 			else if (inventory[index][0] == "Consumable")
 			{
@@ -393,6 +399,7 @@ public class PlayerUnit : Unit
 					CombatLog.instance.PrintEvent();
 					discardItem(index);
 					selectedItemIndex = -1;
+					playerWait();
                     EventManager.TriggerEvent("ItemUIOFF");
                 }
 			}
@@ -656,7 +663,6 @@ public class PlayerUnit : Unit
 				//Visit
 				if (GUI.Button(buttonRect, "Capture"))
 				{
-					// Check if reward is gold
 					if (Grid.instance.villageStatus[gridPosition][0] != team)
 					{
 						Grid.instance.villageStatus[gridPosition][1] -= 1;
@@ -668,6 +674,7 @@ public class PlayerUnit : Unit
 							Grid.instance.villageStatus[gridPosition][1] = 2;
 							Debug.Log("Village has been captured.");
 						}
+						playerWait();
 					}
 					else
 					{
@@ -1219,7 +1226,6 @@ public class PlayerUnit : Unit
     {
         if (selected && !doneAction)
         {
-            // Check if reward is gold
             if (Grid.instance.villageStatus[gridPosition][0] != team)
             {
                 Grid.instance.villageStatus[gridPosition][1] -= 1;
@@ -1231,6 +1237,7 @@ public class PlayerUnit : Unit
                     Grid.instance.villageStatus[gridPosition][1] = 2;
                     Debug.Log("Village has been captured.");
                 }
+				playerWait();
             }
             else
             {

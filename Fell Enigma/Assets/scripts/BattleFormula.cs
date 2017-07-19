@@ -216,25 +216,15 @@ public class BattleFormula
 					Debug.Log(target.unitName + " has died!");
                     CombatLog.instance.AddEvent(target.unitName + " has died!");
 
-					// Deactivate menu GUI and set unit to not attacking after the attack
-					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
-					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-					Grid.instance.totalDone++;
-
 					// Add exp if attacker is a PlayerUnit
 					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
 					{
 						this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, true);
 					}
-					if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-					{
-						Grid.instance.currentPlayer = -1;
-					}
-					Grid.instance.removeTileHighlight();
 
-					
-
+					// Deactivate menu GUI and set unit to not attacking after the attack
+					Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
+					CombatLog.instance.PrintEvent();
 					return;
 				}
 				else
@@ -294,24 +284,15 @@ public class BattleFormula
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
                         CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
 
+						// Add exp if attacker is a PlayerUnit
+						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, true);
+						}
+
 						// Deactivate menu GUI and set unit to not attacking after the attack
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-						Grid.instance.totalDone++;
-
-						// Add exp if target is a PlayerUnit
-						if (target is PlayerUnit)
-						{
-							this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], defenderDmg, true);
-						}
-						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-						{
-							Grid.instance.currentPlayer = -1;
-						}
-						Grid.instance.removeTileHighlight();
-
-						
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
+						CombatLog.instance.PrintEvent();
 						return;
 					}
 					else
@@ -377,26 +358,16 @@ public class BattleFormula
 						Debug.Log(target.unitName + " has died!");
                         CombatLog.instance.AddEvent(target.unitName + " has died!");
 
-						// Deactivate menu GUI and set unit to not attacking after the attack
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-						Grid.instance.totalDone++;
-
 						// Add exp if attacker is a PlayerUnit
 						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
 						{
-							this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, 2 * attackerDmg, true);
+							this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, true);
 						}
 
-						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-						{
-							Grid.instance.currentPlayer = -1;
-						}
-						Grid.instance.removeTileHighlight();
+						// Deactivate menu GUI and set unit to not attacking after the attack
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
 
-						
-
+						CombatLog.instance.PrintEvent();
 						return;
 					}
 					else
@@ -406,7 +377,7 @@ public class BattleFormula
 				}
 
 
-
+				// FOllowup Counter
 				if (target.currentHP > 0 && canCounter && defAS - atkAS >= 4)
 				{
 					Debug.Log(target.unitName + " does a follow up counterattack!");
@@ -467,26 +438,16 @@ public class BattleFormula
 					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP <= 0)
 					{
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP = 0;
-						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
-                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has died!");
+
+						// Add exp if attacker is a PlayerUnit
+						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							this.battleEXP(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], target, attackerDmg, true);
+						}
 
 						// Deactivate menu GUI and set unit to not attacking after the attack
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-						Grid.instance.totalDone++;
-						// Add exp if target is a PlayerUnit
-						if (target is PlayerUnit)
-						{
-							this.battleEXP(target, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer], 2 * defenderDmg, true);
-						}
-
-						if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-						{
-							Grid.instance.currentPlayer = -1;
-						}
-						Grid.instance.removeTileHighlight();
-                        CombatLog.instance.PrintEvent();
+						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
+						CombatLog.instance.PrintEvent();
                         return;
 					}
 					else
@@ -524,16 +485,10 @@ public class BattleFormula
 					}
 				}
 			}
-			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting = false;
-			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-			Grid.instance.totalDone++;
-			if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-			{
-				Grid.instance.currentPlayer = -1;
-			}
-			Grid.instance.removeTileHighlight();
-            CombatLog.instance.PrintEvent();
+
+			// Deactivate menu GUI and set unit to not attacking after the attack
+			Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
+			CombatLog.instance.PrintEvent();
             return;
 		}
 		else
@@ -1085,15 +1040,7 @@ public class BattleFormula
 						statup = 0;
 					}
 				}
-				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].selected = false;
-				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing = false;
-				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex = -1;
-				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].doneAction = true;
-				Grid.instance.totalDone++;
-				if (!Grid.instance.AITeams.Contains(Grid.instance.currentTeam))
-				{
-					Grid.instance.currentPlayer = -1;
-				}
+				Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
 				Grid.instance.removeTileHighlight();
                 CombatLog.instance.PrintEvent();
                 return;

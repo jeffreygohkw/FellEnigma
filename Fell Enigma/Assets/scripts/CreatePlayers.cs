@@ -552,14 +552,14 @@ public class CreatePlayers : MonoBehaviour {
 			enemy1.classBonusB = 0;
 			enemy1.lvl = 1;
 			enemy1.exp = 0;
-			enemy1.maxHP = 20;
+			enemy1.maxHP = 18;
 			enemy1.currentHP = 20;
 			enemy1.strength = 5;
 			enemy1.mag = 0;
-			enemy1.skl = 1;
+			enemy1.skl = 0;
 			enemy1.spd = 5;
 			enemy1.luk = 0;
-			enemy1.def = 3;
+			enemy1.def = 1;
 			enemy1.res = 0;
 			enemy1.con = 12;
 			enemy1.mov = 5;
@@ -605,10 +605,9 @@ public class CreatePlayers : MonoBehaviour {
 			enemy2.allies.Add(1);
 			enemy2.index = 3;
 
-			AIUnit enemy3 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(9 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 4 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-			enemy3.gridPosition = new Vector2(9, 4);
-			enemy3.ai_id = 3;
-			enemy3.objectiveTile = Grid.instance.map[9][1];
+			AIUnit enemy3 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(18 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 4 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy3.gridPosition = new Vector2(18, 4);
+			enemy3.ai_id = 4;
 
 			enemy3.unitName = "Bandit Leader";
 			enemy3.job = "Bandit";
@@ -631,7 +630,7 @@ public class CreatePlayers : MonoBehaviour {
 			enemy3.proficiency.Add("Axe");
 			Item.instance.equipWeapon(enemy3, "Axe", "IronAxe");
 
-			Grid.instance.map[9][4].occupied = enemy3;
+			Grid.instance.map[18][4].occupied = enemy3;
 
 			enemy3.team = 1;
 			enemy3.allies.Add(1);
