@@ -933,6 +933,8 @@ public class PlayerUnit : Unit
 
 				Grid.instance.nextTurn();
 				Grid.instance.currentPlayer = -1;
+
+
 			}
 			base.OnGUI();
             

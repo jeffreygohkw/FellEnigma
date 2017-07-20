@@ -84,6 +84,10 @@ public class TavernUnits : MonoBehaviour {
 
 						unit1.unitName = "Mercenary";
 						unit1.job = unitClass;
+						if (unitClass == "SkyKnight" || unitClass == "Dragoon")
+						{
+							unit1.isFlying = true;
+						}
 						unit1.lvl = Grid.instance.tavernLevel;
 						unit1.exp = 0;
 						unit1.maxHP = (int)(double.Parse(tavernUnits[unitClass][2][0]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][0]) * 0.01);

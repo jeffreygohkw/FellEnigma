@@ -169,7 +169,7 @@ public class AIUnit : Unit
 				int tempMove = 1;
 				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], tempMove, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+				Dictionary<Tile, List<Tile>> enemiesInRange;
 				List<Tile> target = new List<Tile>();
 
 				// Find the best target to approach
@@ -405,6 +405,22 @@ public class AIUnit : Unit
 						return;
 					}
 				}
+
+				bool allCaptured = true;
+				foreach (Vector2 v in Grid.instance.villageStatus.Keys)
+				{
+					if (Grid.instance.villageStatus[v][0] != Grid.instance.currentTeam)
+					{
+						allCaptured = false;
+						break;
+					}
+				}
+
+				// IF there are no more available cities to capture, change to another ai type
+				if (allCaptured)
+				{
+					ai_id = ai_id_priority[1];
+				}
 				//City seeking AI
 				int tempMove = 1;
 				int tempMov = mov;
@@ -443,12 +459,10 @@ public class AIUnit : Unit
 							return;
 						}
 					}
-						Debug.Log("There");
-						ai_id = ai_id_priority[1];
+					ai_id = ai_id_priority[1];
 				}
 				else
 				{
-					Debug.Log("Here");
 					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true, isFlying);
 					int distanceTo = 1;
 					while (true)

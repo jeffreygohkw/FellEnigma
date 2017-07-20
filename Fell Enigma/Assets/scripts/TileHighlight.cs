@@ -396,6 +396,20 @@ public class TileHighlight {
 
 		List<Tile> toReturn =  new List<Tile>();
 
+		bool allCaptured = true;
+		foreach (Vector2 v in Grid.instance.villageStatus.Keys)
+		{
+			if (Grid.instance.villageStatus[v][0] != Grid.instance.currentTeam)
+			{
+				allCaptured = false;
+				break;
+			}
+		}
+
+		if (allCaptured)
+		{
+			return toReturn;
+		}
 		// Dictionary of tiles
 		// Key is a tile that can be attacked
 		// The value is a list of the tiles that the unit can attack the key tile from

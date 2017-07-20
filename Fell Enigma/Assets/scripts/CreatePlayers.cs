@@ -397,6 +397,7 @@ public class CreatePlayers : MonoBehaviour {
 			unit2.job = "Rogue";
 			unit2.isHero = true;
 			unit2.isThief = 1;
+			//unit2.isFlying = true;
 			unit2.lvl = 1;
 			unit2.exp = 0;
 			unit2.maxHP = 16;
