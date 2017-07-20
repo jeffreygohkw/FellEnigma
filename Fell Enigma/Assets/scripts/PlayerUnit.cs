@@ -27,13 +27,7 @@ public class PlayerUnit : Unit
             {
                 GetComponent<Renderer>().material.color = Color.grey;
                 if (!onceisEnough)
-                {
-                    EventManager.TriggerEvent("DeselectUnit");
-                    EventManager.TriggerEvent("DeselectUnitStats");
-                    EventManager.TriggerEvent("ItemUIOFF");
-                    EventManager.TriggerEvent("AttackUnitStatsOFF");
-                    EventManager.TriggerEvent("HealUnitStatsOFF");
-                    ActionOtherUI.instance.OffAllUI();
+                {   
                     EventManager.StopListening("MoveUnit", MoveUnit);
                     EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
                     EventManager.StopListening("AttackUnit", AttackUnit);
@@ -48,6 +42,8 @@ public class PlayerUnit : Unit
                     EventManager.StopListening("EquipUseItem", EquipUseItem);
                     EventManager.StopListening("DiscardItem", DiscardItem);
                     onceisEnough = true;
+
+                    EventManager.TriggerEvent("DeselectUnit");
                 }
             }
             else if (selected)
@@ -65,6 +61,7 @@ public class PlayerUnit : Unit
 			GetComponent<Renderer>().material.color = Color.grey;
 			lastPosition.Clear();
             onceisEnough = false;
+            EventManager.TriggerEvent("DeselectUnit");
         }
 
 		if (currentHP <= 0)
@@ -74,9 +71,8 @@ public class PlayerUnit : Unit
 
             //Object disappears if dead
             gameObject.SetActive(false);
-
-			//Turn the tile this unit was standing on free
-			Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
+            //Turn the tile this unit was standing on free
+            Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
 
 			if (Grid.instance.currentPlayer == index)
 			{
@@ -158,7 +154,7 @@ public class PlayerUnit : Unit
 					if (selected)
 					{
 						EventManager.TriggerEvent("SelectUnit");
-						EventManager.TriggerEvent("SelectUnitStats");
+
                         EventManager.StartListening("MoveUnit", MoveUnit);
                         EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
                         EventManager.StartListening("AttackUnit", AttackUnit);
@@ -176,11 +172,7 @@ public class PlayerUnit : Unit
 					else
 					{
 						EventManager.TriggerEvent("DeselectUnit");
-						EventManager.TriggerEvent("DeselectUnitStats");
-                        EventManager.TriggerEvent("ItemUIOFF");
-                        EventManager.TriggerEvent("HealUnitStatsOFF");
-                        EventManager.TriggerEvent("AttackUnitStatsOFF");
-                        ActionOtherUI.instance.OffAllUI();
+
                         EventManager.StopListening("MoveUnit", MoveUnit);
                         EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
                         EventManager.StopListening("AttackUnit", AttackUnit);
@@ -374,7 +366,6 @@ public class PlayerUnit : Unit
 					Debug.Log("Something's wrong with your stat booster");
 					return;
 				}
-                EventManager.TriggerEvent("ItemUIOFF");
                 discardItem(index);
 				selectedItemIndex = -1;
 				playerWait();
@@ -399,8 +390,8 @@ public class PlayerUnit : Unit
 					CombatLog.instance.PrintEvent();
 					discardItem(index);
 					selectedItemIndex = -1;
-					playerWait();
-                    EventManager.TriggerEvent("ItemUIOFF");
+                    playerWait();
+                    
                 }
 			}
 			else if (inventory[index][0] == "Key")
@@ -422,7 +413,6 @@ public class PlayerUnit : Unit
 							Debug.Log("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.AddEvent("Acquired " + Grid.instance.chestLoot[gridPosition][1]);
 							CombatLog.instance.PrintEvent();
-                            EventManager.TriggerEvent("ItemUIOFF");
                             playerWait();
 						}
 						else
@@ -446,7 +436,6 @@ public class PlayerUnit : Unit
 					{
 						//Discard Key
 						discardItem(selectedItemIndex);
-                        EventManager.TriggerEvent("ItemUIOFF");
                         playerWait();
 
 						Debug.Log("Door unlocked");
@@ -499,7 +488,6 @@ public class PlayerUnit : Unit
 					{
 						//Discard Key
 						discardItem(selectedItemIndex);
-                        EventManager.TriggerEvent("ItemUIOFF");
                         playerWait();
 
 						Debug.Log("Door unlocked");
@@ -585,6 +573,7 @@ public class PlayerUnit : Unit
 		selectedItemIndex = -1;
 		isTalking = false;
 
+        EventManager.TriggerEvent("DeselectUnit");
 		Grid.instance.totalDone++;
 		Grid.instance.currentPlayer = -1;
 
@@ -958,7 +947,7 @@ public class PlayerUnit : Unit
     * EventMangager: Activates Move function when the move button is pressed
     * 
     * v1.1
-    * updated to follow original
+    * Updated to follow original
     * 
     * @author Jeffery Goh
     * @version 1.1
@@ -1037,7 +1026,7 @@ public class PlayerUnit : Unit
      */
     void AttackUnit()
     {
-        if (selected && !doneAction)
+        if (selected && !doneAction && equippedIndex != -1)
         {
             displayInventory = false;
             selectedItemIndex = -1;
@@ -1045,6 +1034,9 @@ public class PlayerUnit : Unit
             isMoving = false;
             isHealing = false;
             activeStaffIndex = -1;
+            isTalking = false;
+            displayTavern = false;
+
 
             if (isFighting)
             {
@@ -1055,8 +1047,14 @@ public class PlayerUnit : Unit
             else
             {
                 isFighting = true;
-                Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange, false, isFlying);
+                Grid.instance.highlightTilesAt(gridPosition, new Vector4(1f, 0f, 0f, 0.5f), weaponMinRange, weaponMaxRange + weaponRangeBuff, false, isFlying);
+                EventManager.TriggerEvent("AttackUnitStatsON");
             }
+        }
+        else if (selected && !doneAction && equippedIndex == -1)
+        {
+            CombatLog.instance.AddEvent("This unit has no weapons to attack with");
+            CombatLog.instance.PrintEvent();
         }
     }
 
@@ -1117,8 +1115,6 @@ public class PlayerUnit : Unit
         {
             useItem(selectedItemIndex);
         }
-
-        displayInventory = !displayInventory;
     }
 
 
@@ -1300,36 +1296,7 @@ public class PlayerUnit : Unit
     {
         if (selected && !doneAction)
         {
-            Grid.instance.removeTileHighlight();
-            lastPosition.Clear();
-            isMoving = false;
-            isFighting = false;
-            isHealing = false;
-            activeStaffIndex = -1;
-            doneAction = true;
-            selected = false;
-            displayInventory = false;
-            selectedItemIndex = -1;
-            EventManager.TriggerEvent("DeselectUnit");
-            EventManager.TriggerEvent("DeselectUnitStats");
-            EventManager.TriggerEvent("AttackUnitStatsOFF");
-            EventManager.TriggerEvent("HealUnitStatsOFF");
-            ActionOtherUI.instance.OffAllUI();
-            EventManager.StopListening("MoveUnit", MoveUnit);
-            EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
-            EventManager.StopListening("AttackUnit", AttackUnit);
-            EventManager.StopListening("ItemUnit", ItemUnit);
-            EventManager.StopListening("WaitUnit", WaitUnit);
-            EventManager.StopListening("EndUnit", EndUnit);
-            EventManager.StopListening("OtherUnit", OtherUnit);
-            EventManager.StopListening("TalkUnit", TalkUnit);
-            EventManager.StopListening("CapUnit", CapUnit);
-            EventManager.StopListening("TavUnit", TavUnit);
-            EventManager.StopListening("ObjUnit", ObjUnit);
-            EventManager.StopListening("EquipUseItem", EquipUseItem);
-            EventManager.StopListening("DiscardItem", DiscardItem);
-            Grid.instance.totalDone++;
-
+            playerWait();
         }
     }
 
@@ -1344,21 +1311,8 @@ public class PlayerUnit : Unit
     {
         if (selected && !doneAction)
         {
-            Grid.instance.removeTileHighlight();
-            lastPosition.Clear();
-            isMoving = false;
-            isFighting = false;
-            isHealing = false;
-            activeStaffIndex = -1;
-            selected = false;
-            doneAction = true;
-            displayInventory = false;
-            selectedItemIndex = -1;
             EventManager.TriggerEvent("DeselectUnit");
-            EventManager.TriggerEvent("DeselectUnitStats");
-            EventManager.TriggerEvent("AttackUnitStatsOFF");
-            EventManager.TriggerEvent("HealUnitStatsOFF");
-            ActionOtherUI.instance.OffAllUI();
+
             EventManager.StopListening("MoveUnit", MoveUnit);
             EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
             EventManager.StopListening("AttackUnit", AttackUnit);
@@ -1372,7 +1326,22 @@ public class PlayerUnit : Unit
             EventManager.StopListening("ObjUnit", ObjUnit);
             EventManager.StopListening("EquipUseItem", EquipUseItem);
             EventManager.StopListening("DiscardItem", DiscardItem);
+
+            Grid.instance.removeTileHighlight();
+            lastPosition.Clear();
+            isMoving = false;
+            isFighting = false;
+            isHealing = false;
+            activeStaffIndex = -1;
+            selected = false;
+            doneAction = true;
+            displayInventory = false;
+            selectedItemIndex = -1;
+            isTalking = false;
+            displayTavern = false;
+
             Grid.instance.nextTurn();
+            Grid.instance.currentPlayer = -1;
         }
     }
 

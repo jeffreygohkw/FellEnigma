@@ -462,7 +462,7 @@ public class Grid : MonoBehaviour {
 					{
 						target = u;
 						battle.attackWithCurrentUnit(target);
-						break;
+                        break;
 					}
 				}
 			}

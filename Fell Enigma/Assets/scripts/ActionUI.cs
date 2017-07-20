@@ -8,9 +8,7 @@ public class ActionUI : MonoBehaviour
 {
     private CanvasGroup thisCanvas;
     private Text moveText;
-
-    private bool hasMoved;
-
+    private Image ultButton;
 
     // Use this for initialization
     void Start()
@@ -21,13 +19,21 @@ public class ActionUI : MonoBehaviour
         // Obtains the UI elements
         thisCanvas = this.GetComponent<CanvasGroup>();
         moveText = GetComponentsInChildren<Text>()[0];
+        ultButton = this.GetComponentInChildren<Image>();
         OffUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Grid.instance.ultCharge == 100)
+        {
+            ultButton.color = Color.green;
+        }
+        else
+        {
+            ultButton.color = Color.white;
+        }
     }
 
     /**
@@ -41,6 +47,9 @@ public class ActionUI : MonoBehaviour
     void SelectUnit()
     {
         OnUI();
+
+        EventManager.TriggerEvent("SelectUnitStats");
+
         EventManager.StopListening("SelectUnit", SelectUnit);
         EventManager.StartListening("MovedUnit", MovedUnit);
         EventManager.StartListening("DeselectUnit", DeselectUnit);
@@ -57,12 +66,15 @@ public class ActionUI : MonoBehaviour
     void DeselectUnit()
     {
         OffUI();
-        EventManager.StartListening("SelectUnit", SelectUnit);
-        EventManager.StopListening("DeselectUnit", DeselectUnit);
+        EventManager.TriggerEvent("DeselectUnitStats");
+        EventManager.TriggerEvent("AttackUnitStatsOFF");
         EventManager.TriggerEvent("ItemUIOFF");
-        hasMoved = false;
+        ActionOtherUI.instance.OffAllUI();
+
         moveText.GetComponent<Text>().text = "Move";
         this.GetComponentInChildren<Actions>().hasMoved = false;
+        EventManager.StartListening("SelectUnit", SelectUnit);
+        EventManager.StopListening("DeselectUnit", DeselectUnit);
     }
 
     /**
@@ -75,7 +87,6 @@ public class ActionUI : MonoBehaviour
     */
     void MovedUnit()
     {
-        hasMoved = true;
         moveText.GetComponent<Text>().text = "Undo Move";
         this.GetComponentInChildren<Actions>().hasMoved = true;
         EventManager.StartListening("UndoMovedUnit", UndoMovedUnit);
@@ -92,7 +103,6 @@ public class ActionUI : MonoBehaviour
     */
     void UndoMovedUnit()
     {
-        hasMoved = false;
         moveText.GetComponent<Text>().text = "Move";
         this.GetComponentInChildren<Actions>().hasMoved = false;
         EventManager.StopListening("UndoMovedUnit", UndoMovedUnit);

@@ -18,10 +18,12 @@ public class GameOver : MonoBehaviour
 		if (status == 1)
 		{
 			anim.SetTrigger("GameOver");
+            EventManager.TriggerEvent("DeselectUnit");
 		}
 		else if (status == 2)
 		{
 			anim.SetTrigger("Victory");
-		}
+            EventManager.TriggerEvent("DeselectUnit");
+        }
 	}
 }

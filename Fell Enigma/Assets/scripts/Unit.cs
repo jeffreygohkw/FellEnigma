@@ -150,8 +150,9 @@ public class Unit : MonoBehaviour {
 
     // Updates UI only when mouseOver
    public void OnMouseOver()
-   {  
-            EventManager.TriggerEvent("GetStats");    
+   {
+        if (this.currentHP != 0)
+        EventManager.TriggerEvent("GetStats");    
    }
 
     public void OnMouseExit()

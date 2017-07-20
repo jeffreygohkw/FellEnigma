@@ -117,6 +117,14 @@ public class ActionOtherUI : MonoBehaviour {
             firstWindow.alpha = 1f;
             firstWindow.interactable = true;
             firstWindow.blocksRaycasts = true;
+
+            if (canTalk)
+            {
+                talkButton.alpha = 1f;
+                talkButton.interactable = true;
+                talkButton.blocksRaycasts = true;
+            }
+
             objText.text = text;
             objButton.alpha = 1f;
             objButton.interactable = true;
@@ -138,7 +146,7 @@ public class ActionOtherUI : MonoBehaviour {
     }
 
     /**
-    *Toggles the Tavern UI when the Tavern button is pressed
+    * Toggles the Tavern UI when the Tavern button is pressed
     * 
     * @param unit To know what tavern tile is the unit standing on
     * @author Wayne Neo

@@ -217,7 +217,7 @@ public class StatsUI : MonoBehaviour {
                     enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
                 }
 
-                OnForecastAttack();
+                OnForecast();
             }
         }
         else if (unitIsHealing) //Heal forecast
@@ -251,7 +251,7 @@ public class StatsUI : MonoBehaviour {
                     enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
                 }
                 
-                OnForecastHeal();
+                OnForecast();
             }
         }
         else //Normal hover
@@ -460,25 +460,10 @@ public class StatsUI : MonoBehaviour {
     * @version 1.0
     * @updated on 10/7/17
     */
-    private void OnForecastAttack()
+    private void OnForecast()
     {
         canvasA.alpha = 0f;
         canvasB.alpha = 1f;
         canvasC.alpha = 1f;
     }
-
-    /**
-    * Activates Forecast UI for healing
-    * 
-    * @author Wayne Neo
-    * @version 1.0
-    * @updated on 10/7/17
-    */
-    private void OnForecastHeal()
-    {
-        canvasA.alpha = 0f;
-        canvasB.alpha = 1f;
-        canvasC.alpha = 1f;
-    }
-
 }

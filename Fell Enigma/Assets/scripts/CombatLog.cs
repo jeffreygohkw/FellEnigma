@@ -14,7 +14,7 @@ public class CombatLog : MonoBehaviour{
 
     private bool fullLogOut = false;
 
-    public int maxLines = 10;
+    public int maxLines = 20;
 
     // Use this for initialization
     void Start () {
@@ -45,9 +45,10 @@ public class CombatLog : MonoBehaviour{
         if (Eventlog.Count >= maxLines)
             Eventlog.Dequeue();
 
+        fullLog = " ";
+
         Eventlog.Enqueue(eventString);
 
-        fullLog = "";
         foreach (string logEvent in Eventlog)
         {
             fullLog += logEvent;

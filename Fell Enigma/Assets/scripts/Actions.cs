@@ -37,10 +37,8 @@ public class Actions : MonoBehaviour {
     public void attackClick()
     {
         ActionOtherUI.instance.OffAllUI();
-        EventManager.TriggerEvent("AttackUnitStatsON");
+        EventManager.TriggerEvent("ItemUIOFF");
         EventManager.TriggerEvent("AttackUnit");
-        
-        
     }
 
     // If Item button is pressed, linked in Inspector
@@ -70,4 +68,12 @@ public class Actions : MonoBehaviour {
         EventManager.TriggerEvent("ItemUIOFF");
         EventManager.TriggerEvent("OtherUnit");
     }
+
+    // If Ult button is pressed, linked in Inspector
+    public void ultClick()
+    {
+        if (Grid.instance.ultCharge == 100 && Grid.instance.commander >= 0 && Grid.instance.commander <= 4 && Grid.instance.ultActive == false)
+            Grid.instance.castUlt();
+    }
+
 }
