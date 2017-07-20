@@ -97,6 +97,16 @@ public class Unit : MonoBehaviour {
 	public int weaponRangeBuff = 0;
 	public bool rebelBuff = false;
 
+	/*
+	 * 0: Aggressive
+	 * 1: Passive
+	 * 2: Stationary
+	 * 3: Target
+	 * 4: City seeking
+	 */
+	public int ai_id;
+	public List<int> ai_id_priority = new List<int>();
+
 
 
 	//movement animation

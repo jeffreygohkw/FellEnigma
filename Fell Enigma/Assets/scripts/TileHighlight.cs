@@ -168,6 +168,153 @@ public class TileHighlight {
 	}
 
 	/**
+	 * Uses BFS to find which tiles can be traversed
+	 * 
+	 * v1.1
+	 * Added min and max range (for archers)
+	 * 
+	 * v1.2
+	 * Fixed archer ranges when at the edge of the map
+	 * 
+	 * v1.3
+	 * Allows allies to pass through each other
+	 * 
+	 * v1.4
+	 * Fixed a bug with movement costs
+	 * 
+	 * v1.5
+	 * Added flying compatibility
+	 * 
+	 * @param originTile The tile our unit is on
+	 * @param minrange The minimum move or attack range of the unit
+	 * @param maxrange The maximum move or attack range of the unit
+	 * @param allies A list containing the allied teams of the current unit
+	 * @param moving whether we are calculating attack or movement
+	 * @author Jeffrey Goh
+	 * @version v1.5
+	 * @updated 16/7/2017
+	 */
+	public static List<Tile> FindHighlightForCities(Tile originTile, int minRange, int maxRange, List<int> allies, bool moving, bool flying)
+	{
+		// List of tiles to highlight
+		List<Tile> closed = new List<Tile>();
+
+		Dictionary<Tile, int> costToReach = new Dictionary<Tile, int>();
+
+
+		// List of valid paths left that could be taken
+		List<TilePath> open = new List<TilePath>();
+
+		List<Tile> toDelete = new List<Tile>();
+
+		// Our path starts from the current location
+		TilePath originPath = new TilePath();
+		originPath.addTile(originTile);
+
+		// Add the original tile, but don't factor in its own movecost
+		open.Add(originPath);
+
+		// Add original tile for now to help with the algorithm
+		closed.Add(originTile);
+		costToReach.Add(originTile, 0);
+
+
+		// Loop while there are valid paths left
+		while (open.Count > 0)
+		{
+			// Get a valid path
+			TilePath current = open[0];
+			open.Remove(open[0]);
+
+			// For each neighbour
+			foreach (Tile t in current.lastTile.neighbours)
+			{
+				// If the current costofPath is below the minRange, we mark the current lastTile to be set to not be highlighted
+				if (current.costofPath < minRange)
+				{
+					toDelete.Add(current.lastTile);
+				}
+
+				// If the neighbour is in closed, that tile can be visited and we continue
+				if (closed.Contains(t))
+				{
+					if (current.costofPath > costToReach[t])
+					{
+						continue;
+					}
+					else
+					{
+						costToReach[t] = current.costofPath;
+					}
+				}
+
+				// Otherwise, make a clone of the current path
+				TilePath newTilePath = new TilePath(current);
+
+				// If moving and the neighbor's movement cost exceeds the unit's movement range, we continue
+				if (moving)
+				{
+					int movCost = t.movementCost;
+					if (flying)
+					{
+						movCost = 1;
+					}
+					if (current.costofPath + movCost > maxRange)
+					{
+						continue;
+					}
+
+
+					if (!t.checkPassable())
+					{
+						continue;
+					}
+					// Otherwise, we add that tile and its movement cost to the newTilePath
+					newTilePath.addTile(t);
+					newTilePath.addCost(movCost);
+
+				}
+				else
+				{
+					// If we are attacking, we ignore the tile's movement cost, each tile will effectively cost 1
+					// If the tile exceeds the attack range of the unit. we continue
+					if (current.costofPath + 1 > maxRange)
+					{
+						continue;
+					}
+					// Otherwise, we add that tile and its movement cost to newTilePath
+					newTilePath.addTile(t);
+					newTilePath.addCost(1);
+				}
+
+				// We add newTilePath to open so we can consider it again
+				open.Add(newTilePath);
+
+				// We add t to closed as we now know this tile can be visited
+				closed.Add(t);
+				if (costToReach.ContainsKey(t))
+				{
+					if (costToReach[t] < current.costofPath)
+					{
+						costToReach[t] = current.costofPath;
+					}
+				}
+				else
+				{
+					costToReach.Add(t, current.costofPath);
+				}
+			}
+		}
+		// Remove the origin tile as we don't want to attack ourselves or move to our current location
+		closed.Remove(originTile);
+		foreach (Tile t in toDelete)
+		{
+			closed.Remove(t);
+		}
+		return closed;
+	}
+
+	/**
 	 * Uses Find Highlight to return a dictionary containing the tiles that the unit can attack
 	 * For AI usage mainly
 	 * 
@@ -245,7 +392,7 @@ public class TileHighlight {
 	 */
 	public static List<Tile> FindCities(Tile originTile, int minRange, int maxRange, List<int> allies, bool flying)
 	{
-		List<Tile> moveRange = FindHighlight(originTile, minRange, maxRange, allies, true, flying);
+		List<Tile> moveRange = FindHighlightForCities(originTile, minRange, maxRange, allies, true, flying);
 
 		List<Tile> toReturn =  new List<Tile>();
 

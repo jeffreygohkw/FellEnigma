@@ -9,13 +9,7 @@ public class AIUnit : Unit
 	public Tile objectiveTile = null;
 	public Unit objectiveUnit = null;
 
-	/*
-	 * 0: Aggressive
-	 * 1: Passive
-	 * 2: Stationary
-	 * 3: Target (To be implemented)
-	 */
-	public int ai_id;
+
 
 	// Use this for initialization
 	void Start()
@@ -232,6 +226,11 @@ public class AIUnit : Unit
 								Grid.instance.moveCurrentUnit(t);
 								return;
 							}
+							else if (t.gridPosition == gridPosition)
+							{
+								doneMoving = true;
+								return;
+							}
 						}
 						distanceTo++;
 					}
@@ -240,14 +239,12 @@ public class AIUnit : Unit
 			else if (ai_id == 1)
 			{
 				//Passive AI
-				// Replace this with 0 and don't increment for stationary enemies
-				int tempMov = mov;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
 
 				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 				target = chooseTarget(enemiesInRange);
 
@@ -263,7 +260,7 @@ public class AIUnit : Unit
 				}
 
 				//If we can reach a target, move to the appropriate tile
-				else if (target[1] != null && tempMov == mov)
+				else if (target[1] != null)
 				{
 					isMoving = true;
 					doneMoving = true;
@@ -279,13 +276,9 @@ public class AIUnit : Unit
 			else if (ai_id == 2)
 			{
 				//Stationary AI
-				int tempMov = 0;
 				// Find all enemies within range
-				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
+				Dictionary<Tile, List<Tile>> enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 0, 0, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 				List<Tile> target = new List<Tile>();
-
-				// Find all enemies within range
-				enemiesInRange = TileHighlight.FindTarget(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, tempMov, weaponMinRange, weaponMaxRange + weaponRangeBuff, allies, true, isFlying);
 
 				//Debug.Log("In Range: " + enemiesInRange.Count);
 				target = chooseTarget(enemiesInRange);
@@ -391,6 +384,11 @@ public class AIUnit : Unit
 								Grid.instance.moveCurrentUnit(t);
 								return;
 							}
+							else if (t.gridPosition == gridPosition)
+							{
+								doneMoving = true;
+								return;
+							}
 						}
 						distanceTo++;
 					}
@@ -398,6 +396,15 @@ public class AIUnit : Unit
 			}
 			else if (ai_id == 4)
 			{
+				if (Grid.instance.villageStatus.ContainsKey(gridPosition))
+				{
+					if (Grid.instance.villageStatus[gridPosition][0] != team)
+					{
+						doneMoving = true;
+						foundCity = true;
+						return;
+					}
+				}
 				//City seeking AI
 				int tempMove = 1;
 				int tempMov = mov;
@@ -420,17 +427,28 @@ public class AIUnit : Unit
 					{
 						break;
 					}
-					
+
 				}
 				if (tempMove == 1)
 				{
-					isMoving = true;
-					doneMoving = true;
-					Grid.instance.moveCurrentUnit(citiesInRange[0]);
-					foundCity = true;
+					//If there are cities in range
+					foreach (Tile t in citiesInRange)
+					{
+						if (t.occupied == null)
+						{
+							isMoving = true;
+							doneMoving = true;
+							Grid.instance.moveCurrentUnit(t);
+							foundCity = true;
+							return;
+						}
+					}
+						Debug.Log("There");
+						ai_id = ai_id_priority[1];
 				}
 				else
 				{
+					Debug.Log("Here");
 					List<Tile> available = TileHighlight.FindHighlight(Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y], 1, mov, allies, true, isFlying);
 					int distanceTo = 1;
 					while (true)
@@ -446,6 +464,11 @@ public class AIUnit : Unit
 								isMoving = true;
 								doneMoving = true;
 								Grid.instance.moveCurrentUnit(t);
+								return;
+							}
+							else if (t.gridPosition == gridPosition)
+							{
+								doneMoving = true;
 								return;
 							}
 						}

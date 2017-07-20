@@ -286,6 +286,13 @@ public class Grid : MonoBehaviour {
 			}
 			Debug.Log("Current gold: " + gold);
 		}
+		if (AITeams.Contains(currentTeam))
+		{
+			foreach (Unit u in units[currentTeam])
+			{
+				u.ai_id = u.ai_id_priority[0];
+			}
+		}
 	}
 
 	/**

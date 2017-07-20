@@ -48,6 +48,11 @@ public class WinCon : MonoBehaviour {
 			bool rout = true;
 			foreach (Unit u in Grid.instance.units[1])
 			{
+				//Boss dies
+				if ((u.unitName == "Black Heart" || u.unitName == "Bandit Leader") && u.currentHP <= 0)
+				{
+					return 2;
+				}
 				if (u.currentHP > 0)
 				{
 					rout = false;
@@ -67,8 +72,18 @@ public class WinCon : MonoBehaviour {
 				}
 			}
 
+			bool allCaptured = true;
+			foreach (Vector2 v in Grid.instance.villageStatus.Keys)
+			{
+				if (Grid.instance.villageStatus[v][0] != 1)
+				{
+					allCaptured = false;
+					break;
+				}
+			}
+
 			//If a hero dies
-			if (heroSlain)
+			if (heroSlain || allCaptured)
 			{
 				return 1;
 			}
