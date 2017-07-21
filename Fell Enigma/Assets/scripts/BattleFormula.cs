@@ -29,14 +29,13 @@ public class BattleFormula
 	* v1.6
 	* Added terrain and exp
 	* 
-	* To do
-	* Does not factor in supports, other misc things
-	* No weapon triangle
+	* v1.7
+	* Added Ult charge, 3 damage per point for damage done by player, 5 damage per point for player taking damage
 	* 
 	* @param target The target of the attack
 	* @author Jeffrey Goh
-	* @version 1.6
-	* @updated 24/6/2017
+	* @version 1.7
+	* @updated 21/7/2017
 	*/
 	public void attackWithCurrentUnit(Unit target)
 	{
@@ -187,17 +186,46 @@ public class BattleFormula
 					{
 						tempattackerDmg = attackerDmg * 3;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
-                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+						CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has critically hit " + target.unitName + " for " + tempattackerDmg + " damage!");
 					}
 					else
 					{
 						tempattackerDmg = attackerDmg;
 						Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
-                        CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+						CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+					}
+
+					
+					//Ult charge
+					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+					{
+						if (tempattackerDmg > target.currentHP)
+						{
+							Grid.instance.ultCharge += target.currentHP / 3;
+						}
+						else
+						{
+							Grid.instance.ultCharge += tempattackerDmg / 3;
+						}
+					}
+					else if (target is PlayerUnit)
+					{
+						if (tempattackerDmg > target.currentHP)
+						{
+							Grid.instance.ultCharge += target.currentHP / 5;
+						}
+						else
+						{
+							Grid.instance.ultCharge += tempattackerDmg / 5;
+						}
+					}
+
+					if (Grid.instance.ultCharge > 100)
+					{
+						Grid.instance.ultCharge = 100;
 					}
 
 					target.currentHP -= tempattackerDmg;
-
 				}
 				// If miss
 				else
@@ -206,7 +234,7 @@ public class BattleFormula
 					Debug.Log("Hit Roll: " + hit);
 
 					Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
-                    CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
+					CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " missed!");
 				}
 
 				// Check if target is dead
@@ -264,6 +292,35 @@ public class BattleFormula
 							tempdefenderDmg = defenderDmg;
 							Debug.Log(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
                             CombatLog.instance.AddEvent(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+						}
+
+						//Ult charge
+						if (target is PlayerUnit)
+						{
+							if (tempdefenderDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 3;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempdefenderDmg / 3;
+							}
+						}
+						else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							if (tempdefenderDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 5;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempdefenderDmg / 5;
+							}
+						}
+
+						if (Grid.instance.ultCharge > 100)
+						{
+							Grid.instance.ultCharge = 100;
 						}
 
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP -= tempdefenderDmg;
@@ -334,6 +391,35 @@ public class BattleFormula
 							tempattackerDmg = attackerDmg;
 							Debug.Log(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
                             CombatLog.instance.AddEvent(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " has hit " + target.unitName + " for " + tempattackerDmg + " damage!");
+						}
+
+						//Ult charge
+						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							if (tempattackerDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 3;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempattackerDmg / 3;
+							}
+						}
+						else if (target is PlayerUnit)
+						{
+							if (tempattackerDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 5;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempattackerDmg / 5;
+							}
+						}
+
+						if (Grid.instance.ultCharge > 100)
+						{
+							Grid.instance.ultCharge = 100;
 						}
 
 						target.currentHP -= tempattackerDmg;
@@ -408,6 +494,35 @@ public class BattleFormula
 							tempdefenderDmg = defenderDmg;
 							Debug.Log(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
                             CombatLog.instance.AddEvent(target.unitName + " has hit " + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName + " for " + tempdefenderDmg + " damage!");
+						}
+
+						//Ult charge
+						if (target is PlayerUnit)
+						{
+							if (tempdefenderDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 3;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempdefenderDmg / 3;
+							}
+						}
+						else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] is PlayerUnit)
+						{
+							if (tempdefenderDmg > target.currentHP)
+							{
+								Grid.instance.ultCharge += target.currentHP / 5;
+							}
+							else
+							{
+								Grid.instance.ultCharge += tempdefenderDmg / 5;
+							}
+						}
+
+						if (Grid.instance.ultCharge > 100)
+						{
+							Grid.instance.ultCharge = 100;
 						}
 
 						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].currentHP -= tempdefenderDmg;

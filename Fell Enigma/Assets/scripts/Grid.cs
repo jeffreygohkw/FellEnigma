@@ -230,9 +230,12 @@ public class Grid : MonoBehaviour {
 	 * v1.2
 	 * Added income from villages
 	 * 
+	 * v1.3
+	 * Added wait time for AI, player gets passive ult gain of 5 points at the start of their turn
+	 * 
 	 * @author Jeffrey Goh
-	 * @version v1.2
-	 * @updated 15/7/2017
+	 * @version v1.3
+	 * @updated 21/7/2017
 	 */
 
 	public void nextTurn()
@@ -269,6 +272,11 @@ public class Grid : MonoBehaviour {
 		else
 		{
 			currentTeam = 0;
+			ultCharge += 5;
+			if (ultCharge > 100)
+			{
+				ultCharge = 100;
+			}
 		}
 
 		currentPlayer = -1;
@@ -683,12 +691,19 @@ public class Grid : MonoBehaviour {
 	/**
 	 * Casts an ultimate ability depending on the current commander
      * 
+	 * Check if ult is inactive before continuing
+	 * 
      * @author Jeffrey Goh
-     * @version 1.0
-     * @updated 15/7/2017
+     * @version 1.1
+     * @updated 21/7/2017
     */
 	public void castUlt()
 	{
+		if (ultActive)
+		{
+			Debug.Log("Ultimate is already active.");
+			return;
+		}
 		ultCharge = 0;
 		if (commander == 0)
 		{
@@ -786,12 +801,20 @@ public class Grid : MonoBehaviour {
 	/**
 	 * Dispels an ultimate ability at the end of turn
 	 * 
+	 * v1.1
+	 * Checks if ult is active before continuing
+	 * 
 	 * @author Jeffrey Goh
-	 * @version 1.0
-	 * @updated 15/7/2017
+	 * @version 1.1
+	 * @updated 21/7/2017
 	*/
 	public void dispelUlt()
 	{
+		if (!ultActive)
+		{
+			Debug.Log("Ultimate is already deactivated.");
+			return;
+		}
 		if (commander == 0)
 		{
 			//MC

@@ -43,7 +43,7 @@ public class CreateBuildings : MonoBehaviour
 			Grid.instance.goldCap = 1000;
 
 			Grid.instance.commander = 0;
-			Grid.instance.ultCharge = 100;
+			Grid.instance.ultCharge = 70;
 		}
 	}
 }
