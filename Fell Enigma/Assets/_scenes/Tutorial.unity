@@ -2606,7 +2606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Boundary: 50
-  speed: 5
+  speed: 10
 --- !u!1 &756449645
 GameObject:
   m_ObjectHideFlags: 0
@@ -5136,6 +5136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc0b7c8dfc1bd9944ad48bb75237e825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedUnit: {fileID: 0}
 --- !u!114 &1377213916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7697,6 +7698,8 @@ MonoBehaviour:
   commander: -1
   ultCharge: 0
   ultActive: 0
+  waitUp: 0
+  waitUpTime: 1
   objectiveComplete: 
   highlightedEnemies: []
 --- !u!114 &1960816817

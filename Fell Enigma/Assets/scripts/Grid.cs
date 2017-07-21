@@ -52,6 +52,9 @@ public class Grid : MonoBehaviour {
 	public int ultCharge;
 	public bool ultActive = false;
 
+	public bool waitUp = false;
+	public int waitUpTime = 1;
+
 	public Dictionary<Vector2, string> objectiveSpecificTiles = new Dictionary<Vector2, string>();
 	public string objectiveComplete;
 
@@ -86,6 +89,11 @@ public class Grid : MonoBehaviour {
         {
             Application.Quit();
         }
+
+		if (waitUp)
+		{
+			return;
+		}
 
 		int status = WinCon.checkWinCon(mapName);
 		//Win conditions
@@ -170,6 +178,10 @@ public class Grid : MonoBehaviour {
 				}
 				else if (units[currentTeam][currentPlayer].currentHP > 0 && !units[currentTeam][currentPlayer].doneAction)
 				{
+					if (waitUp)
+					{
+						startDelayCoroutine();
+					}
 					units[currentTeam][currentPlayer].turnUpdate();
 				}
 				else
@@ -190,6 +202,22 @@ public class Grid : MonoBehaviour {
 			}
 		}
 	}
+
+	//To delay the execution of AI turns
+	public void startDelayCoroutine()
+	{
+		StartCoroutine(delay(waitUpTime));
+	}
+
+	IEnumerator delay(int time)
+	{
+		if (waitUp)
+		{
+			yield return new WaitForSeconds((float)time);
+			waitUp = false;
+		}
+	}
+
 
 	/**
 	 * v1.0
@@ -270,7 +298,7 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
-		//Gain 200 gold per village controlled on player turn (Needs playtesting and balancing)
+		//Gain 100 gold per village controlled on player turn (Needs playtesting and balancing)
 		if (currentTeam == 0)
 		{
 			foreach (Vector2 k in villageStatus.Keys)
@@ -288,6 +316,8 @@ public class Grid : MonoBehaviour {
 		}
 		if (AITeams.Contains(currentTeam))
 		{
+			waitUp = true;
+			startDelayCoroutine();
 			foreach (Unit u in units[currentTeam])
 			{
 				u.ai_id = u.ai_id_priority[0];

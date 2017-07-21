@@ -102,10 +102,9 @@ public class AIUnit : Unit
 	*/
 	public override void turnUpdate()
 	{
+		mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 		if (positionQueue.Count > 0)
 		{
-
-			mainCam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, mainCam.transform.position.z);
 
 			if (Vector3.Distance(positionQueue[0], transform.position) > 0.1f)
 			{
@@ -152,12 +151,7 @@ public class AIUnit : Unit
 			else
 			{
 				//End turn
-				Grid.instance.removeTileHighlight();
-				isMoving = false;
-				isFighting = false;
-				doneAction = true;
-				targetTile = null;
-				Grid.instance.totalDone++;
+				playerWait();
 			}
 		}
 		else
@@ -251,12 +245,7 @@ public class AIUnit : Unit
 				if (target == null)
 				{
 					// End Turn
-					Grid.instance.removeTileHighlight();
-					isMoving = false;
-					isFighting = false;
-					doneAction = true;
-					targetTile = null;
-					Grid.instance.totalDone++;
+					playerWait();
 				}
 
 				//If we can reach a target, move to the appropriate tile
@@ -286,12 +275,7 @@ public class AIUnit : Unit
 				if (target == null)
 				{
 					// End Turn
-					Grid.instance.removeTileHighlight();
-					isMoving = false;
-					isFighting = false;
-					doneAction = true;
-					targetTile = null;
-					Grid.instance.totalDone++;
+					playerWait();
 				}
 
 				else if (target[1] != null)
@@ -632,6 +616,8 @@ public class AIUnit : Unit
 		selectedItemIndex = -1;
 		isTalking = false;
 
+		Grid.instance.waitUp = true;
+		Grid.instance.startDelayCoroutine();
 		Grid.instance.totalDone++;
 		Grid.instance.currentPlayer = -1;
 
