@@ -1072,6 +1072,7 @@ public class PlayerUnit : Unit
         if (selected && !doneAction)
         {
             ItemUI.instance.setUnit(this);
+            Debug.Log("Item UI is checking" + this.unitName);
             displayInventory = !displayInventory;
             if (isFighting || isMoving)
             {
@@ -1109,6 +1110,8 @@ public class PlayerUnit : Unit
     void EquipUseItem()
     {
         selectedItemIndex = ItemUI.instance.getItemIndex();
+        Debug.Log(ItemUI.instance.selectedUnit.unitName);
+        Debug.Log("selectedItemIndex =" + selectedItemIndex);
         if (inventory[selectedItemIndex].Length == 13)
         {
             equipItem(selectedItemIndex);
@@ -1141,13 +1144,16 @@ public class PlayerUnit : Unit
     * EventManager: Activates the Other Actions function when the Actions button is pressed.
     * This searches for the available actions the unit can take and updates the ActionsOtherUI accordingly
     *
+    * v1.1
+    * Updated to close Tavern window when toggled off.
+    * 
     * @author Jeffrey Goh
-    * @version 1.0
-    * @updated by 19/7/17 by Wayne
+    * @version 1.1
+    * @updated by 21/7/17 by Wayne
     */
     void OtherUnit()
     {
-        if (selected && !doneAction)
+        if (selected && !doneAction && !displayTavern)
         {
             foreach (Tile t in Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].neighbours)
             {
@@ -1178,6 +1184,11 @@ public class PlayerUnit : Unit
             {
                 ActionOtherUI.instance.ToggleUI(Grid.instance.objectiveSpecificTiles[gridPosition]);
             }
+        }
+        else if (displayTavern)
+        {
+            displayTavern = !displayTavern;
+            ActionOtherUI.instance.OffAllUI();
         }
     }
 

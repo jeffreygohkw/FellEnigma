@@ -14,7 +14,7 @@ public class ItemUI : MonoBehaviour {
     private Text buttons2Text;
     private CanvasGroup window;
 
-    private Unit selectedUnit;
+    public Unit selectedUnit;
     private bool itemIsSelected = false;
 
     // Use this for initialization
