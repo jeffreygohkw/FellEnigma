@@ -378,6 +378,7 @@ public class PlayerUnit : Unit
 				}
 				else
 				{
+                    EventManager.TriggerEvent("PlayPotSound");
 					int tempHP = currentHP;
 					currentHP += int.Parse(inventory[index][4]);
 					if (currentHP > maxHP)
@@ -1353,6 +1354,7 @@ public class PlayerUnit : Unit
             isTalking = false;
             displayTavern = false;
 
+            EventManager.TriggerEvent("PlayTimeSound");
             Grid.instance.nextTurn();
             Grid.instance.currentPlayer = -1;
         }

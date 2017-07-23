@@ -14,7 +14,8 @@ public class CombatLog : MonoBehaviour{
 
     private bool fullLogOut = false;
 
-    public int maxLines = 20;
+    private int counter = 0;
+    public int maxLines = 13;
 
     // Use this for initialization
     void Start () {
@@ -35,25 +36,33 @@ public class CombatLog : MonoBehaviour{
     /**
      * Adds a string to the bar to be printed afterwards
      *
+     * v1.1
+     * Updated Full Log to save previous lines
      * 
+     * @param eventString string to be added into the log
      * @author Wayne Neo
-     * @version 1.0
-     * @updated on 14/7/17
+     * @version 1.1
+     * @updated on 23/7/17
      */
     public void AddEvent(string eventString)
     {
         if (Eventlog.Count >= maxLines)
             Eventlog.Dequeue();
 
-        fullLog = " ";
-
-        Eventlog.Enqueue(eventString);
-
-        foreach (string logEvent in Eventlog)
+        if (counter < maxLines)
         {
-            fullLog += logEvent;
+            fullLog += eventString;
             fullLog += "\n";
+            counter++;
         }
+        else
+        {
+            string[] lines = fullLog.Split("\n"[0]);
+            fullLog = "Prev Line: " + lines[lines.Length - 2];
+            fullLog += "\n";
+            counter = 1;
+        }
+        Eventlog.Enqueue(eventString);
 
     }
 

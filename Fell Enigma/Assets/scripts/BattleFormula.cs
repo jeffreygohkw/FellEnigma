@@ -44,7 +44,8 @@ public class BattleFormula
 
 			if (target != null && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].equippedIndex != -1)
 			{
-				Debug.Log("Calculating");
+                EventManager.TriggerEvent("PlayBattleSound");
+                Debug.Log("Calculating");
 
 				// Range
 				bool canCounter = false;
@@ -980,6 +981,7 @@ public class BattleFormula
 		{
 			if (target.currentHP < target.maxHP)
 			{
+                EventManager.TriggerEvent("PlayHealSound");
 				int tempHP = target.currentHP;
 				// Heal based on staff Mt + caster's Mag
 				target.currentHP += int.Parse(staff[8]) + Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].mag;

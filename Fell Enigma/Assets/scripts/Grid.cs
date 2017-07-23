@@ -241,7 +241,7 @@ public class Grid : MonoBehaviour {
 	public void nextTurn()
 	{
 		resetCamera();
-		removeTileHighlight();
+        removeTileHighlight();
 		if (ultActive)
 		{
 			dispelUlt();
