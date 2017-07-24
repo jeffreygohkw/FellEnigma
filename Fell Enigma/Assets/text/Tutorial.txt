@@ -1,0 +1,110 @@
+Naive Prince: We have arrived at the place, sir.
+You: About time. How’s the situation?
+Young Rebel: Well, if not for a certain someone jumping at every bush he sees, this message would have came way sooner. <smirk>
+Naive Prince: Argh, for the umpteen time, stop laughing at me. Sir, the information seems to be correct. The hideout of the bandit group, XXX, is indeed in sight. 
+Naive Prince: However, there is no sign of the mysterious girl that is the new leader of the bandits. Only a lookout. What should be our course of action?
+You: I trust you guys remember our practice sessions?
+Young Rebel: Heh. I sure do. Not sure about our fresh chick here.
+You: …Alright, let’s go through the basics once again.
+Narrator: This game is similar to the Fire Emblem series. To begin, select an unit. During your turn, an unit can move, attack, use/change equipment. 
+Narrator: Or he/she could choose to standby (by selecting Wait or End (Standbys all units). For now, let’s move either Naive Prince or Young Rebel nearer to the lookout.
+
+<Unit moves>
+Narrator: It seems that the lookout has not noticed us yet. After movement, an unit can perform another action. He/she can attack nearby units depending on his equipped weapon where he/she will enter combat with the enemy. 
+Narrator: The attacker will take the initiative in battle and will receive retaliation if the opposing unit survives and is able to counterattack. Let’s try moving one of our guys to take out that lookout
+
+<Unit attacks and kills lookout>
+Narrator: Good job. It seems, however, that our unit got injured during combat. Use a potion to heal back his health by selecting Item. Note that this takes an action, similar to Attack.
+
+<Unit heals>
+Narrator: Good. Now that our units are healthy, proceed ahead and engage the next enemy.
+Narrator: In the map, there are different terrain. Certain terrain offers combat advantages or healing effects. The same goes for your enemies. Consider the terrain your unit is on when engaging enemy units. 
+
+<Unit reaches second tutorial area where there is differing terrain>
+
+<Unit defeats second lookout>
+Young Rebel: Kid, look at your front
+Naive Prince: Huh, what is it? It better not be one of your jokes again… Oh, there is a young girl fighting the bandits all by herself.
+You: Well, an enemy of our enemy is a friend. See if she is our ally and assist if necessary.
+Narrator: Not all units are your enemies. Sometimes, there will be allied units in the map with the same objectives as you. 
+Narrator: Try talking to that girl by placing one of your units beside her and select Talk. This is considered an action.
+
+<Talks> 
+
+Naive Prince: Are you alright, my lady?
+Young Rebel: Hey lass, what are you doing out here in the outskirts?
+Kind Soul: Gasp, more of these guys?! Just when I am busy dealing with this trash. UGH
+Young Rebel: Haha relax, lass. We are on your side. I see you are having some trouble with one of these guys. Need our help? It doesn’t come free of course. ;)
+Kind Soul: Seriously? Argh fine, I will take whatever help that comes.
+Young Rebel: Haha now we are talking.
+Kind Soul: I am not very good at fighting but I can patch you guys up with magic if you are injured.
+Naive Prince: Thanks, you saved us there. We are running low on potions in fact.
+Young Rebel: No thanks to someone.
+Naive Prince: ...
+Narrator: Healing works the same way as attacking. Move your healer beside an allied unit and select heal to heal your ally. This is also considered one action, similar to attacking or healing.
+
+<Third Lookout is defeated>
+You: We just got a tipoff, the bandits are currently raiding nearby villages while the commander seems to be staying put in her hideout.
+Young Rebel: What?! We need to protect the villages!
+Naive Prince: No, Young Rebel. The original mission is to take out the bandit leader. Now that we know her location, we should prioritize her first. The village can come later.
+Young Rebel: …. Are you serious, kid? You are saying we leave the villagers to die?!
+Naive Prince: No, I am not! We can save them afterwards but we cannot let the commander escape! Furthermore, we are severely outnumbered. How do you expect us to defend a whole region with just the 3 of us?!
+White Heart: If you don’t mind me interrupting, letting her escape won’t be a wise choice. History will just repeat itself at another region.
+You: …
+Narrator: Every map, you will come to a point where you need to make decisions. Do you follow your mission regardless of casualties or do you follow your emotions, doing what you personally feel is right?
+You: In any case, go ahead to the tavern nearby to rally more people to our side. If you need gold, go to the village beside and show our emblem to them.
+Narrator: In maps, there will be places where you can recruit new temporary allies. By spending gold, you can choose various classes of unit who joins your army. 
+Narrator: To do so, go on to the tavern tile and select Recruit. After confirming the cost, a unit will spawn on an adjacent tile. This is also considered one action, similar to attacking or healing.
+Narrator: Your team also have an emblem given by the king himself. Showing the emblem will allow you to gain a limited amount of gold from villages at the start of each turn.
+
+Law Route
+<Black Heart defeated>
+Black Heart: Heh, you guys are pretty strong but for what reason do you attack me?
+Naive Prince: You state the obvious. Lay down your staff or we will be forced to end your life!
+Young Rebel: At the same time, get your goons to stop whatever they are doing or otherwise… someone’s head will roll.
+Black Heart: Goons? Ah you mean the idiots I got to get food? Sigh, what stupid things have they gotten themselves into? Sure, I will get them to come back.
+Naive Prince: You better comply or… oh okay.
+<Scene changes>
+Black Heart: Oh ho. Did I not say to get food without violence?
+Bandit: But but miss we wouldn’t know of another way to… HIEEEEEEE, DON’T KILL ME! <faints after seeing Black Heart readying a fireball>
+Black Heart: Well there you go, I have no particular care for these trash. Do with them as you deem fit. Well then, I shall make my way out….
+You: Hold on Miss. I see you bear no ill will and possess tremendous strength. But we have our contractors to answer to. However I can close one eye and let you off…. provided you join our team.
+Black Heart: Huh? Why would I-
+You: Or we could have a deathmatch right here right now. I suppose even you will be at an disadvantage, given your injuries. 
+Black Heart: Argh fine. Do whatever you want.
+You: And how about you, the lady in white? I heard that the group you were with got killed by those bandits. I do not know of your goals but if you do not have a particular group to travel with, we could do with a great healer like yourself.
+Kind Soul: Very well, I shall take you up on that offer.
+You: Alright. Naive Prince and Young Rebel, finish up the aftermath and bring them over to the base. Out.
+Naive Prince: Uhhhhh okay.
+Young Rebel: Well there goes the boss again. Heh, looks like it is going to be awkward for our little boy here.
+Naive Prince: Arghhhhh.
+
+Chaos Route
+<Village Protected, All bandits defeated>
+Young Rebel: Is everyone alright? Anyone who needs healing can get this lass to heal ya.
+Kind Soul: Excuse me, I will run out of mana at this rate. What if the enemy leader came here and- Ah, she did come.
+<Black Heart enters>
+Black Heart: Oh ho, what is this?
+Naive Prince: You must be their leader. What a fool to come here alone. Now be prepared to-
+Bandit: MISS, SAVE US! We were just raiding this village for your food and- ARGHHHH.
+<Black Heart knocks him out with a fireball>
+Black Heart: Sigh, these bunch of idiots. I ordered them to get food without violence and this is what they achieved? Do whatever you wish with them. I am outta here.
+You: Hold on Miss. I see you bear no ill will and possess tremendous strength. But we have our contractors to answer to. However I can close one eye and let you off…. provided you join our team.
+Black Heart: Huh? Why would I-
+You: Or we could have a deathmatch right here right now. I suppose even you will be at an disadvantage, given it’s 3-to-1. 
+Black Heart: Argh fine. Do whatever you want.
+You: And how about you, the lady in white? I heard that the group you were with got killed by those bandits. I do not know of your goals but if you do not have a particular group to travel with, we could do with a great healer like yourself.
+Kind Soul: Very well, I shall take you up on that offer.
+You: Alright. Naive Prince and Young Rebel, finish up the aftermath and bring them over to the base. Out.
+Naive Prince: Uhhhhh okay.
+Young Rebel: Well there goes the boss again. Heh, looks like it is going to be awkward for our little boy here.
+Naive Prince: Arghhhhh.
+
+Fail Scenario
+If any named character dies
+You: This can’t be….
+Narrator: As this is a tutorial level, none of your main units are supposed to die. Try the level again.
+
+If the bandit leader captures all villages
+You: This can’t be….
+Narrator: As this is a tutorial level, you are supposed to make a choice before the bandit leader captures all villages. Try the level again.
