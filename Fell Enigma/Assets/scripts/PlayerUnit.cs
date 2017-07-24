@@ -42,7 +42,7 @@ public class PlayerUnit : Unit
                     EventManager.StopListening("EquipUseItem", EquipUseItem);
                     EventManager.StopListening("DiscardItem", DiscardItem);
                     onceisEnough = true;
-
+                    Debug.Log("Doneaction happened");
                     EventManager.TriggerEvent("DeselectUnit");
                 }
             }
@@ -60,8 +60,11 @@ public class PlayerUnit : Unit
 			//If it is not your team's turn, unit is grey
 			GetComponent<Renderer>().material.color = Color.grey;
 			lastPosition.Clear();
-            onceisEnough = false;
-            EventManager.TriggerEvent("DeselectUnit");
+            if (onceisEnough)
+            {
+                EventManager.TriggerEvent("DeselectUnit");
+                onceisEnough = false;
+            }
         }
 
 		if (currentHP <= 0)
@@ -170,6 +173,7 @@ public class PlayerUnit : Unit
 							EventManager.StartListening("ObjUnit", ObjUnit);
 							EventManager.StartListening("EquipUseItem", EquipUseItem);
 							EventManager.StartListening("DiscardItem", DiscardItem);
+                            Debug.Log("Unit selected");
 						}
 						else
 						{
@@ -559,9 +563,13 @@ public class PlayerUnit : Unit
 	/**
 	* Makes the current unit wait
 	* Done to avoid typing this out every time
+    * 
+    * v1.1
+    * Updated to make EventManager work
+    *
 	* @author Jeffrey Goh
-	* @version 1.0
-	* @updated 11/7/2017
+	* @version 1.1
+	* @updated 24/7/2017 by Wayne Neo
 	*/
 	public override void playerWait()
 	{
@@ -578,7 +586,20 @@ public class PlayerUnit : Unit
 		isTalking = false;
 
         EventManager.TriggerEvent("DeselectUnit");
-		Grid.instance.totalDone++;
+        EventManager.StopListening("MoveUnit", MoveUnit);
+        EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+        EventManager.StopListening("AttackUnit", AttackUnit);
+        EventManager.StopListening("ItemUnit", ItemUnit);
+        EventManager.StopListening("WaitUnit", WaitUnit);
+        EventManager.StopListening("EndUnit", EndUnit);
+        EventManager.StopListening("OtherUnit", OtherUnit);
+        EventManager.StopListening("TalkUnit", TalkUnit);
+        EventManager.StopListening("CapUnit", CapUnit);
+        EventManager.StopListening("TavUnit", TavUnit);
+        EventManager.StopListening("ObjUnit", ObjUnit);
+        EventManager.StopListening("EquipUseItem", EquipUseItem);
+        EventManager.StopListening("DiscardItem", DiscardItem);
+        Grid.instance.totalDone++;
 		Grid.instance.currentPlayer = -1;
 
 		base.playerWait();
@@ -603,7 +624,7 @@ public class PlayerUnit : Unit
 	* @updated 15/7/2017
 	*/
 
-    public override void OnGUI()
+   /* public override void OnGUI()
 	{
 		if (selected && !doneAction)
 		{
@@ -945,7 +966,7 @@ public class PlayerUnit : Unit
         }
         
         
-    }
+    } */
 
 
 

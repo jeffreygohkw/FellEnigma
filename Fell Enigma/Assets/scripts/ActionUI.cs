@@ -14,7 +14,6 @@ public class ActionUI : MonoBehaviour
     void Start()
     {
         EventManager.StartListening("SelectUnit", SelectUnit);
-        EventManager.StartListening("MovedUnit", MovedUnit);
         
         // Obtains the UI elements
         thisCanvas = this.GetComponent<CanvasGroup>();

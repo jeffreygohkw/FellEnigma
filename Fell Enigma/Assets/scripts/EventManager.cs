@@ -54,7 +54,8 @@ public class EventManager : MonoBehaviour {
         // Search for event in dictionary
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
-            thisEvent.AddListener(listener);
+            // thisEvent.AddListener(listener);
+            Debug.LogError("This event " + eventName + " is already listening");
         }
         // If event does not exist, create event
         else
@@ -62,6 +63,7 @@ public class EventManager : MonoBehaviour {
             thisEvent = new UnityEvent();
             thisEvent.AddListener(listener);
             instance.eventDictionary.Add(eventName, thisEvent);
+            // Debug.Log("This event " + eventName + " started listening");
         }
     }
 
@@ -72,7 +74,9 @@ public class EventManager : MonoBehaviour {
         UnityEvent thisEvent = null;
         if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
+            // Debug.Log("This event " + eventName + " stopped listening");
             thisEvent.RemoveListener(listener);
+            instance.eventDictionary.Remove(eventName);
         }
     }
 
@@ -83,10 +87,13 @@ public class EventManager : MonoBehaviour {
         {
             // Will call all listeners
             thisEvent.Invoke();
+            if (!eventName.Equals("GetStats") && !eventName.Equals("RemoveStats"))
+            // Debug.Log("This event " + eventName + " is triggered");
         }
         else
         {
-            Debug.LogError("This event" + eventName + "doesn't exist!");
+            Debug.LogError("This event " + eventName + " doesn't exist!");
         }
     }
 }
+

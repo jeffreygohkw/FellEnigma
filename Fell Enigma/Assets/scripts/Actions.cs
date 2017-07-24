@@ -26,10 +26,12 @@ public class Actions : MonoBehaviour {
         if (!hasMoved)
         {
             EventManager.TriggerEvent("MoveUnit");
+            Debug.Log("MoveUnit Button called");
         }
         else
         {
             EventManager.TriggerEvent("UndoMoveUnit");
+            Debug.Log("UndoMoveUnit Button called");
         }
     }
 
