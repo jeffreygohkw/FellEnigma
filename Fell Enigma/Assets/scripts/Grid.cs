@@ -111,7 +111,19 @@ public class Grid : MonoBehaviour {
 
 		int status = WinCon.checkWinCon(mapName);
 		//Win conditions
-		
+
+
+		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+		{
+			TextBoxManager.instance.setCurrentLine(TextBoxManager.instance.endAtLine);
+			TextBoxManager.instance.disableTextBox();
+		}
+
+		if (waitUp || TextBoxManager.instance.isActive)
+		{
+			return;
+		}
+
 		if (status == 1)
 		{
 			HUDCanvas.SetActive(true);

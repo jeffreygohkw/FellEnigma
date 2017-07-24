@@ -53,12 +53,20 @@ public class WinCon : MonoBehaviour {
 				//Boss dies
 				if ((u.unitName == "Black Heart" && u.currentHP <= 0))
 				{
-					ActivateTextAtLine.instance.startScript(61, 80);
+					if (!textOut)
+					{
+						ActivateTextAtLine.instance.startScript(61, 80);
+						textOut = true;
+					}
 					return 2;
 				}
 				if ((u.unitName == "Bandit Leader") && u.currentHP <= 0)
 				{
-					ActivateTextAtLine.instance.startScript(83, 101);
+					if (!textOut)
+					{
+						ActivateTextAtLine.instance.startScript(83, 101);
+						textOut = true;
+					}
 					return 2;
 				}
 				if (u.currentHP > 0)

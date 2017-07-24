@@ -359,23 +359,23 @@ public class CreatePlayers : MonoBehaviour {
 			unit1.exp = 0;
 			unit1.maxHP = 18;
 			unit1.currentHP = 18;
-			unit1.strength = 5;
-			unit1.mag = 1;
+			unit1.strength = 7;
+			unit1.mag = 0;
 			unit1.skl = 5;
-			unit1.spd = 7;
-			unit1.luk = 7;
-			unit1.def = 5;
-			unit1.res = 0;
+			unit1.spd = 6;
+			unit1.luk = 3;
+			unit1.def = 6;
+			unit1.res = 2;
 			unit1.con = 7;
 			unit1.mov = 5;
 
 			unit1.hpG = 80;
-			unit1.strG = 45;
-			unit1.magG = 35;
+			unit1.strG = 60;
+			unit1.magG = 20;
 			unit1.sklG = 50;
 			unit1.spdG = 40;
 			unit1.lukG = 45;
-			unit1.defG = 30;
+			unit1.defG = 50;
 			unit1.resG = 35;
 
 			unit1.proficiency.Add("Sword");
@@ -407,19 +407,19 @@ public class CreatePlayers : MonoBehaviour {
 			unit2.skl = 7;
 			unit2.spd = 9;
 			unit2.luk = 5;
-			unit2.def = 2;
-			unit2.res = 0;
+			unit2.def = 4;
+			unit2.res = 2;
 			unit2.con = 5;
 			unit2.mov = 5;
 
 			unit2.hpG = 70;
-			unit2.strG = 40;
+			unit2.strG = 50;
 			unit2.magG = 20;
 			unit2.sklG = 60;
 			unit2.spdG = 60;
-			unit2.lukG = 55;
+			unit2.lukG = 50;
 			unit2.defG = 20;
-			unit2.resG = 30;
+			unit2.resG = 25;
 
 			unit2.proficiency.Add("Sword");
 			Item.instance.equipWeapon(unit2, "Sword", "IronSword");
@@ -448,23 +448,23 @@ public class CreatePlayers : MonoBehaviour {
 			ally1.maxHP = 16;
 			ally1.currentHP = 16;
 			ally1.strength = 0;
-			ally1.mag = 1;
-			ally1.skl = 6;
-			ally1.spd = 8;
+			ally1.mag = 4;
+			ally1.skl = 5;
+			ally1.spd = 6;
 			ally1.luk = 8;
 			ally1.def = 2;
-			ally1.res = 6;
+			ally1.res = 9;
 			ally1.con = 4;
 			ally1.mov = 5;
 
-			ally1.hpG = 45;
-			ally1.strG = 10;
-			ally1.magG = 50;
-			ally1.sklG = 30;
-			ally1.spdG = 20;
+			ally1.hpG = 60;
+			ally1.strG = 20;
+			ally1.magG = 40;
+			ally1.sklG = 35;
+			ally1.spdG = 35;
 			ally1.lukG = 70;
-			ally1.defG = 5;
-			ally1.resG = 60;
+			ally1.defG = 10;
+			ally1.resG = 80;
 
 			ally1.proficiency.Add("Tome");
 			ally1.proficiency.Add("Staff");
@@ -492,17 +492,27 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.isBoss = 1;
 			boss1.lvl = 2;
 			boss1.exp = 0;
-			boss1.maxHP = 24;
-			boss1.currentHP = 24;
+			boss1.maxHP = 22;
+			boss1.currentHP = 22;
 			boss1.strength = 4;
-			boss1.mag = 8;
-			boss1.skl = 14;
-			boss1.spd = 7;
-			boss1.luk = 9;
-			boss1.def = 8;
-			boss1.res = 10;
+			boss1.mag = 6;
+			boss1.skl = 4;
+			boss1.spd = 8;
+			boss1.luk = 3;
+			boss1.def = 3;
+			boss1.res = 7;
 			boss1.con = 6;
 			boss1.mov = 5;
+
+
+			boss1.hpG = 50;
+			boss1.strG = 20;
+			boss1.magG = 80;
+			boss1.sklG = 40;
+			boss1.spdG = 55;
+			boss1.lukG = 20;
+			boss1.defG = 30;
+			boss1.resG = 50;
 
 			boss1.proficiency.Add("Tome");
 			Item.instance.equipWeapon(boss1, "Tome", "Flux");
@@ -623,14 +633,14 @@ public class CreatePlayers : MonoBehaviour {
 
 			enemy3.classBonusA = 0;
 			enemy3.classBonusB = 0;
-			enemy3.lvl = 4;
+			enemy3.lvl = 3;
 			enemy3.exp = 0;
-			enemy3.maxHP = 23;
-			enemy3.currentHP = 23;
-			enemy3.strength = 8;
+			enemy3.maxHP = 24;
+			enemy3.currentHP = 24;
+			enemy3.strength = 7;
 			enemy3.mag = 0;
 			enemy3.skl = 3;
-			enemy3.spd = 7;
+			enemy3.spd = 6;
 			enemy3.luk = 2;
 			enemy3.def = 5;
 			enemy3.res = 2;

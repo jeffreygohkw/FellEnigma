@@ -177,6 +177,10 @@ public class PlayerUnit : Unit
 						}
 						else
 						{
+							isFighting = false;
+							isMoving = false;
+							Grid.instance.removeTileHighlight();
+
 							EventManager.TriggerEvent("DeselectUnit");
 
                             EventManager.StopListening("MoveUnit", MoveUnit);
