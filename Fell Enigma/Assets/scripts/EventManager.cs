@@ -87,7 +87,7 @@ public class EventManager : MonoBehaviour {
         {
             // Will call all listeners
             thisEvent.Invoke();
-            if (!eventName.Equals("GetStats") && !eventName.Equals("RemoveStats"))
+            // if (!eventName.Equals("GetStats") && !eventName.Equals("RemoveStats"))
             // Debug.Log("This event " + eventName + " is triggered");
         }
         else
