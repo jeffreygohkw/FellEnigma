@@ -204,7 +204,7 @@ public class ActionOtherUI : MonoBehaviour {
             foreach (string s in TavernUnits.tavernUnits.Keys)
             {
                 count++;
-                Rect buttonRect = new Rect(Screen.width/1.28f, Screen.height/1.4f - ((Screen.height / 15) * count), Screen.width/6, Screen.height/15);
+                Rect buttonRect = new Rect(Screen.width/1.28f, Screen.height/1.2f - ((Screen.height / 25) * count), Screen.width/6, Screen.height/25);
                 if (GUI.Button(buttonRect, s))
                 {
                     TavernUnits.tavernSpawn(s, thisUnit.gridPosition);

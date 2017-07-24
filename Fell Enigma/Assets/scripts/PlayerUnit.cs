@@ -179,7 +179,7 @@ public class PlayerUnit : Unit
 						{
 							EventManager.TriggerEvent("DeselectUnit");
 
-							EventManager.StopListening("MoveUnit", MoveUnit);
+                            EventManager.StopListening("MoveUnit", MoveUnit);
 							EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
 							EventManager.StopListening("AttackUnit", AttackUnit);
 							EventManager.StopListening("ItemUnit", ItemUnit);
@@ -1270,12 +1270,16 @@ public class PlayerUnit : Unit
                     Grid.instance.villageStatus[gridPosition][0] = team;
                     Grid.instance.villageStatus[gridPosition][1] = 2;
                     Debug.Log("Village has been captured.");
+                    CombatLog.instance.AddEvent("Village has been captured");
+                    CombatLog.instance.PrintEvent();
                 }
 				playerWait();
             }
             else
             {
                 Debug.Log("Village has already been captured");
+                CombatLog.instance.AddEvent("Village has already been captured");
+                CombatLog.instance.PrintEvent();
             }
         }
     }

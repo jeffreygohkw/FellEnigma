@@ -142,8 +142,11 @@ public class TavernUnits : MonoBehaviour {
 						Debug.Log(unitClass + " spawned for " + Grid.instance.tavernLevel * 500 + " gold");
 						Debug.Log(Grid.instance.gold + " gold left");
 
-						//Wait
-						Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
+                        CombatLog.instance.AddEvent(unitClass + " spawned for " + Grid.instance.tavernLevel * 500 + " gold");
+                        CombatLog.instance.PrintEvent();
+
+                        //Wait
+                        Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].playerWait();
 					}
 					else
 					{
@@ -153,12 +156,16 @@ public class TavernUnits : MonoBehaviour {
 				else
 				{
 					Debug.Log("Not enough gold");
-				}
+                    CombatLog.instance.AddEvent("Not enough gold");
+                    CombatLog.instance.PrintEvent();
+                }
 			}
 			else
 			{
 				Debug.Log("Spawn point is blocked");
-			}
+                CombatLog.instance.AddEvent("Spawn point is blocked");
+                CombatLog.instance.PrintEvent();
+            }
 		}
 		else
 		{

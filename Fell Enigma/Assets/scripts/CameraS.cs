@@ -10,7 +10,6 @@ public class CameraS : MonoBehaviour {
     public float max_x = 0;
     public float min_y = 0;
     public float max_y = 0;
-    private bool justOnce = true;
 
     private Vector3 newPos;
 
