@@ -14,6 +14,8 @@ public class WinCon : MonoBehaviour {
 		
 	}
 
+	static bool textOut = false;
+
 	/**
 	 * 0 = Continue
 	 * 1 = Victory
@@ -49,8 +51,14 @@ public class WinCon : MonoBehaviour {
 			foreach (Unit u in Grid.instance.units[1])
 			{
 				//Boss dies
-				if ((u.unitName == "Black Heart" || u.unitName == "Bandit Leader") && u.currentHP <= 0)
+				if ((u.unitName == "Black Heart" && u.currentHP <= 0))
 				{
+					ActivateTextAtLine.instance.startScript(61, 80);
+					return 2;
+				}
+				if ((u.unitName == "Bandit Leader") && u.currentHP <= 0)
+				{
+					ActivateTextAtLine.instance.startScript(83, 101);
 					return 2;
 				}
 				if (u.currentHP > 0)
@@ -83,8 +91,22 @@ public class WinCon : MonoBehaviour {
 			}
 
 			//If a hero dies
-			if (heroSlain || allCaptured)
+			if (heroSlain)
 			{
+				if (!textOut)
+				{
+					ActivateTextAtLine.instance.startScript(104, 106);
+					textOut = true;
+				}
+				return 1;
+			}
+			if (allCaptured)
+			{
+				if (!textOut)
+				{
+					ActivateTextAtLine.instance.startScript(109, 111);
+					textOut = true;
+				}
 				return 1;
 			}
 			//Rout

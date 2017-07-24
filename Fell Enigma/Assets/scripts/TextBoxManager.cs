@@ -22,6 +22,14 @@ public class TextBoxManager : MonoBehaviour {
 
 	public float typeSpeed = 0.03f;
 
+	public static TextBoxManager instance;
+
+	public void Awake()
+	{
+		instance = this;
+	}
+
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -119,5 +127,13 @@ public class TextBoxManager : MonoBehaviour {
 			textLines = new string[1];
 			textLines = (theText.text.Split('\n'));
 		}
+	}
+
+	public void setCurrentLine(int line)
+	{
+		currentLine = line;
+		StartCoroutine(textScroll(textLines[currentLine]));
+		cancelTyping = true;
+		
 	}
 }

@@ -90,7 +90,21 @@ public class Grid : MonoBehaviour {
             Application.Quit();
         }
 
-		if (waitUp)
+		//Skip Text
+		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+		{
+			TextBoxManager.instance.setCurrentLine(TextBoxManager.instance.endAtLine);
+			TextBoxManager.instance.disableTextBox();
+		}
+
+		if (waitUp || TextBoxManager.instance.isActive)
+		{
+			return;
+		}
+
+		bool newText = ActivateTextAtLine.instance.scriptUpdate();
+
+		if (newText)
 		{
 			return;
 		}
@@ -601,84 +615,88 @@ public class Grid : MonoBehaviour {
 			//Recruit
 			if (target.canTalk[units[currentTeam][currentPlayer].unitName] == 0)
 			{
-				PlayerUnit recruit = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(target.gridPosition.x - Mathf.Floor(Grid.instance.tilesPerCol / 2), target.gridPosition.y - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-				recruit.gridPosition = new Vector2(target.gridPosition.x, target.gridPosition.y);
-
-				recruit.unitName = target.unitName;
-				recruit.job = target.job;
-				recruit.isThief = target.isThief;
-				recruit.lvl = target.lvl;
-				recruit.exp = target.exp;
-				recruit.maxHP = target.maxHP;
-				recruit.currentHP = target.currentHP;
-				recruit.strength = target.strength;
-				recruit.mag = target.mag;
-				recruit.skl = target.skl;
-				recruit.spd = target.spd;
-				recruit.luk = target.luk;
-				recruit.def = target.def;
-				recruit.res = target.res;
-				recruit.con = target.con;
-				recruit.mov = target.mov;
-
-				recruit.hpG = target.hpG;
-				recruit.strG = target.strG;
-				recruit.magG = target.magG;
-				recruit.sklG = target.sklG;
-				recruit.spdG = target.spdG;
-				recruit.lukG = target.lukG;
-				recruit.defG = target.defG;
-				recruit.resG = target.resG;
-
-				foreach (string weapon in target.proficiency)
+				if (ActivateTextAtLine.instance.recruiting == 0)
 				{
-					recruit.proficiency.Add(weapon);
+					ActivateTextAtLine.instance.recruiting = 1;
+					PlayerUnit recruit = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(target.gridPosition.x - Mathf.Floor(Grid.instance.tilesPerCol / 2), target.gridPosition.y - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+					recruit.gridPosition = new Vector2(target.gridPosition.x, target.gridPosition.y);
+
+					recruit.unitName = target.unitName;
+					recruit.job = target.job;
+					recruit.isThief = target.isThief;
+					recruit.lvl = target.lvl;
+					recruit.exp = target.exp;
+					recruit.maxHP = target.maxHP;
+					recruit.currentHP = target.currentHP;
+					recruit.strength = target.strength;
+					recruit.mag = target.mag;
+					recruit.skl = target.skl;
+					recruit.spd = target.spd;
+					recruit.luk = target.luk;
+					recruit.def = target.def;
+					recruit.res = target.res;
+					recruit.con = target.con;
+					recruit.mov = target.mov;
+
+					recruit.hpG = target.hpG;
+					recruit.strG = target.strG;
+					recruit.magG = target.magG;
+					recruit.sklG = target.sklG;
+					recruit.spdG = target.spdG;
+					recruit.lukG = target.lukG;
+					recruit.defG = target.defG;
+					recruit.resG = target.resG;
+
+					foreach (string weapon in target.proficiency)
+					{
+						recruit.proficiency.Add(weapon);
+					}
+
+					for (int i = 0; i < target.inventory.Count; i++)
+					{
+						if (i == target.equippedIndex)
+						{
+							Item.instance.equipWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
+						}
+						else if (target.inventory[i].Length == 13)
+						{
+							Item.instance.addWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
+						}
+						else
+						{
+							Item.instance.addItem(recruit, target.inventory[i][0], target.inventory[i][1]);
+						}
+					}
+
+					Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].occupied = recruit;
+
+					recruit.team = 0;
+					recruit.allies.Add(0);
+
+					// The recruited unit gets a turn
+					recruit.doneMoving = false;
+					recruit.doneAction = false;
+					recruit.selected = false;
+					recruit.willAttack = false;
+					recruit.isMoving = false;
+					recruit.isFighting = false;
+					recruit.isHealing = false;
+					recruit.activeStaffIndex = -1;
+					recruit.highlighted = false;
+					recruit.displayInventory = false;
+					recruit.selectedItemIndex = -1;
+
+					recruit.index = units[currentTeam].Count;
+					units[currentTeam].Add(recruit);
+
+					removeTileHighlight();
+
+					units[target.team][target.index].gameObject.SetActive(false);
+					units[target.team].RemoveAt(target.index);
+
+					units[currentTeam][currentPlayer].playerWait();
+					Debug.Log(recruit.unitName + " has joined!");
 				}
-
-				for (int i = 0; i < target.inventory.Count; i++)
-				{
-					if (i == target.equippedIndex)
-					{
-						Item.instance.equipWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
-					}
-					else if (target.inventory[i].Length == 13)
-					{
-						Item.instance.addWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
-					}
-					else
-					{
-						Item.instance.addItem(recruit, target.inventory[i][0], target.inventory[i][1]);
-					}
-				}
-
-				Grid.instance.map[(int)target.gridPosition.x][(int)target.gridPosition.y].occupied = recruit;
-
-				recruit.team = 0;
-				recruit.allies.Add(0);
-
-				// The recruited unit gets a turn
-				recruit.doneMoving = false;
-				recruit.doneAction = false;
-				recruit.selected = false;
-				recruit.willAttack = false;
-				recruit.isMoving = false;
-				recruit.isFighting = false;
-				recruit.isHealing = false;
-				recruit.activeStaffIndex = -1;
-				recruit.highlighted = false;
-				recruit.displayInventory = false;
-				recruit.selectedItemIndex = -1;
-
-				recruit.index = units[currentTeam].Count;
-				units[currentTeam].Add(recruit);
-
-				removeTileHighlight();
-
-				units[target.team][target.index].gameObject.SetActive(false);
-				units[target.team].RemoveAt(target.index);
-
-				units[currentTeam][currentPlayer].playerWait();
-				Debug.Log(recruit.unitName + " has joined!");
 			}
 		}
 		else

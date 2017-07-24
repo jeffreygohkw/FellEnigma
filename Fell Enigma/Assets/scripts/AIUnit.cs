@@ -628,28 +628,31 @@ public class AIUnit : Unit
 	{
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+			if (TextBoxManager.instance.isActive == false)
 			{
-				Grid.instance.battle.attackWithCurrentUnit(this);
-			}
-			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-			{
-				Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
-			}
-			else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-			{
-				Grid.instance.talkWithCurrentUnit(this);
-			}
-			else
-			{
-				//Danger Range
-				if (Grid.instance.highlightedEnemies.Contains(this))
+				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 				{
-					Grid.instance.highlightedEnemies.Remove(this);
+					Grid.instance.battle.attackWithCurrentUnit(this);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+				}
+				else if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isTalking && canTalk.ContainsKey(Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].unitName) && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+				{
+					Grid.instance.talkWithCurrentUnit(this);
 				}
 				else
 				{
-					Grid.instance.highlightedEnemies.Add(this);
+					//Danger Range
+					if (Grid.instance.highlightedEnemies.Contains(this))
+					{
+						Grid.instance.highlightedEnemies.Remove(this);
+					}
+					else
+					{
+						Grid.instance.highlightedEnemies.Add(this);
+					}
 				}
 			}
 		}

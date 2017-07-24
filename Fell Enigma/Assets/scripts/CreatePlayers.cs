@@ -679,6 +679,8 @@ public class CreatePlayers : MonoBehaviour {
 					u.mainCam = Grid.instance.mainCam;
 				}
 			}
+
+			Grid.instance.resetCamera();
 		}
 
 	}

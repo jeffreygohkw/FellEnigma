@@ -131,81 +131,84 @@ public class PlayerUnit : Unit
 	{
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			if (Grid.instance.currentTeam == team)
+			if (TextBoxManager.instance.isActive == false)
 			{
-				foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
+				if (Grid.instance.currentTeam == team)
 				{
-					if (u.selected && u != this)
+					foreach (Unit u in Grid.instance.units[Grid.instance.currentTeam])
 					{
-						if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+						if (u.selected && u != this)
 						{
-							Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+							if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isHealing && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
+							{
+								Grid.instance.battle.healWithCurrentUnit(this, Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].inventory[Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].activeStaffIndex]);
+							}
+							return;
 						}
-						return;
+					}
+					if (selected && doneMoving)
+					{
+						playerWait();
+					}
+					if (!doneAction)
+					{
+						selected = !selected;
+						if (selected)
+						{
+							EventManager.TriggerEvent("SelectUnit");
+
+							EventManager.StartListening("MoveUnit", MoveUnit);
+							EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
+							EventManager.StartListening("AttackUnit", AttackUnit);
+							EventManager.StartListening("ItemUnit", ItemUnit);
+							EventManager.StartListening("WaitUnit", WaitUnit);
+							EventManager.StartListening("EndUnit", EndUnit);
+							EventManager.StartListening("OtherUnit", OtherUnit);
+							EventManager.StartListening("TalkUnit", TalkUnit);
+							EventManager.StartListening("CapUnit", CapUnit);
+							EventManager.StartListening("TavUnit", TavUnit);
+							EventManager.StartListening("ObjUnit", ObjUnit);
+							EventManager.StartListening("EquipUseItem", EquipUseItem);
+							EventManager.StartListening("DiscardItem", DiscardItem);
+						}
+						else
+						{
+							EventManager.TriggerEvent("DeselectUnit");
+
+							EventManager.StopListening("MoveUnit", MoveUnit);
+							EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
+							EventManager.StopListening("AttackUnit", AttackUnit);
+							EventManager.StopListening("ItemUnit", ItemUnit);
+							EventManager.StopListening("WaitUnit", WaitUnit);
+							EventManager.StopListening("EndUnit", EndUnit);
+							EventManager.StopListening("OtherUnit", OtherUnit);
+							EventManager.StopListening("TalkUnit", TalkUnit);
+							EventManager.StopListening("CapUnit", CapUnit);
+							EventManager.StopListening("TavUnit", TavUnit);
+							EventManager.StopListening("ObjUnit", ObjUnit);
+							EventManager.StopListening("EquipUseItem", EquipUseItem);
+							EventManager.StopListening("DiscardItem", DiscardItem);
+						}
+					}
+					if (selected && !doneAction)
+					{
+						Grid.instance.currentPlayer = index;
 					}
 				}
-				if (selected && doneMoving)
+				if (Grid.instance.currentPlayer != -1)
 				{
-					playerWait();
-				}
-				if (!doneAction)
-				{
-					selected = !selected;
-					if (selected)
+					if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
 					{
-						EventManager.TriggerEvent("SelectUnit");
-
-                        EventManager.StartListening("MoveUnit", MoveUnit);
-                        EventManager.StartListening("UndoMoveUnit", UndoMoveUnit);
-                        EventManager.StartListening("AttackUnit", AttackUnit);
-                        EventManager.StartListening("ItemUnit", ItemUnit);
-                        EventManager.StartListening("WaitUnit", WaitUnit);
-                        EventManager.StartListening("EndUnit", EndUnit);
-                        EventManager.StartListening("OtherUnit", OtherUnit);
-                        EventManager.StartListening("TalkUnit", TalkUnit);
-                        EventManager.StartListening("CapUnit", CapUnit);
-                        EventManager.StartListening("TavUnit", TavUnit);
-                        EventManager.StartListening("ObjUnit", ObjUnit);
-                        EventManager.StartListening("EquipUseItem", EquipUseItem);
-                        EventManager.StartListening("DiscardItem", DiscardItem);
-                    }
-					else
-					{
-						EventManager.TriggerEvent("DeselectUnit");
-
-                        EventManager.StopListening("MoveUnit", MoveUnit);
-                        EventManager.StopListening("UndoMoveUnit", UndoMoveUnit);
-                        EventManager.StopListening("AttackUnit", AttackUnit);
-                        EventManager.StopListening("ItemUnit", ItemUnit);
-                        EventManager.StopListening("WaitUnit", WaitUnit);
-                        EventManager.StopListening("EndUnit", EndUnit);
-                        EventManager.StopListening("OtherUnit", OtherUnit);
-                        EventManager.StopListening("TalkUnit", TalkUnit);
-                        EventManager.StopListening("CapUnit", CapUnit);
-                        EventManager.StopListening("TavUnit", TavUnit);
-                        EventManager.StopListening("ObjUnit", ObjUnit);
-                        EventManager.StopListening("EquipUseItem", EquipUseItem);
-                        EventManager.StopListening("DiscardItem", DiscardItem);
-                    }
+						Grid.instance.battle.attackWithCurrentUnit(this);
+					}
 				}
-				if (selected && !doneAction)
+				else
 				{
-					Grid.instance.currentPlayer = index;
+					isMoving = false;
+					isFighting = false;
+					isHealing = false;
+					activeStaffIndex = -1;
 				}
-			}
-			if (Grid.instance.currentPlayer != -1)
-			{
-				if (Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].isFighting && Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer] != this)
-				{
-					Grid.instance.battle.attackWithCurrentUnit(this);
-				}
-			}
-			else
-			{
-				isMoving = false;
-				isFighting = false;
-				isHealing = false;
-				activeStaffIndex = -1;
 			}
 		}
 	}

@@ -44,6 +44,7 @@ public class CreateBuildings : MonoBehaviour
 
 			Grid.instance.commander = 0;
 			Grid.instance.ultCharge = 70;
+			ActivateTextAtLine.instance.startScript(0, 10);
 		}
 	}
 }
