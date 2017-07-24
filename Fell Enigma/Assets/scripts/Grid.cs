@@ -720,7 +720,9 @@ public class Grid : MonoBehaviour {
 		if (ultActive)
 		{
 			Debug.Log("Ultimate is already active.");
-			return;
+            CombatLog.instance.AddEvent("Ultimate is already active.");
+            CombatLog.instance.PrintEvent();
+            return;
 		}
 		ultCharge = 0;
 		if (commander == 0)
@@ -734,7 +736,9 @@ public class Grid : MonoBehaviour {
 			}
 			ultActive = true;
 			Debug.Log("All allies gained 1 extra mov and 1 extra weapon range!");
-		}
+            CombatLog.instance.AddEvent("All allies gained 1 extra mov and 1 extra weapon range!");
+            CombatLog.instance.PrintEvent();
+        }
 		else if (commander == 1)
 		{
 			//Naive Prince
@@ -754,7 +758,9 @@ public class Grid : MonoBehaviour {
 			}
 			ultActive = true;
 			Debug.Log("All allies gained 5 to all stats!");
-		}
+            CombatLog.instance.AddEvent("All allies gained 5 to all stats!");
+            CombatLog.instance.PrintEvent();
+        }
 		else if (commander == 2)
 		{
 			//Kind Soul
@@ -772,7 +778,9 @@ public class Grid : MonoBehaviour {
 			}
 			ultActive = true;
 			Debug.Log("All allies have been healed!");
-		}
+            CombatLog.instance.AddEvent("All allies have been healed!");
+            CombatLog.instance.PrintEvent();
+        }
 		else if (commander == 3)
 		{
 			//Young Rebel
@@ -784,7 +792,9 @@ public class Grid : MonoBehaviour {
 			}
 			ultActive = true;
 			Debug.Log("All allies no longer receive counterattacks, and have improved hit and crit rates!");
-		}
+            CombatLog.instance.AddEvent("All allies no longer receive counterattacks, and have improved hit and crit rates!");
+            CombatLog.instance.PrintEvent();
+        }
 		else if (commander == 4)
 		{
 			//Black Heart
@@ -808,11 +818,15 @@ public class Grid : MonoBehaviour {
 			}
 			ultActive = true;
 			Debug.Log("All enemies have taken 10 damage!");
-		}
+            CombatLog.instance.AddEvent("All enemies have taken 10 damage!");
+            CombatLog.instance.PrintEvent();
+        }
 		else
 		{
 			Debug.Log("No Commander set, can't cast ult.");
-		}
+            CombatLog.instance.AddEvent("No Commander set, can't cast ult.");
+            CombatLog.instance.PrintEvent();
+        }
 	}
 
 
