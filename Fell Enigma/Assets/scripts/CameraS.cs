@@ -5,13 +5,11 @@ using UnityEngine;
 public class CameraS : MonoBehaviour {
 
     public float Boundary = 0.05f; // distance from edge scrolling starts
-    public float speed = 5;
-    private float min_x;
-    private float max_x;
-    private float min_y;
-    private float max_y;
-    private float horiSize = 0;
-    private float vertSize = 0;
+    public float speed = 10;
+    public float min_x = 0;
+    public float max_x = 0;
+    public float min_y = 0;
+    public float max_y = 0;
     private bool justOnce = true;
 
     private Vector3 newPos;
@@ -25,21 +23,6 @@ public class CameraS : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        // Now camera adjusts according to the grid size. Hopefully this works for all cases
-        if (horiSize == 0 && vertSize == 0)
-        {
-            horiSize = Grid.instance.tilesPerRow;
-            vertSize = Grid.instance.tilesPerCol;
-        }
-
-        if (justOnce)
-        {
-            min_x = transform.position.x - horiSize + 23.5f;
-            max_x = transform.position.x + horiSize - 24;
-            min_y = transform.position.y - vertSize + 16.5f;
-            max_y = transform.position.y + vertSize - 20.6f;
-            justOnce = false;
-        }
 
         newPos = transform.position;
 
