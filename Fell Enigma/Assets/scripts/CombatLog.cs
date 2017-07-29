@@ -15,11 +15,12 @@ public class CombatLog : MonoBehaviour{
     private bool fullLogOut = false;
 
     private int counter = 0;
-    public int maxLines = 13;
+    private int maxLines = Screen.height/22; //Adjusted to fit screen size
 
     // Use this for initialization
     void Start () {
         textBar = GetComponent<Text>();
+        Debug.Log(maxLines);
 	}
 
     private void Awake()

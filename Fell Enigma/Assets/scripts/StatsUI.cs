@@ -95,9 +95,12 @@ public class StatsUI : MonoBehaviour {
     * v1.3
     * Added Heal Forecast and Profile Functionality Expanded Battle Forecast.
     * 
+    * v1.4
+    * Added the case where enemy cannot counterattack
+    * 
     * @author Wayne Neo
-    * @version 1.3
-    * @updated on 19/7/17
+    * @version 1.4
+    * @updated on 29/7/17
     */
     void GetStats()
     {
@@ -143,9 +146,20 @@ public class StatsUI : MonoBehaviour {
                 int myCrit = Mathf.Max(attackerCritRate - defenderCritAvd, 0);
                 int enemyCrit = Mathf.Max(defenderCritRate - attackerCritAvd, 0);
 
-                myForecastUI.text = (selectedUnit.currentHP).ToString() + " => " + Mathf.Max((selectedUnit.currentHP - dmgtoMe),0).ToString();
+                int dist = Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.x - (int)currUnit.gridPosition.x) + Mathf.Abs((int)Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].gridPosition.y - (int)currUnit.gridPosition.y);
+
+                // If enemy cannot counter
+                if (currUnit.weaponMinRange > dist || currUnit.weaponMaxRange + currUnit.weaponRangeBuff < dist || Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].rebelBuff)
+                {
+                    myForecastUI.text = "No change";
+                }
+                else
+                {
+                    myForecastUI.text = (selectedUnit.currentHP).ToString() + " => " + Mathf.Max((selectedUnit.currentHP - dmgtoMe), 0).ToString();
+                }
                 enemyForecastUI.text = (currUnit.currentHP).ToString() + " => " + Mathf.Max((currUnit.currentHP - dmgtoEnemy), 0).ToString();
-              
+
+                // Seperated due to spacing in UI
                 if (myHr == 100)
                 {
                     if (selectedUnit.spd - currUnit.spd >= 4)
@@ -168,7 +182,12 @@ public class StatsUI : MonoBehaviour {
                         myForecastStatsUI.text = "\t" + selectedUnit.inventory[selectedUnit.equippedIndex][1] + "\n" + myHr.ToString() + "%\t\t\t" + myCrit.ToString() + "%";
                     }
                 }
-                if (enemyHr == 100)
+
+                if (currUnit.weaponMinRange > dist || currUnit.weaponMaxRange + currUnit.weaponRangeBuff < dist || Grid.instance.units[Grid.instance.currentTeam][Grid.instance.currentPlayer].rebelBuff)
+                    {
+                    enemyForecastStatsUI.text = currUnit.inventory[currUnit.equippedIndex][1] + "\n" + "-" + "\t\t -";
+                    }
+                else if (enemyHr == 100)
                 {
                     if (currUnit.spd - selectedUnit.spd >= 4)
                     {
@@ -191,6 +210,7 @@ public class StatsUI : MonoBehaviour {
                     }
                 }
 
+                // Profile picture loading
                 if (currUnit.unitName.Equals("Naive Prince"))
                 {
                     enemyProfile.texture = profiles[0];

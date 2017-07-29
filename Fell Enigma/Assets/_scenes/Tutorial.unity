@@ -141,7 +141,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 708, y: 80}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2037409
 MonoBehaviour:
@@ -738,7 +738,7 @@ GameObject:
   - component: {fileID: 189247426}
   - component: {fileID: 189247425}
   m_Layer: 5
-  m_Name: My HP
+  m_Name: My HP Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,7 +760,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 255, y: 135}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &189247425
 MonoBehaviour:
@@ -925,7 +925,7 @@ GameObject:
   - component: {fileID: 271432323}
   - component: {fileID: 271432322}
   m_Layer: 5
-  m_Name: Enemy HP
+  m_Name: Enemy HP Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -947,7 +947,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 708, y: 135}
-  m_SizeDelta: {x: 75, y: 75}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &271432322
 MonoBehaviour:
@@ -2010,9 +2010,9 @@ RectTransform:
   m_Father: {fileID: 929983002}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -126.5, y: 490.37012}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 833.5, y: -49.629883}
   m_SizeDelta: {x: 1507, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &531251035
@@ -2425,7 +2425,7 @@ GameObject:
   - component: {fileID: 674105851}
   - component: {fileID: 674105850}
   m_Layer: 5
-  m_Name: Enemy Crit
+  m_Name: Enemy Crit Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2447,7 +2447,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 585, y: 30}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &674105850
 MonoBehaviour:
@@ -2775,7 +2775,7 @@ GameObject:
   - component: {fileID: 761299938}
   - component: {fileID: 761299937}
   m_Layer: 5
-  m_Name: My Crit
+  m_Name: My Crit Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2797,7 +2797,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 375, y: 30}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &761299937
 MonoBehaviour:
@@ -2865,7 +2865,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 255, y: 80}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &766386762
 MonoBehaviour:
@@ -3052,7 +3052,7 @@ GameObject:
   - component: {fileID: 863864865}
   - component: {fileID: 863864864}
   m_Layer: 5
-  m_Name: My HR Icon
+  m_Name: Enemy HR Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3074,7 +3074,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 713, y: 30}
-  m_SizeDelta: {x: 60, y: 60}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &863864864
 MonoBehaviour:
@@ -3667,9 +3667,9 @@ RectTransform:
   m_Father: {fileID: 929983002}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -122, y: 490.37}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 838, y: -49.630005}
   m_SizeDelta: {x: 1516, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &971571128
@@ -3683,7 +3683,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb3e4ea6566a984290dd1dffacf1692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLines: 13
 --- !u!114 &971571129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4630,6 +4629,7 @@ MonoBehaviour:
   se3: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
   se4: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   se5: {fileID: 8300000, guid: c5e2a73ad4706440f93bf05df0b465fe, type: 3}
+  se6: {fileID: 8300000, guid: ff5f85da24bc943d1abdc5760a22bc81, type: 3}
 --- !u!82 &1228532963
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6204,7 +6204,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 255, y: 30}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1529351121
 MonoBehaviour:
@@ -7960,9 +7960,9 @@ RectTransform:
   m_Father: {fileID: 929983002}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -131, y: -50}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 829, y: -50}
   m_SizeDelta: {x: 1516, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1911016553

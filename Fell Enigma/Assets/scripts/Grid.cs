@@ -759,6 +759,7 @@ public class Grid : MonoBehaviour {
 				u.mov += 1;
 			}
 			ultActive = true;
+            EventManager.TriggerEvent("PlayUltSound");
 			Debug.Log("All allies gained 1 extra mov and 1 extra weapon range!");
             CombatLog.instance.AddEvent("All allies gained 1 extra mov and 1 extra weapon range!");
             CombatLog.instance.PrintEvent();
@@ -781,7 +782,8 @@ public class Grid : MonoBehaviour {
 				u.res += 5;
 			}
 			ultActive = true;
-			Debug.Log("All allies gained 5 to all stats!");
+            EventManager.TriggerEvent("PlayUltSound");
+            Debug.Log("All allies gained 5 to all stats!");
             CombatLog.instance.AddEvent("All allies gained 5 to all stats!");
             CombatLog.instance.PrintEvent();
         }
@@ -801,7 +803,8 @@ public class Grid : MonoBehaviour {
 				}
 			}
 			ultActive = true;
-			Debug.Log("All allies have been healed!");
+            EventManager.TriggerEvent("PlayUltSound");
+            Debug.Log("All allies have been healed!");
             CombatLog.instance.AddEvent("All allies have been healed!");
             CombatLog.instance.PrintEvent();
         }
@@ -815,7 +818,8 @@ public class Grid : MonoBehaviour {
 				u.rebelBuff = true;
 			}
 			ultActive = true;
-			Debug.Log("All allies no longer receive counterattacks, and have improved hit and crit rates!");
+            EventManager.TriggerEvent("PlayUltSound");
+            Debug.Log("All allies no longer receive counterattacks, and have improved hit and crit rates!");
             CombatLog.instance.AddEvent("All allies no longer receive counterattacks, and have improved hit and crit rates!");
             CombatLog.instance.PrintEvent();
         }
@@ -841,7 +845,8 @@ public class Grid : MonoBehaviour {
 				}
 			}
 			ultActive = true;
-			Debug.Log("All enemies have taken 10 damage!");
+            EventManager.TriggerEvent("PlayUltSound");
+            Debug.Log("All enemies have taken 10 damage!");
             CombatLog.instance.AddEvent("All enemies have taken 10 damage!");
             CombatLog.instance.PrintEvent();
         }

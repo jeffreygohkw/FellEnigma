@@ -9,6 +9,7 @@ public class SoundEffect : MonoBehaviour {
     public AudioClip se3; // pot usage
     public AudioClip se4; // heal
     public AudioClip se5; // time sound
+    public AudioClip se6; // ult sound
     private AudioSource source;
 
 	// Use this for initialization
@@ -18,6 +19,7 @@ public class SoundEffect : MonoBehaviour {
         EventManager.StartListening("PlayPotSound", PlayPotSound);
         EventManager.StartListening("PlayHealSound", PlayHealSound);
         EventManager.StartListening("PlayTimeSound", PlayTimeSound);
+        EventManager.StartListening("PlayUltSound", PlayUltSound);
     }
 	
 	// Update is called once per frame
@@ -90,5 +92,17 @@ public class SoundEffect : MonoBehaviour {
     void PlayTimeSound()
     {
         source.PlayOneShot(se5, 0.5f);
+    }
+
+    /**
+    * Event Manager: Plays sound effect for Ult
+    * 
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated on 29/7/17
+    */
+    void PlayUltSound()
+    {
+        source.PlayOneShot(se6, 0.5f);
     }
 }
