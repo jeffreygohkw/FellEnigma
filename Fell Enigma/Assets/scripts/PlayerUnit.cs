@@ -74,6 +74,10 @@ public class PlayerUnit : Unit
 
             //Object disappears if dead
             gameObject.SetActive(false);
+			if (!isHero)
+			{
+				Grid.instance.units[team].RemoveAt(index);
+			}
             //Turn the tile this unit was standing on free
             Grid.instance.map[(int)gridPosition.x][(int)gridPosition.y].occupied = null;
 

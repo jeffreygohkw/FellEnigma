@@ -58,6 +58,13 @@ public class Grid : MonoBehaviour {
 	public Dictionary<Vector2, string> objectiveSpecificTiles = new Dictionary<Vector2, string>();
 	public string objectiveComplete;
 
+	/*
+	 * 0: Still playing
+	 * 1: Victory
+	 * 2: Failure
+	 */
+	public int status = 0;
+
 	public List<Unit> highlightedEnemies = new List<Unit>();
 
 	public Dictionary<Vector2, string[]> chestLoot = new Dictionary<Vector2, string[]>();
@@ -109,7 +116,12 @@ public class Grid : MonoBehaviour {
 			return;
 		}
 
-		int status = WinCon.checkWinCon(mapName);
+		if (status != 0)
+		{
+			return;
+		}
+
+		status = WinCon.checkWinCon(mapName);
 		//Win conditions
 
 
