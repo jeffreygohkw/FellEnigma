@@ -29,6 +29,7 @@ public class TavernUnits : MonoBehaviour {
 	*/
 	public void initUnits()
 	{
+		tavernUnits.Clear();
 		// Splits the text file into lines
 		string[] lines = unitDatabase.text.Split("\r"[0]);
 		string[] name;

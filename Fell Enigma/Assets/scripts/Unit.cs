@@ -40,8 +40,6 @@ public class Unit : MonoBehaviour {
 
 	public List<string> proficiency = new List<string>();
 
-	public bool movementType;
-
 	// Unit stats
 	public string unitName;
 	public string job;

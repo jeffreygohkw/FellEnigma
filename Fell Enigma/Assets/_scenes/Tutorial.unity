@@ -3041,6 +3041,52 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 781700566}
+--- !u!1 &826715813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 826715815}
+  - component: {fileID: 826715814}
+  m_Layer: 0
+  m_Name: GameControl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &826715814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 826715813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d6990c07d76e543b6497b5773b5c0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MC: {fileID: 0}
+  NP: {fileID: 0}
+  KS: {fileID: 0}
+  YR: {fileID: 0}
+  BH: {fileID: 0}
+  gold: 0
+--- !u!4 &826715815
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 826715813}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 211.68228, y: 260.46326, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &863864862
 GameObject:
   m_ObjectHideFlags: 0
@@ -8097,6 +8143,7 @@ MonoBehaviour:
   mapConfig: {fileID: 4900000, guid: a4d0d2de050c14d429ccae257ad0b8e2, type: 3}
   mainCam: {fileID: 736736688}
   mapName: tutorial
+  nextScene: Chapter1
   tilesPerRow: 0
   tilesPerCol: 0
   currentPlayer: 0
@@ -8139,23 +8186,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitDatabase: {fileID: 4900000, guid: 29740156f41d9914bbc0bc624efbab14, type: 3}
---- !u!114 &1960816819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1960816814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d6990c07d76e543b6497b5773b5c0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MC: {fileID: 0}
-  NP: {fileID: 0}
-  KS: {fileID: 0}
-  YR: {fileID: 0}
-  BH: {fileID: 0}
-  gold: 0
 --- !u!1 &1976485775
 GameObject:
   m_ObjectHideFlags: 0

@@ -410,10 +410,6 @@ public class TileHighlight {
 		{
 			return toReturn;
 		}
-		// Dictionary of tiles
-		// Key is a tile that can be attacked
-		// The value is a list of the tiles that the unit can attack the key tile from
-		Dictionary<Tile, List<Tile>> targets = new Dictionary<Tile, List<Tile>>();
 
 		foreach (Tile t in moveRange)
 		{

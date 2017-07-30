@@ -349,8 +349,8 @@ public class CreatePlayers : MonoBehaviour {
 		}
 		else if (mapName == "tutorial")
 		{
-			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(5 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 25 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit1.gridPosition = new Vector2(5, 25);
+			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 5 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit1.gridPosition = new Vector2(2, 5);
 
 			unit1.unitName = "Naive Prince";
 			unit1.job = "Prince";
@@ -382,7 +382,7 @@ public class CreatePlayers : MonoBehaviour {
 			Item.instance.equipWeapon(unit1, "Sword", "IronSword");
 			Item.instance.addItem(unit1, "Consumable", "Potion");
 
-			Grid.instance.map[5][25].occupied = unit1;
+			Grid.instance.map[2][5].occupied = unit1;
 
 			unit1.team = 0;
 			unit1.allies.Add(0);
@@ -493,7 +493,7 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.lvl = 2;
 			boss1.exp = 0;
 			boss1.maxHP = 22;
-			boss1.currentHP = 22;
+			boss1.currentHP = 1;
 			boss1.strength = 4;
 			boss1.mag = 6;
 			boss1.skl = 4;
@@ -612,7 +612,7 @@ public class CreatePlayers : MonoBehaviour {
 			enemy2.con = 12;
 			enemy2.mov = 5;
 
-			enemy2.proficiency.Add("Axe");	
+			enemy2.proficiency.Add("Axe");
 			Item.instance.equipWeapon(enemy2, "Axe", "BronzeAxe");
 
 			Grid.instance.map[14][14].occupied = enemy2;
@@ -692,6 +692,83 @@ public class CreatePlayers : MonoBehaviour {
 
 			Grid.instance.resetCamera();
 		}
+		else if (mapName == "chapter1")
+		{
+			//Load Save
+			GameControl.instance.Load();
 
+			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 17 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit1.gridPosition = new Vector2(2, 17);
+
+			unit1.unitName = GameControl.instance.npNameJob[0];
+			unit1.job = GameControl.instance.npNameJob[1];
+			unit1.isHero = GameControl.instance.npBoolData[0];
+			unit1.isFlying = GameControl.instance.npBoolData[1];
+
+			unit1.lvl = GameControl.instance.npIntData[0];
+			unit1.exp = GameControl.instance.npIntData[1];
+			unit1.maxHP = GameControl.instance.npIntData[2];
+			if (GameControl.instance.npIntData[3] <= 0)
+			{
+				unit1.currentHP = 0;
+			}
+			else
+			{
+				unit1.currentHP = GameControl.instance.npIntData[2];
+			}
+			unit1.strength = GameControl.instance.npIntData[4];
+			unit1.mag = GameControl.instance.npIntData[5];
+			unit1.skl = GameControl.instance.npIntData[6];
+			unit1.spd = GameControl.instance.npIntData[7];
+			unit1.luk = GameControl.instance.npIntData[8];
+			unit1.def = GameControl.instance.npIntData[9];
+			unit1.res = GameControl.instance.npIntData[10];
+			unit1.con = GameControl.instance.npIntData[11];
+			unit1.mov = GameControl.instance.npIntData[12];
+
+			unit1.hpG = GameControl.instance.npIntData[13];
+			unit1.strG = GameControl.instance.npIntData[14];
+			unit1.magG = GameControl.instance.npIntData[15];
+			unit1.sklG = GameControl.instance.npIntData[16];
+			unit1.spdG = GameControl.instance.npIntData[17];
+			unit1.lukG = GameControl.instance.npIntData[18];
+			unit1.defG = GameControl.instance.npIntData[19];
+			unit1.resG = GameControl.instance.npIntData[20];
+
+			unit1.proficiency = GameControl.instance.npProf;
+
+			unit1.inventory = GameControl.instance.npInventory;
+			unit1.equippedIndex = GameControl.instance.npIntData[21];
+			unit1.weaponMt = GameControl.instance.npIntData[22];
+			unit1.weaponPhysical = GameControl.instance.npBoolData[2];
+			unit1.weaponAcc = GameControl.instance.npIntData[23];
+			unit1.weaponCrit = GameControl.instance.npIntData[24];
+			unit1.weaponWt = GameControl.instance.npIntData[25];
+			unit1.weaponMinRange = GameControl.instance.npIntData[26];
+			unit1.weaponMaxRange = GameControl.instance.npIntData[27];
+
+			Grid.instance.map[2][17].occupied = unit1;
+
+			unit1.team = 0;
+			unit1.allies.Add(0);
+			unit1.index = 0;
+
+			List<Unit> team0 = new List<Unit>();
+			List<Unit> team2 = new List<Unit>();
+
+			team0.Add(unit1);
+
+			Grid.instance.units.Add(team0);
+
+			foreach (List<Unit> team in Grid.instance.units)
+			{
+				foreach (Unit u in team)
+				{
+					u.mainCam = Grid.instance.mainCam;
+				}
+			}
+
+			Grid.instance.resetCamera();
+		}
 	}
 }

@@ -58,7 +58,7 @@ public class WinCon : MonoBehaviour {
 						ActivateTextAtLine.instance.startScript(61, 80);
 						textOut = true;
 					}
-					return 2;
+					return 1;
 				}
 				if ((u.unitName == "Bandit Leader") && u.currentHP <= 0)
 				{
@@ -67,7 +67,7 @@ public class WinCon : MonoBehaviour {
 						ActivateTextAtLine.instance.startScript(83, 101);
 						textOut = true;
 					}
-					return 2;
+					return 1;
 				}
 				if (u.currentHP > 0)
 				{
@@ -106,7 +106,7 @@ public class WinCon : MonoBehaviour {
 					ActivateTextAtLine.instance.startScript(104, 106);
 					textOut = true;
 				}
-				return 1;
+				return 2;
 			}
 			if (allCaptured)
 			{
@@ -115,12 +115,12 @@ public class WinCon : MonoBehaviour {
 					ActivateTextAtLine.instance.startScript(109, 111);
 					textOut = true;
 				}
-				return 1;
+				return 2;
 			}
 			//Rout
 			else if (rout)
 			{
-				return 2;
+				return 1;
 			}
 			else
 			{

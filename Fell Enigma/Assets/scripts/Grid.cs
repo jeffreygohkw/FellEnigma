@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Grid : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class Grid : MonoBehaviour {
     public TextAsset mapConfig;
     public Camera mainCam;
 	public string mapName;
+	public string nextScene;
 
 	public int tilesPerRow = 0;
 	public int tilesPerCol = 0;
@@ -86,6 +88,7 @@ public class Grid : MonoBehaviour {
 		CreateTiles();
 		CreatePlayers.generatePlayers(mapName);
 		CreateBuildings.generateBuildings(mapName);
+		Debug.Log("Started");
 	}
 
 	// Update is called once per frame
@@ -116,9 +119,36 @@ public class Grid : MonoBehaviour {
 			return;
 		}
 
-		if (status != 0)
+		//Go to next scene
+		if (status == 1)
 		{
-			return;
+			if (nextScene != null)
+			{
+				/*
+				tilesPerRow = 0;
+				tilesPerCol = 0;
+
+				currentPlayer = -1;
+
+				currentTeam = 0;
+				map.Clear();
+				units.Clear();
+				villageStatus.Clear();
+				tavernAndSpawn.Clear();
+				highlightedEnemies.Clear();
+				objectiveSpecificTiles.Clear();
+				chestLoot.Clear();
+				ultActive = false;
+
+				waitUp = false;
+				*/
+				SceneManager.LoadScene(nextScene);
+				return;
+			}
+			else
+			{
+				return;
+			}
 		}
 
 		status = WinCon.checkWinCon(mapName);
@@ -138,6 +168,7 @@ public class Grid : MonoBehaviour {
 
 		if (status == 1)
 		{
+			GameControl.instance.Save();
 			HUDCanvas.SetActive(true);
 			foreach (List<Unit> u in units)
 			{
@@ -166,7 +197,6 @@ public class Grid : MonoBehaviour {
 		// For highlighting of enemy range
 		removeTerrainHighlight();
 
-		List<Tile> dangerRange = new List<Tile>();
 		foreach (Unit u in highlightedEnemies)
 		{
 			List<Tile> enemiesInRange = TileHighlight.FindAttackRange(Grid.instance.map[(int)u.gridPosition.x][(int)u.gridPosition.y], 1, u.mov, u.weaponMinRange, u.weaponMaxRange + u.weaponRangeBuff, u.allies, true, u.isFlying);
@@ -482,16 +512,18 @@ public class Grid : MonoBehaviour {
      * v 1.1
      * Changed to user-defined color
      * 
-     * 
+     * v1.2
+	 * Bugfix for non square maps
+	 * 
 	 * @author Jeffrey Goh
-	 * @version 1.1
-	 * @updated 6/6/2017 by Wayne Neo
+	 * @version 1.2
+	 * @updated 30/7/2017 by Wayne Neo
 	 */
 	public void removeTileHighlight()
 	{
-		for (int i = 0; i < tilesPerCol; i++)
+		for (int i = 0; i < tilesPerRow; i++)
 		{
-			for (int j = 0; j < tilesPerRow; j++)
+			for (int j = 0; j < tilesPerCol; j++)
 			{
 				map[i][j].resetDefaultColor();
 			}
@@ -501,16 +533,18 @@ public class Grid : MonoBehaviour {
 	/**
 	 * Removes highlights on terrain
      * 
-     * 
+     * v1.2
+	 * Bugfix for non square maps
+	 * 
 	 * @author Jeffrey Goh
-	 * @version 1.1
-	 * @updated 6/6/2017 by Wayne Neo
+	 * @version 1.2
+	 * @updated 30/7/2017 by Wayne Neo
 	 */
 	public void removeTerrainHighlight()
 	{
-		for (int i = 0; i < tilesPerCol; i++)
+		for (int i = 0; i < tilesPerRow; i++)
 		{
-			for (int j = 0; j < tilesPerRow; j++)
+			for (int j = 0; j < tilesPerCol; j++)
 			{
 				map[i][j].linkedTerrain.GetComponent<Renderer>().material = map[i][j].linkedTerrain.defaultColour;
 			}
@@ -965,7 +999,7 @@ public class Grid : MonoBehaviour {
 
 		// Iterate through each column
 		for (int i = 0; i < tilesPerCol; i++)
-			{
+		{
             // Splits the text file into strings containing individual integers
             line = lines[i].Split(" "[0]);
 
@@ -984,8 +1018,8 @@ public class Grid : MonoBehaviour {
 					villageStatus.Add(new Vector2(j,i), village);
 				}
 			}
- 
         }
+		Debug.Log("Terrain Created");
     }
 
     /**
@@ -1017,7 +1051,7 @@ public class Grid : MonoBehaviour {
 			// Add the row to the map
 			map.Add(row);
 		}
-        
+		Debug.Log("Tiles Created");
     }
 
 

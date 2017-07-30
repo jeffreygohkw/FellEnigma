@@ -632,11 +632,17 @@ public class PlayerUnit : Unit
 	* @updated 15/7/2017
 	*/
 
-   /* public override void OnGUI()
+    public override void OnGUI()
 	{
 		if (selected && !doneAction)
 		{
-			Rect buttonRect = new Rect(0, Screen.height - 400, 150, 50);
+			Rect buttonRect = new Rect(0, Screen.height - 450, 150, 50);
+			if (GUI.Button(buttonRect, "Save"))
+			{
+				GameControl.instance.Save();
+			}
+
+			buttonRect = new Rect(0, Screen.height - 400, 150, 50);
 			if (Grid.instance.ultCharge == 100 && Grid.instance.commander >= 0 && Grid.instance.commander <= 4 && Grid.instance.ultActive == false)
 			{
 				if (GUI.Button(buttonRect, "Ult"))
@@ -974,7 +980,7 @@ public class PlayerUnit : Unit
         }
         
         
-    } */
+    }
 
 
 
