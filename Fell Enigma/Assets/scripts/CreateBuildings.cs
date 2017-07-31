@@ -61,6 +61,12 @@ public class CreateBuildings : MonoBehaviour
 			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[4][18].gridPosition, Grid.instance.map[4][17].gridPosition);
 			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[13][16].gridPosition, Grid.instance.map[13][15].gridPosition);
 
+			// Precap villages
+			Grid.instance.villageStatus[Grid.instance.map[1][18].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[1][17].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[2][18].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[2][17].gridPosition][0] = 0;
+
 			//Set level of units that can be recruited
 			Grid.instance.tavernLevel = 3;
 

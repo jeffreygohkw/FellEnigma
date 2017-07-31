@@ -142,6 +142,7 @@ public class Grid : MonoBehaviour {
 
 				waitUp = false;
 				*/
+				GameControl.instance.Save();
 				SceneManager.LoadScene(nextScene);
 				return;
 			}
@@ -168,7 +169,6 @@ public class Grid : MonoBehaviour {
 
 		if (status == 1)
 		{
-			GameControl.instance.Save();
 			HUDCanvas.SetActive(true);
 			foreach (List<Unit> u in units)
 			{
