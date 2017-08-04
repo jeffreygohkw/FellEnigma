@@ -55,11 +55,25 @@ public class AIUnit : Unit
 			if (allies.Contains(0))
 			{
 				//If ally
-				GetComponent<Renderer>().material.color = Color.white;
+				if (Grid.instance.highlightedEnemies.Contains(this))
+				{
+					GetComponent<Renderer>().material.color = Color.green;
+				}
+				else
+				{
+					GetComponent<Renderer>().material.color = Color.white;
+				}
 			}
 			else
 			{
-				GetComponent<Renderer>().material.color = Color.magenta;
+				if (Grid.instance.highlightedEnemies.Contains(this))
+				{
+					GetComponent<Renderer>().material.color = Color.red;
+				}
+				else
+				{
+					GetComponent<Renderer>().material.color = Color.magenta;
+				}
 			}
 		}
 

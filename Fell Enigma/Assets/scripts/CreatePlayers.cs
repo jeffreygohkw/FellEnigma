@@ -936,7 +936,7 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.mov = 5;
 
 			boss1.proficiency.Add("Axe");
-			Item.instance.equipWeapon(boss1, "Axe", "Hand Axe");
+			Item.instance.equipWeapon(boss1, "Axe", "HandAxe");
 
 			Grid.instance.map[2][6].occupied = boss1;
 
@@ -944,6 +944,481 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.allies.Add(1);
 			boss1.index = 0;
 
+
+			AIUnit enemy1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(13 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 4 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy1.gridPosition = new Vector2(13, 4);
+			enemy1.ai_id = 1;
+			enemy1.ai_id_priority.Add(1);
+
+			enemy1.unitName = "Bandit";
+			enemy1.job = "Bandit";
+			enemy1.classBonusA = 0;
+			enemy1.classBonusB = 0;
+			enemy1.isBoss = 0;
+			enemy1.lvl = 3;
+			enemy1.exp = 0;
+			enemy1.maxHP = 24;
+			enemy1.currentHP = 24;
+			enemy1.strength = 6;
+			enemy1.mag = 0;
+			enemy1.skl = 1;
+			enemy1.spd = 5;
+			enemy1.luk = 0;
+			enemy1.def = 4;
+			enemy1.res = 0;
+			enemy1.con = 12;
+			enemy1.mov = 5;
+
+			enemy1.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy1, "Axe", "SteelAxe");
+
+			Grid.instance.map[13][4].occupied = enemy1;
+
+			enemy1.team = 1;
+			enemy1.allies.Add(1);
+			enemy1.index = 1;
+
+
+			AIUnit enemy2 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 3 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy2.gridPosition = new Vector2(2, 3);
+			enemy2.ai_id = 1;
+			enemy2.ai_id_priority.Add(1);
+
+			enemy2.unitName = "Bandit";
+			enemy2.job = "Bandit";
+			enemy2.classBonusA = 0;
+			enemy2.classBonusB = 0;
+			enemy2.isBoss = 0;
+			enemy2.lvl = 3;
+			enemy2.exp = 0;
+			enemy2.maxHP = 24;
+			enemy2.currentHP = 24;
+			enemy2.strength = 6;
+			enemy2.mag = 0;
+			enemy2.skl = 1;
+			enemy2.spd = 5;
+			enemy2.luk = 0;
+			enemy2.def = 4;
+			enemy2.res = 0;
+			enemy2.con = 12;
+			enemy2.mov = 5;
+
+			enemy2.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy2, "Axe", "SteelAxe");
+
+			Grid.instance.map[2][3].occupied = enemy2;
+
+			enemy2.team = 1;
+			enemy2.allies.Add(1);
+			enemy2.index = 2;
+
+
+			AIUnit enemy3 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(8 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 3 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy3.gridPosition = new Vector2(8, 3);
+			enemy3.ai_id = 1;
+			enemy3.ai_id_priority.Add(1);
+
+			enemy3.unitName = "Bandit";
+			enemy3.job = "Bandit";
+			enemy3.classBonusA = 0;
+			enemy3.classBonusB = 0;
+			enemy3.isBoss = 0;
+			enemy3.lvl = 3;
+			enemy3.exp = 0;
+			enemy3.maxHP = 24;
+			enemy3.currentHP = 24;
+			enemy3.strength = 6;
+			enemy3.mag = 0;
+			enemy3.skl = 1;
+			enemy3.spd = 5;
+			enemy3.luk = 0;
+			enemy3.def = 4;
+			enemy3.res = 0;
+			enemy3.con = 12;
+			enemy3.mov = 5;
+
+			enemy3.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy3, "Axe", "IronAxe");
+
+			Grid.instance.map[8][3].occupied = enemy3;
+
+			enemy3.team = 1;
+			enemy3.allies.Add(1);
+			enemy3.index = 3;
+
+
+			AIUnit enemy4 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(7 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 4 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy4.gridPosition = new Vector2(7, 4);
+			enemy4.ai_id = 1;
+			enemy4.ai_id_priority.Add(1);
+
+			enemy4.unitName = "Bandit";
+			enemy4.job = "Bandit";
+			enemy4.classBonusA = 0;
+			enemy4.classBonusB = 0;
+			enemy4.isBoss = 0;
+			enemy4.lvl = 3;
+			enemy4.exp = 0;
+			enemy4.maxHP = 24;
+			enemy4.currentHP = 24;
+			enemy4.strength = 6;
+			enemy4.mag = 0;
+			enemy4.skl = 1;
+			enemy4.spd = 5;
+			enemy4.luk = 0;
+			enemy4.def = 4;
+			enemy4.res = 0;
+			enemy4.con = 12;
+			enemy4.mov = 5;
+
+			enemy4.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy4, "Axe", "IronAxe");
+
+			Grid.instance.map[7][4].occupied = enemy4;
+
+			enemy4.team = 1;
+			enemy4.allies.Add(1);
+			enemy4.index = 4;
+
+
+			AIUnit enemy5 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(6 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 3 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy5.gridPosition = new Vector2(6, 3);
+			enemy5.ai_id = 1;
+			enemy5.ai_id_priority.Add(1);
+
+			enemy5.unitName = "Bandit";
+			enemy5.job = "Bandit";
+			enemy5.classBonusA = 0;
+			enemy5.classBonusB = 0;
+			enemy5.isBoss = 0;
+			enemy5.lvl = 3;
+			enemy5.exp = 0;
+			enemy5.maxHP = 24;
+			enemy5.currentHP = 24;
+			enemy5.strength = 6;
+			enemy5.mag = 0;
+			enemy5.skl = 1;
+			enemy5.spd = 5;
+			enemy5.luk = 0;
+			enemy5.def = 4;
+			enemy5.res = 0;
+			enemy5.con = 12;
+			enemy5.mov = 5;
+
+			enemy5.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy5, "Axe", "IronAxe");
+
+			Grid.instance.map[6][3].occupied = enemy5;
+
+			enemy5.team = 1;
+			enemy5.allies.Add(1);
+			enemy5.index = 5;
+
+
+			AIUnit enemy6 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(1 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 8 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy6.gridPosition = new Vector2(1, 8);
+			enemy6.ai_id = 1;
+			enemy6.ai_id_priority.Add(1);
+
+			enemy6.unitName = "Bandit";
+			enemy6.job = "Bandit";
+			enemy6.classBonusA = 0;
+			enemy6.classBonusB = 0;
+			enemy6.isBoss = 0;
+			enemy6.lvl = 2;
+			enemy6.exp = 0;
+			enemy6.maxHP = 22;
+			enemy6.currentHP = 22;
+			enemy6.strength = 6;
+			enemy6.mag = 0;
+			enemy6.skl = 1;
+			enemy6.spd = 5;
+			enemy6.luk = 0;
+			enemy6.def = 3;
+			enemy6.res = 0;
+			enemy6.con = 12;
+			enemy6.mov = 5;
+
+			enemy6.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy6, "Axe", "IronAxe");
+
+			Grid.instance.map[1][8].occupied = enemy6;
+
+			enemy6.team = 1;
+			enemy6.allies.Add(1);
+			enemy6.index = 6;
+
+
+			AIUnit enemy7 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(3 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 8 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy7.gridPosition = new Vector2(3, 8);
+			enemy7.ai_id = 1;
+			enemy7.ai_id_priority.Add(1);
+
+			enemy7.unitName = "Bandit";
+			enemy7.job = "Bandit";
+			enemy7.classBonusA = 0;
+			enemy7.classBonusB = 0;
+			enemy7.isBoss = 0;
+			enemy7.lvl = 2;
+			enemy7.exp = 0;
+			enemy7.maxHP = 22;
+			enemy7.currentHP = 22;
+			enemy7.strength = 6;
+			enemy7.mag = 0;
+			enemy7.skl = 1;
+			enemy7.spd = 5;
+			enemy7.luk = 0;
+			enemy7.def = 3;
+			enemy7.res = 0;
+			enemy7.con = 12;
+			enemy7.mov = 5;
+
+			enemy7.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy7, "Axe", "IronAxe");
+
+			Grid.instance.map[3][8].occupied = enemy7;
+
+			enemy7.team = 1;
+			enemy7.allies.Add(1);
+			enemy7.index = 7;
+
+
+			AIUnit enemy8 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(12 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 8 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy8.gridPosition = new Vector2(12, 8);
+			enemy8.ai_id = 1;
+			enemy8.ai_id_priority.Add(1);
+
+			enemy8.unitName = "Bandit";
+			enemy8.job = "Bandit";
+			enemy8.classBonusA = 0;
+			enemy8.classBonusB = 0;
+			enemy8.isBoss = 0;
+			enemy8.lvl = 2;
+			enemy8.exp = 0;
+			enemy8.maxHP = 22;
+			enemy8.currentHP = 22;
+			enemy8.strength = 6;
+			enemy8.mag = 0;
+			enemy8.skl = 1;
+			enemy8.spd = 5;
+			enemy8.luk = 0;
+			enemy8.def = 3;
+			enemy8.res = 0;
+			enemy8.con = 12;
+			enemy8.mov = 5;
+
+			enemy8.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy8, "Axe", "IronAxe");
+
+			Grid.instance.map[12][8].occupied = enemy8;
+
+			enemy8.team = 1;
+			enemy8.allies.Add(1);
+			enemy8.index = 8;
+
+
+			AIUnit enemy9 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(13 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy9.gridPosition = new Vector2(13, 11);
+			enemy9.ai_id = 1;
+			enemy9.ai_id_priority.Add(1);
+
+			enemy9.unitName = "Bandit";
+			enemy9.job = "Bandit";
+			enemy9.classBonusA = 0;
+			enemy9.classBonusB = 0;
+			enemy9.isBoss = 0;
+			enemy9.lvl = 2;
+			enemy9.exp = 0;
+			enemy9.maxHP = 20;
+			enemy9.currentHP = 20;
+			enemy9.strength = 5;
+			enemy9.mag = 0;
+			enemy9.skl = 1;
+			enemy9.spd = 5;
+			enemy9.luk = 0;
+			enemy9.def = 3;
+			enemy9.res = 0;
+			enemy9.con = 12;
+			enemy9.mov = 5;
+
+			enemy9.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy9, "Axe", "IronAxe");
+
+			Grid.instance.map[13][11].occupied = enemy9;
+
+			enemy9.team = 1;
+			enemy9.allies.Add(1);
+			enemy9.index = 9;
+
+
+			AIUnit enemy10 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(11 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 13 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy10.gridPosition = new Vector2(11, 13);
+			enemy10.ai_id = 1;
+			enemy10.ai_id_priority.Add(1);
+
+			enemy10.unitName = "Bandit";
+			enemy10.job = "Bandit";
+			enemy10.classBonusA = 0;
+			enemy10.classBonusB = 0;
+			enemy10.isBoss = 0;
+			enemy10.lvl = 2;
+			enemy10.exp = 0;
+			enemy10.maxHP = 20;
+			enemy10.currentHP = 20;
+			enemy10.strength = 5;
+			enemy10.mag = 0;
+			enemy10.skl = 1;
+			enemy10.spd = 5;
+			enemy10.luk = 0;
+			enemy10.def = 3;
+			enemy10.res = 0;
+			enemy10.con = 12;
+			enemy10.mov = 5;
+
+			enemy10.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy10, "Axe", "IronAxe");
+
+			Grid.instance.map[11][13].occupied = enemy10;
+
+			enemy10.team = 1;
+			enemy10.allies.Add(1);
+			enemy10.index = 10;
+
+
+			AIUnit enemy11 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(12 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 12 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy11.gridPosition = new Vector2(12, 12);
+			enemy11.ai_id = 1;
+			enemy11.ai_id_priority.Add(1);
+
+			enemy11.unitName = "Bandit";
+			enemy11.job = "Bandit";
+			enemy11.classBonusA = 0;
+			enemy11.classBonusB = 0;
+			enemy11.isBoss = 0;
+			enemy11.lvl = 2;
+			enemy11.exp = 0;
+			enemy11.maxHP = 20;
+			enemy11.currentHP = 20;
+			enemy11.strength = 5;
+			enemy11.mag = 0;
+			enemy11.skl = 1;
+			enemy11.spd = 5;
+			enemy11.luk = 0;
+			enemy11.def = 3;
+			enemy11.res = 0;
+			enemy11.con = 12;
+			enemy11.mov = 5;
+
+			enemy11.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy11, "Axe", "IronAxe");
+
+			Grid.instance.map[12][12].occupied = enemy11;
+
+			enemy11.team = 1;
+			enemy11.allies.Add(1);
+			enemy11.index = 11;
+
+
+			AIUnit enemy12 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(1 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 13 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy12.gridPosition = new Vector2(1, 13);
+			enemy12.ai_id = 1;
+			enemy12.ai_id_priority.Add(1);
+
+			enemy12.unitName = "Bandit";
+			enemy12.job = "Bandit";
+			enemy12.classBonusA = 0;
+			enemy12.classBonusB = 0;
+			enemy12.isBoss = 0;
+			enemy12.lvl = 2;
+			enemy12.exp = 0;
+			enemy12.maxHP = 20;
+			enemy12.currentHP = 20;
+			enemy12.strength = 5;
+			enemy12.mag = 0;
+			enemy12.skl = 1;
+			enemy12.spd = 5;
+			enemy12.luk = 0;
+			enemy12.def = 3;
+			enemy12.res = 0;
+			enemy12.con = 12;
+			enemy12.mov = 5;
+
+			enemy12.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy12, "Axe", "IronAxe");
+
+			Grid.instance.map[1][13].occupied = enemy12;
+
+			enemy12.team = 1;
+			enemy12.allies.Add(1);
+			enemy12.index = 12;
+
+
+			AIUnit enemy13 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(3 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy13.gridPosition = new Vector2(3, 11);
+			enemy13.ai_id = 1;
+			enemy13.ai_id_priority.Add(1);
+
+			enemy13.unitName = "Bandit";
+			enemy13.job = "Bandit";
+			enemy13.classBonusA = 0;
+			enemy13.classBonusB = 0;
+			enemy13.isBoss = 0;
+			enemy13.lvl = 2;
+			enemy13.exp = 0;
+			enemy13.maxHP = 20;
+			enemy13.currentHP = 20;
+			enemy13.strength = 5;
+			enemy13.mag = 0;
+			enemy13.skl = 1;
+			enemy13.spd = 5;
+			enemy13.luk = 0;
+			enemy13.def = 3;
+			enemy13.res = 0;
+			enemy13.con = 12;
+			enemy13.mov = 5;
+
+			enemy13.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy13, "Axe", "IronAxe");
+
+			Grid.instance.map[3][11].occupied = enemy13;
+
+			enemy13.team = 1;
+			enemy13.allies.Add(1);
+			enemy13.index = 13;
+
+
+			AIUnit enemy14 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(7 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 9 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			enemy14.gridPosition = new Vector2(7, 9);
+			enemy14.ai_id = 1;
+			enemy14.ai_id_priority.Add(1);
+
+			enemy14.unitName = "Bandit";
+			enemy14.job = "Bandit";
+			enemy14.classBonusA = 0;
+			enemy14.classBonusB = 0;
+			enemy14.isBoss = 0;
+			enemy14.lvl = 2;
+			enemy14.exp = 0;
+			enemy14.maxHP = 20;
+			enemy14.currentHP = 20;
+			enemy14.strength = 5;
+			enemy14.mag = 0;
+			enemy14.skl = 1;
+			enemy14.spd = 5;
+			enemy14.luk = 0;
+			enemy14.def = 3;
+			enemy14.res = 0;
+			enemy14.con = 12;
+			enemy14.mov = 5;
+
+			enemy14.proficiency.Add("Axe");
+			Item.instance.equipWeapon(enemy14, "Axe", "IronAxe");
+
+			Grid.instance.map[7][9].occupied = enemy14;
+
+			enemy14.team = 1;
+			enemy14.allies.Add(1);
+			enemy14.index = 13;
 
 			List<Unit> team0 = new List<Unit>();
 			List<Unit> team1 = new List<Unit>();
@@ -953,7 +1428,26 @@ public class CreatePlayers : MonoBehaviour {
 			team0.Add(unit3);
 			team0.Add(unit4);
 
+			team1.Add(boss1);
+			team1.Add(enemy1);
+			team1.Add(enemy2);
+			team1.Add(enemy3);
+			team1.Add(enemy4);
+			team1.Add(enemy5);
+			team1.Add(enemy6);
+			team1.Add(enemy7);
+			team1.Add(enemy8);
+			team1.Add(enemy9);
+			team1.Add(enemy10);
+			team1.Add(enemy11);
+			team1.Add(enemy12);
+			team1.Add(enemy13);
+			team1.Add(enemy14);
+
 			Grid.instance.units.Add(team0);
+			Grid.instance.units.Add(team1);
+
+			Grid.instance.AITeams.Add(1);
 
 			foreach (List<Unit> team in Grid.instance.units)
 			{

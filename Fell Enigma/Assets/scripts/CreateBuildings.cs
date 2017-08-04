@@ -75,6 +75,9 @@ public class CreateBuildings : MonoBehaviour
 
 			Grid.instance.commander = 0;
 			Grid.instance.ultCharge = 0;
+
+			Grid.instance.objectiveSpecificTiles.Add(Grid.instance.map[14][0].gridPosition, "Escape");
+
 			//ActivateTextAtLine.instance.startScript(0, 10);
 		}
 	}
