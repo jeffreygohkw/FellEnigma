@@ -207,7 +207,15 @@ public class ActionOtherUI : MonoBehaviour {
                 Rect buttonRect = new Rect(Screen.width/1.28f, Screen.height/1.35f - ((Screen.height / 25) * count), Screen.width/6, Screen.height/25);
                 if (GUI.Button(buttonRect, s))
                 {
-                    TavernUnits.tavernSpawn(s, thisUnit.gridPosition);
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        TavernUnits.tavernSpawn(s, thisUnit.gridPosition);
+                    }
+                    else if (Input.GetMouseButtonUp(1))
+                    {
+                        CombatLog.instance.AddEvent(TavernUnits.returnStats(s));
+                        CombatLog.instance.PrintEvent();
+                    }
                 }
             }
         }

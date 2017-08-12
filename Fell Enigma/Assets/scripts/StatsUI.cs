@@ -9,16 +9,13 @@ public class StatsUI : MonoBehaviour {
     // UI Elements
     private CanvasGroup canvasA;
     private Slider healthBar;
+    private Slider expBar;
     private Text displayName;
     private Text displayStats;
 
     // Battle Forecast
     private CanvasGroup canvasB;
     private RawImage enemyProfile;
-    /*private Image attIcon;
-    private Image hrIcon;
-    private Image attIconB;
-    private Image hrIconB;*/
 
     private Text myForecastUI;
     private Text enemyForecastUI;
@@ -52,11 +49,12 @@ public class StatsUI : MonoBehaviour {
         // Obtains the various components under the UI prefab
         // Note that components need to be in order (aka don't change the order in Inspector)
 
-        // Canvas A: Healthbar,stats,name
+        // Canvas A: Healthbar,stats,name, exp Bar
         canvasA = this.GetComponentsInChildren<CanvasGroup>()[0];
         displayName = this.GetComponentsInChildren<Text>()[0];
         displayStats = this.GetComponentsInChildren<Text>()[1];
-        healthBar = this.GetComponentInChildren<Slider>();
+        healthBar = this.GetComponentsInChildren<Slider>()[0];
+        expBar = this.GetComponentsInChildren<Slider>()[1];
 
         // Canvas B: Battle/Heal Forecast
         canvasB = this.GetComponentsInChildren<CanvasGroup>()[1];
@@ -98,9 +96,12 @@ public class StatsUI : MonoBehaviour {
     * v1.4
     * Added the case where enemy cannot counterattack
     * 
+    * v1.5
+    * Added EXP Bar
+    * 
     * @author Wayne Neo
-    * @version 1.4
-    * @updated on 29/7/17
+    * @version 1.5
+    * @updated on 12/8/17
     */
     void GetStats()
     {
@@ -304,6 +305,7 @@ public class StatsUI : MonoBehaviour {
 
             displayName.text = currUnit.unitName;
             healthBar.value = Mathf.Floor(((float)currUnit.currentHP / (float)currUnit.maxHP) * 100);
+            expBar.value = currUnit.exp;
             displayStats.text = "HP = " + currUnit.currentHP.ToString() + "/" + currUnit.maxHP.ToString() + " STR = " + currUnit.strength.ToString() + " MAG = " + currUnit.mag.ToString() + " SKL = " + currUnit.skl.ToString() + "\n"
                 + " SPD = " + currUnit.spd.ToString() + " LUK = " + currUnit.luk.ToString() + " DEF = " + currUnit.def.ToString() + " RES = " + currUnit.res.ToString();
             OnStats();

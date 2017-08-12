@@ -16,7 +16,7 @@ public class ActionUI : MonoBehaviour
         EventManager.StartListening("SelectUnit", SelectUnit);
         
         // Obtains the UI elements
-        thisCanvas = this.GetComponent<CanvasGroup>();
+        thisCanvas = this.GetComponentInChildren<CanvasGroup>();
         moveText = GetComponentsInChildren<Text>()[0];
         ultButton = this.GetComponentInChildren<Image>();
         OffUI();

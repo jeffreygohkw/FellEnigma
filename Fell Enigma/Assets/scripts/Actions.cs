@@ -75,7 +75,22 @@ public class Actions : MonoBehaviour {
     public void ultClick()
     {
         if (Grid.instance.ultCharge == 100 && Grid.instance.commander >= 0 && Grid.instance.commander <= 4 && Grid.instance.ultActive == false)
+        {
             Grid.instance.castUlt();
+        }
+        else
+        {
+            if (!Grid.instance.ultActive)
+            {
+                CombatLog.instance.AddEvent("Current Ult Charge: " + Grid.instance.ultCharge);
+                CombatLog.instance.PrintEvent();
+            }
+            else
+            {
+                CombatLog.instance.AddEvent("Ultimate is currently active");
+                CombatLog.instance.PrintEvent();
+            }
+        }
     }
 
 }

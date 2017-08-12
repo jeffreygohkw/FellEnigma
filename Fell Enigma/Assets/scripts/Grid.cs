@@ -95,13 +95,13 @@ public class Grid : MonoBehaviour {
 	void Update()
 	{
         //Force shut game
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
 
 		//Skip Text
-		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+		if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
 		{
 			TextBoxManager.instance.setCurrentLine(TextBoxManager.instance.endAtLine);
 			TextBoxManager.instance.disableTextBox();

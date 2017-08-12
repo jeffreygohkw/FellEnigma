@@ -246,7 +246,7 @@ public class PlayerUnit : Unit
 		else
 		{
 			//If not weapon, don't equip
-			if (inventory[index].Length != 13)
+			if (inventory[index].Length != 14)
 			{
 				Debug.Log("Not a weapon");
 			}

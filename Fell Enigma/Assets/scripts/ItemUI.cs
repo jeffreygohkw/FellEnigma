@@ -12,6 +12,7 @@ public class ItemUI : MonoBehaviour {
     private Text[] buttonsText = new Text[3]; 
     private CanvasGroup buttons2;
     private Text buttons2Text;
+    private Text itemDesUI;
     private CanvasGroup window;
 
     public Unit selectedUnit;
@@ -35,6 +36,7 @@ public class ItemUI : MonoBehaviour {
         
         buttons2 = this.GetComponentsInChildren<CanvasGroup>()[4];        
         buttons2Text = this.GetComponentsInChildren<Text>()[3];
+        itemDesUI = this.GetComponentsInChildren<Text>()[5];
         selectedItemIndex = -1;
     }
 
@@ -58,13 +60,38 @@ public class ItemUI : MonoBehaviour {
         if (itemIsSelected)
         {
             // Item selected is a weapon
-            if (selectedUnit.inventory[selectedItemIndex].Length == 13)
+            if (selectedUnit.inventory[selectedItemIndex].Length == 14)
             {
                 buttons2Text.text = "Equip";
             }
             else
             {
                 buttons2Text.text = "Use";
+            }
+
+            if (selectedUnit.inventory[selectedItemIndex][0].Equals("Staff"))
+            {
+                itemDesUI.text = obtainItemDes(10);
+            }
+            else if (selectedUnit.inventory[selectedItemIndex][0].Equals("StatBoost"))
+            {
+                itemDesUI.text = obtainItemDes(6);
+            }
+            else if (selectedUnit.inventory[selectedItemIndex][0].Equals("Consumable"))
+            {
+                itemDesUI.text = obtainItemDes(5);
+            }
+            else if (selectedUnit.inventory[selectedItemIndex][0].Equals("Key"))
+            {
+                itemDesUI.text = obtainItemDes(4);
+            }
+            else if (selectedUnit.inventory[selectedItemIndex].Length == 14)
+            {
+                itemDesUI.text = obtainItemDes(13);
+            }
+            else
+            {
+                itemDesUI.text = "N/A";
             }
 
             // Activates second window
@@ -146,5 +173,29 @@ public class ItemUI : MonoBehaviour {
     public void setItemSelected(bool value)
     {
         itemIsSelected = value;
+    }
+
+
+
+    /**
+     * Extracts the description text from the item  
+     *
+     * @param i the number of words in the specific category of Item
+     * @author Wayne Neo
+     * @version 1.0
+     * @updated on 10/8/17
+     */
+    private string obtainItemDes(int i)
+    {
+        string[] words;
+        string mainLine = "";
+        words = selectedUnit.inventory[selectedItemIndex][i].Split("$"[0]);
+
+        foreach (string word in words)
+        {
+            mainLine += (word + " ");
+        }
+
+        return mainLine;
     }
 }

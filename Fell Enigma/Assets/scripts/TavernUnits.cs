@@ -174,4 +174,38 @@ public class TavernUnits : MonoBehaviour {
 		}
 
 	}
+
+
+    /**
+    * Obtains stats from the respective unitClass for printing
+    * Copied mostly from tavernSpawn
+    * 
+    * @param unitClass The class of the unit to spawn
+    * @author Wayne Neo
+    * @version 1.0
+    * @updated 12/8/2017
+    */
+    public static string returnStats(string unitClass)
+    {
+        PlayerUnit unit1 = new PlayerUnit();
+        if (tavernUnits.ContainsKey(unitClass))
+        {
+            unit1.lvl = Grid.instance.tavernLevel;
+            unit1.maxHP = (int)(double.Parse(tavernUnits[unitClass][2][0]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][0]) * 0.01);
+            unit1.strength = (int)(double.Parse(tavernUnits[unitClass][2][1]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][1]) * 0.01);
+            unit1.mag = (int)(double.Parse(tavernUnits[unitClass][2][2]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][2]) * 0.01);
+            unit1.skl = (int)(double.Parse(tavernUnits[unitClass][2][3]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][3]) * 0.01);
+            unit1.spd = (int)(double.Parse(tavernUnits[unitClass][2][4]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][4]) * 0.01);
+            unit1.luk = (int)(double.Parse(tavernUnits[unitClass][2][5]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][5]) * 0.01);
+            unit1.def = (int)(double.Parse(tavernUnits[unitClass][2][6]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][6]) * 0.01);
+            unit1.res = (int)(double.Parse(tavernUnits[unitClass][2][7]) + Grid.instance.tavernLevel * double.Parse(tavernUnits[unitClass][3][7]) * 0.01);
+            unit1.mov = int.Parse(tavernUnits[unitClass][2][8]);
+
+            return (unitClass + ": Cost=" + Grid.instance.tavernLevel * 500 + " LVL =" + unit1.lvl + " HP=" + unit1.maxHP + " STR=" + unit1.strength + " MAG=" + unit1.mag + " SKL=" + unit1.skl + " SPD=" + unit1.spd + " LUK=" + unit1.luk + " DEF=" + unit1.def + " RES=" + unit1.res + " MOV=" + unit1.mov);
+        }
+        else
+        {
+            return "Not available";
+        }
+    }
 }
