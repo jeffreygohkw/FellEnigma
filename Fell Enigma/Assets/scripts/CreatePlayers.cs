@@ -350,8 +350,8 @@ public class CreatePlayers : MonoBehaviour {
 		else if (mapName == "tutorial")
 		{
 			//5, 25
-			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 5 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit1.gridPosition = new Vector2(2, 5);
+			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(5 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 25 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit1.gridPosition = new Vector2(5, 25);
 
 			unit1.unitName = "Naive Prince";
 			unit1.job = "Prince";
@@ -383,7 +383,7 @@ public class CreatePlayers : MonoBehaviour {
 			Item.instance.equipWeapon(unit1, "Sword", "IronSword");
 			Item.instance.addItem(unit1, "Consumable", "Potion");
 
-			Grid.instance.map[2][5].occupied = unit1;
+			Grid.instance.map[5][25].occupied = unit1;
 
 			unit1.team = 0;
 			unit1.allies.Add(0);
@@ -391,8 +391,8 @@ public class CreatePlayers : MonoBehaviour {
 
 
 			//5, 26
-			PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(13 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 15 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit2.gridPosition = new Vector2(13, 15);
+			PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(5 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 26 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit2.gridPosition = new Vector2(5, 26);
 
 			unit2.unitName = "Young Rebel";
 			unit2.job = "Rogue";
@@ -427,7 +427,7 @@ public class CreatePlayers : MonoBehaviour {
 			Item.instance.addItem(unit2, "Key", "Lockpick");
 			Item.instance.addItem(unit2, "Consumable", "Potion");
 
-			Grid.instance.map[13][15].occupied = unit2;
+			Grid.instance.map[5][26].occupied = unit2;
 
 			unit2.team = 0;
 			unit2.allies.Add(0);

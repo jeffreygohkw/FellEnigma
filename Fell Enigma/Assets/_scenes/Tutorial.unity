@@ -4597,7 +4597,7 @@ MonoBehaviour:
     anywhere also closes the windows)\nArrow Keys: Move the camera in that direction\nRight-Click
     (When Tavern Window is open): Prints mercenary's stats\n\nTerrain Effects\nGrass:
     None\tSand: +5 AVD \tForest: +20 AVD +1 DEF -1 MOV\nOcean: +10 AVD \tFort: +20
-    AVD +2 DEF - 2 MOV, +10 HP every turn\nMountain: +30 AVD +1 DEF -4 MOV\n "
+    AVD +2 DEF - 2 MOV, +10% HP every turn\nMountain: +30 AVD +1 DEF -4 MOV\n "
 --- !u!222 &980580332
 CanvasRenderer:
   m_ObjectHideFlags: 0
