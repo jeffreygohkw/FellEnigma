@@ -8655,7 +8655,7 @@ MonoBehaviour:
   mapConfig: {fileID: 4900000, guid: 9f581617f93206f43af4c91b6e05c935, type: 3}
   mainCam: {fileID: 736736688}
   mapName: chapter1
-  nextScene: 
+  nextScene: Chapter2
   tilesPerRow: 0
   tilesPerCol: 0
   currentPlayer: 0

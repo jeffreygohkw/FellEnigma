@@ -54,7 +54,7 @@ public class CreateBuildings : MonoBehaviour
 			GameControl.instance.Load();
 
 			//Set next scene
-
+			Grid.instance.nextScene = "Chapter2";
 			
 			// Link Taverns and spawn point
 			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[1][15].gridPosition, Grid.instance.map[2][15].gridPosition);
@@ -77,6 +77,38 @@ public class CreateBuildings : MonoBehaviour
 			Grid.instance.ultCharge = 0;
 
 			Grid.instance.objectiveSpecificTiles.Add(Grid.instance.map[14][0].gridPosition, "Escape");
+
+			//ActivateTextAtLine.instance.startScript(0, 10);
+		}
+		else if (mapName == "chapter2")
+		{
+			GameControl.instance.Load();
+
+			//Set next scene
+
+
+			// Link Taverns and spawn point
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[6][19].gridPosition, Grid.instance.map[6][18].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[4][11].gridPosition, Grid.instance.map[4][10].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][12].gridPosition, Grid.instance.map[7][12].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][8].gridPosition, Grid.instance.map[8][7].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[14][8].gridPosition, Grid.instance.map[14][7].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[1][1].gridPosition, Grid.instance.map[2][1].gridPosition);
+
+			// Precap villages
+			Grid.instance.villageStatus[Grid.instance.map[10][8].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[10][7].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[11][8].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[11][7].gridPosition][0] = 0;
+
+			//Set level of units that can be recruited
+			Grid.instance.tavernLevel = 5;
+
+			Grid.instance.gold = GameControl.instance.gold;
+			Grid.instance.goldCap = 2000;
+
+			Grid.instance.commander = 0;
+			Grid.instance.ultCharge = 0;
 
 			//ActivateTextAtLine.instance.startScript(0, 10);
 		}

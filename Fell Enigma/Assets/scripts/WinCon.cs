@@ -168,6 +168,37 @@ public class WinCon : MonoBehaviour {
 				return 0;
 			}
 		}
+		else if (mapName == "chapter2")
+		{	
+			int heroSlain = 0;
+
+			foreach (Unit u in Grid.instance.units[0])
+			{
+				if (u.currentHP <= 0 && u.isHero)
+				{
+					heroSlain++;
+				}
+			}
+
+			if (heroSlain == 4)
+			{
+				return 2;
+			}
+			else if (Grid.instance.units[1][0].currentHP == 0)
+			{
+				//ActivateTextAtLine.instance.startScript(,);
+				return 1;
+			}
+			else if (Grid.instance.units[2][0].currentHP <= 0)
+			{
+				//ActivateTextAtLine.instance.startScript(,);
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
 		else
 		{
 			return 0;
