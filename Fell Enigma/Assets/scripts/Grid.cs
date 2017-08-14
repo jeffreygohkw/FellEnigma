@@ -15,7 +15,7 @@ public class Grid : MonoBehaviour {
     public TextAsset mapConfig;
     public Camera mainCam;
 	public string mapName;
-	public string nextScene;
+	public string nextScene = "";
 
 	public int tilesPerRow = 0;
 	public int tilesPerCol = 0;

@@ -11,6 +11,8 @@ public class GameControl : MonoBehaviour{
 
 	public static GameControl instance;
 
+	public string nextScene;
+
 	public List<string> mcProf;
 	public List<string> mcNameJob;
 	public List<int> mcIntData;
@@ -46,6 +48,9 @@ public class GameControl : MonoBehaviour{
 	public void Awake()
 	{
 		instance = this;
+
+		nextScene = "";
+
 		List<string> mcProf = new List<string>();
 		List<string> mcNameJob = new List<string>();
 		List<int> mcIntData = new List<int>();
@@ -85,6 +90,12 @@ public class GameControl : MonoBehaviour{
 
 		foreach (Unit u in Grid.instance.units[0])
 		{
+			if (Grid.instance.nextScene != "")
+			{
+				Debug.Log(Grid.instance.nextScene);
+				data.nextScene = Grid.instance.nextScene;
+			}
+
 			if (u.unitName == "You")
 			{
 				data.mcProf = u.proficiency;
@@ -344,6 +355,9 @@ public class GameControl : MonoBehaviour{
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
 			data = (PlayerData)bf.Deserialize(file);
+
+			nextScene = data.nextScene;
+
 			mcProf = data.mcProf;
 			mcNameJob = data.mcNameJob;
 			mcIntData = data.mcIntData;
@@ -387,6 +401,8 @@ public class GameControl : MonoBehaviour{
 	[Serializable]
 	private class PlayerData
 	{
+		public string nextScene;
+
 		public List<string> mcProf = new List<string>();
 		public List<string> mcNameJob = new List<string>();
 		public List<int> mcIntData = new List<int>();
