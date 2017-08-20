@@ -25,7 +25,7 @@ public class StatsUI : MonoBehaviour {
     // Profile Pic
     private CanvasGroup canvasC;
     private RawImage displayProfile;
-    public Texture[] profiles = new Texture[5];
+    public Texture[] profiles = new Texture[8];
     private Rect defaultRect;
    
 
@@ -232,13 +232,18 @@ public class StatsUI : MonoBehaviour {
                     enemyProfile.texture = profiles[3];
                     enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
                 }
-                else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader"))
+                else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader") || currUnit.unitName.Equals("Rebel") || currUnit.unitName.Equals("Rebel Leader"))
                 {
-                    enemyProfile.texture = profiles[4];
+                    enemyProfile.texture = profiles[5];
                     enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
                 }
+				else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander"))
+				{
+					enemyProfile.texture = profiles[6];
+					enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+				}
 
-                OnForecast();
+				OnForecast();
             }
         }
         else if (unitIsHealing) //Heal forecast
@@ -297,13 +302,18 @@ public class StatsUI : MonoBehaviour {
                 displayProfile.texture = profiles[3];
                 displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
             }
-            else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader"))
-            {
-                displayProfile.texture = profiles[4];
-                displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
-            }
+			else if (currUnit.unitName.Equals("Bandit") || currUnit.unitName.Equals("Bandit Leader") || currUnit.unitName.Equals("Rebel") || currUnit.unitName.Equals("Rebel Leader"))
+			{
+				displayProfile.texture = profiles[5];
+				displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+			}
+			else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander"))
+			{
+				displayProfile.texture = profiles[6];
+				displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+			}
 
-            displayName.text = currUnit.unitName;
+			displayName.text = currUnit.unitName;
             healthBar.value = Mathf.Floor(((float)currUnit.currentHP / (float)currUnit.maxHP) * 100);
             expBar.value = currUnit.exp;
             displayStats.text = "HP = " + currUnit.currentHP.ToString() + "/" + currUnit.maxHP.ToString() + " STR = " + currUnit.strength.ToString() + " MAG = " + currUnit.mag.ToString() + " SKL = " + currUnit.skl.ToString() + "\n"

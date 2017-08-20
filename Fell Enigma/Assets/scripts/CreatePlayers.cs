@@ -1316,8 +1316,8 @@ public class CreatePlayers : MonoBehaviour {
 			unit3.index = 2;
 
 
-			PlayerUnit unit4 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(11 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 10 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit4.gridPosition = new Vector2(11, 10);
+			PlayerUnit unit4 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(4 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 17 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+			unit4.gridPosition = new Vector2(4, 17);
 
 			unit4.unitName = GameControl.instance.bhNameJob[0];
 			unit4.job = GameControl.instance.bhNameJob[1];
@@ -1366,7 +1366,7 @@ public class CreatePlayers : MonoBehaviour {
 			unit4.weaponMinRange = GameControl.instance.bhIntData[26];
 			unit4.weaponMaxRange = GameControl.instance.bhIntData[27];
 
-			Grid.instance.map[11][10].occupied = unit4;
+			Grid.instance.map[4][17].occupied = unit4;
 
 			unit4.team = 0;
 			unit4.allies.Add(0);

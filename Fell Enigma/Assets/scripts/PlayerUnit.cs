@@ -631,7 +631,7 @@ public class PlayerUnit : Unit
 	* @version 1.3
 	* @updated 15/7/2017
 	*/
-
+	/*
     public override void OnGUI()
 	{
 		if (selected && !doneAction)
@@ -972,16 +972,12 @@ public class PlayerUnit : Unit
 
 				Grid.instance.nextTurn();
 				Grid.instance.currentPlayer = -1;
-
-
 			}
-			base.OnGUI();
-            
+			base.OnGUI();          
         }
-        
-        
+  
     }
-
+	*/
 
 
     /**

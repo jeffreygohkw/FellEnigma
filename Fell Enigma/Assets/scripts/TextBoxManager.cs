@@ -83,9 +83,9 @@ public class TextBoxManager : MonoBehaviour {
 					{
 						if (Grid.instance.mapName == "tutorial")
 						{
-							if (currentLine == 3)
+							if (currentLine == 2)
 							{
-								loadPortrait(3, 2);
+								loadPortrait(3, 1);
 							}
 							else
 							{
