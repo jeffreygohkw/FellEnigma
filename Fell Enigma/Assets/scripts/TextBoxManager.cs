@@ -6,11 +6,16 @@ using UnityEngine.UI;
 public class TextBoxManager : MonoBehaviour {
 
 	public GameObject textBox;
+	public RawImage displayProfile;
 
 	public Text theText;
 
 	public TextAsset textFile;
 	public string[] textLines;
+	public string[] split;
+
+	public Texture[] profiles = new Texture[5];
+
 
 	public int currentLine;
 	public int endAtLine;
@@ -27,6 +32,7 @@ public class TextBoxManager : MonoBehaviour {
 	public void Awake()
 	{
 		instance = this;
+		
 	}
 
 
@@ -58,13 +64,47 @@ public class TextBoxManager : MonoBehaviour {
 	{
 		if (isActive)
 		{
-			//theText.text = textLines[currentLine];
 
+			//theText.text = textLines[currentLine];	
 			if (Input.GetMouseButtonDown(0))
 			{
 				if (!isTyping)
 				{
-
+					split = textLines[currentLine].Split(' ');
+					if (split[0] == "Naive")
+					{
+						loadPortrait(1, 0);
+					}
+					else if (split[0] == "Kind")
+					{
+						loadPortrait(2, 0);
+					}
+					else if (split[0] == "Young")
+					{
+						if (Grid.instance.mapName == "tutorial")
+						{
+							if (currentLine == 3)
+							{
+								loadPortrait(3, 2);
+							}
+							else
+							{
+								loadPortrait(3, 0);
+							}
+						}
+						else
+						{
+							loadPortrait(3, 0);
+						}
+					}
+					else if (split[0] == "Black")
+					{
+						loadPortrait(4, 0);
+					}
+					else
+					{
+						loadPortrait(0, 0);
+					}
 					// Disable the text box when we're done
 					if (currentLine > endAtLine)
 					{
@@ -89,6 +129,87 @@ public class TextBoxManager : MonoBehaviour {
 		}
 	}
 
+	private void loadPortrait(int index, int expression)
+	{
+		if (index == 1)
+		{
+			if (expression == 0)
+			{
+				displayProfile.texture = profiles[0];
+				displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+			}
+			else if (expression == 1)
+			{
+				//Calm down
+				displayProfile.texture = profiles[0];
+				displayProfile.uvRect = new Rect(0.34f, 0.38f, 0.3f, 0.55f);
+			}
+			else if (expression == 2)
+			{
+				//Facepalm
+				displayProfile.texture = profiles[0];
+				displayProfile.uvRect = new Rect(0f, 0.38f, 0.3f, 0.55f);
+			}
+		}
+		else if (index == 2)
+		{
+			if (expression == 0)
+			{
+				displayProfile.texture = profiles[1];
+				displayProfile.uvRect = new Rect(0.55f, 0.3f, 0.4f, 0.55f);
+			}
+			else
+			{
+				//Worry
+				displayProfile.texture = profiles[1];
+				displayProfile.uvRect = new Rect(0f, 0.3f, 0.4f, 0.55f);
+			}
+		}
+		else if (index == 3)
+		{
+			if (expression == 0)
+			{
+				displayProfile.texture = profiles[2];
+				displayProfile.uvRect = new Rect(0.67f, 0.38f, 0.28f, 0.55f);
+			}
+			else if (expression == 1)
+			{
+				//Smug
+				displayProfile.texture = profiles[2];
+				displayProfile.uvRect = new Rect(0f, 0.38f, 0.28f, 0.55f);
+			}
+			else if (expression == 2)
+			{
+				//Mouth close
+				displayProfile.texture = profiles[2];
+				displayProfile.uvRect = new Rect(0.34f, 0.38f, 0.28f, 0.55f);
+			}
+		}
+		else if (index == 4)
+		{
+			if (expression == 0)
+			{
+				displayProfile.texture = profiles[3];
+				displayProfile.uvRect = new Rect(0f, 0.38f, 0.3f, 0.55f);
+			}
+			else if (expression == 1)
+			{
+				//Hmph
+				displayProfile.texture = profiles[3];
+				displayProfile.uvRect = new Rect(0.34f, 0.38f, 0.3f, 0.55f);
+			}
+			else if (expression == 2)
+			{
+				//Angry
+				displayProfile.texture = profiles[3];
+				displayProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
+			}
+		}
+		else
+		{
+			displayProfile.texture = profiles[4];
+		}
+	}
 
 	private IEnumerator textScroll(string lineOfText)
 	{
