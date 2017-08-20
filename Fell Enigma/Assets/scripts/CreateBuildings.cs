@@ -88,18 +88,18 @@ public class CreateBuildings : MonoBehaviour
 
 
 			// Link Taverns and spawn point
-			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[6][19].gridPosition, Grid.instance.map[6][18].gridPosition);
-			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[4][11].gridPosition, Grid.instance.map[4][10].gridPosition);
-			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][12].gridPosition, Grid.instance.map[7][12].gridPosition);
-			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][8].gridPosition, Grid.instance.map[8][7].gridPosition);
-			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[14][8].gridPosition, Grid.instance.map[14][7].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[6][24].gridPosition, Grid.instance.map[6][23].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[4][14].gridPosition, Grid.instance.map[4][13].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][15].gridPosition, Grid.instance.map[7][15].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[8][11].gridPosition, Grid.instance.map[8][10].gridPosition);
+			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[14][11].gridPosition, Grid.instance.map[14][10].gridPosition);
 			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[1][1].gridPosition, Grid.instance.map[2][1].gridPosition);
 
 			// Precap villages
-			Grid.instance.villageStatus[Grid.instance.map[10][8].gridPosition][0] = 0;
-			Grid.instance.villageStatus[Grid.instance.map[10][7].gridPosition][0] = 0;
-			Grid.instance.villageStatus[Grid.instance.map[11][8].gridPosition][0] = 0;
-			Grid.instance.villageStatus[Grid.instance.map[11][7].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[10][11].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[10][10].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[11][11].gridPosition][0] = 0;
+			Grid.instance.villageStatus[Grid.instance.map[11][10].gridPosition][0] = 0;
 
 			//Set level of units that can be recruited
 			Grid.instance.tavernLevel = 5;
