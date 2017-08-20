@@ -2235,6 +2235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d6990c07d76e543b6497b5773b5c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextScene: 
   mcProf: []
   mcNameJob: []
   mcIntData: 
@@ -3524,10 +3525,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Boundary: 50
   speed: 10
-  min_x: -7
-  max_x: 6
-  min_y: -12.2
-  max_y: 10.5
+  min_x: -4
+  max_x: -2
+  min_y: -4
+  max_y: 8.5
 --- !u!1 &741133797
 GameObject:
   m_ObjectHideFlags: 0
