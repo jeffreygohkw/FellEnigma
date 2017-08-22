@@ -97,7 +97,7 @@ public class GameControl : MonoBehaviour{
 				Debug.Log(Grid.instance.nextScene);
 				data.nextScene = Grid.instance.nextScene;
 			}
-
+			
 			if (u.unitName == "You")
 			{
 				data.mcProf = u.proficiency;
@@ -344,6 +344,15 @@ public class GameControl : MonoBehaviour{
 			}
 		}
 		data.gold = Grid.instance.gold;
+
+		if (Grid.instance.mapName == "tutorial")
+		{
+			data.chapterID = 1;
+		}
+		else if (Grid.instance.mapName == "chapter1")
+		{
+			data.chapterID = 2;
+			}
 
 		bf.Serialize(file, data);
 		Debug.Log("Saved");

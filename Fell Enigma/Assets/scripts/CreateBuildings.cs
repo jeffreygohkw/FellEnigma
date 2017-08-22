@@ -54,7 +54,7 @@ public class CreateBuildings : MonoBehaviour
 			GameControl.instance.Load();
 
 			//Set next scene
-			Grid.instance.nextScene = "Chapter2";
+			Grid.instance.nextScene = "Battle Prep";
 			
 			// Link Taverns and spawn point
 			Grid.instance.tavernAndSpawn.Add(Grid.instance.map[1][15].gridPosition, Grid.instance.map[2][15].gridPosition);
@@ -107,7 +107,7 @@ public class CreateBuildings : MonoBehaviour
 			Grid.instance.gold = GameControl.instance.gold;
 			Grid.instance.goldCap = 2000;
 
-			Grid.instance.commander = 0;
+			Grid.instance.commander = GameControl.instance.ultID;
 			Grid.instance.ultCharge = 0;
 
 			//ActivateTextAtLine.instance.startScript(0, 10);

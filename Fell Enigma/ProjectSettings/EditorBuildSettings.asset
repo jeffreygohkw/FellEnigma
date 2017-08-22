@@ -18,5 +18,8 @@ EditorBuildSettings:
     path: Assets/_scenes/Chapter1.unity
     guid: 844f775f62832044296cd140f2b36ea0
   - enabled: 1
+    path: Assets/_scenes/Battle Prep.unity
+    guid: e9f07f564d46db646b498671beaaca79
+  - enabled: 1
     path: Assets/_scenes/Chapter2.unity
     guid: 2a07edc95b59ab040b6a0907c95d492f

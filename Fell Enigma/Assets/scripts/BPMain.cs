@@ -163,21 +163,33 @@ public class BPMain : MonoBehaviour {
     */
     private void IntHeroes()
     {
-        if (GameControl.instance.npIntData[3] <= 0)
-        {
-            npDead = true;
-        }
-        if (GameControl.instance.yrIntData[3] <= 0)
-        {
-            yrDead = true;
-        }
-        /*if (GameControl.instance.ksIntData[3] <= 0)
-        {
-            ksDead = true;
-        }
-        if (GameControl.instance.bhIntData[3] <= 0)
-        {
-            bhDead = true;
-        }*/
+		if (GameControl.instance.npIntData.Count != 0)
+		{
+			if (GameControl.instance.npIntData[3] <= 0)
+			{
+				npDead = true;
+			}
+		}
+		if (GameControl.instance.yrIntData.Count != 0)
+		{
+			if (GameControl.instance.yrIntData[3] <= 0)
+			{
+				yrDead = true;
+			}
+		}
+		if (GameControl.instance.ksIntData.Count != 0)
+		{
+			if (GameControl.instance.ksIntData[3] <= 0)
+			{
+				ksDead = true;
+			}
+		}
+		if (GameControl.instance.bhIntData.Count != 0)
+		{
+			if (GameControl.instance.bhIntData[3] <= 0)
+			{
+				bhDead = true;
+			}
+		}
     }
 }

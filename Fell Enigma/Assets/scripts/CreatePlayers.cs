@@ -1145,233 +1145,255 @@ public class CreatePlayers : MonoBehaviour {
 			//Load Save
 			GameControl.instance.Load();
 
-			PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(10 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit1.gridPosition = new Vector2(10, 11);
+			int indexCount = 0;
 
-			unit1.unitName = GameControl.instance.npNameJob[0];
-			unit1.job = GameControl.instance.npNameJob[1];
-			unit1.isHero = GameControl.instance.npBoolData[0];
-			unit1.isFlying = GameControl.instance.npBoolData[1];
+			List<Unit> team0 = new List<Unit>();
+			List<Unit> team1 = new List<Unit>();
+			List<Unit> team2 = new List<Unit>();
 
-			unit1.lvl = GameControl.instance.npIntData[0];
-			unit1.exp = GameControl.instance.npIntData[1];
-			unit1.maxHP = GameControl.instance.npIntData[2];
-			if (GameControl.instance.npIntData[3] <= 0)
+			if (GameControl.instance.ultID != 1)
 			{
-				unit1.currentHP = 0;
+				PlayerUnit unit1 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(10 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+				unit1.gridPosition = new Vector2(10, 11);
+
+				unit1.unitName = GameControl.instance.npNameJob[0];
+				unit1.job = GameControl.instance.npNameJob[1];
+				unit1.isHero = GameControl.instance.npBoolData[0];
+				unit1.isFlying = GameControl.instance.npBoolData[1];
+
+				unit1.lvl = GameControl.instance.npIntData[0];
+				unit1.exp = GameControl.instance.npIntData[1];
+				unit1.maxHP = GameControl.instance.npIntData[2];
+				if (GameControl.instance.npIntData[3] <= 0)
+				{
+					unit1.currentHP = 0;
+				}
+				else
+				{
+					unit1.currentHP = GameControl.instance.npIntData[2];
+				}
+				unit1.strength = GameControl.instance.npIntData[4];
+				unit1.mag = GameControl.instance.npIntData[5];
+				unit1.skl = GameControl.instance.npIntData[6];
+				unit1.spd = GameControl.instance.npIntData[7];
+				unit1.luk = GameControl.instance.npIntData[8];
+				unit1.def = GameControl.instance.npIntData[9];
+				unit1.res = GameControl.instance.npIntData[10];
+				unit1.con = GameControl.instance.npIntData[11];
+				unit1.mov = GameControl.instance.npIntData[12];
+
+				unit1.hpG = GameControl.instance.npIntData[13];
+				unit1.strG = GameControl.instance.npIntData[14];
+				unit1.magG = GameControl.instance.npIntData[15];
+				unit1.sklG = GameControl.instance.npIntData[16];
+				unit1.spdG = GameControl.instance.npIntData[17];
+				unit1.lukG = GameControl.instance.npIntData[18];
+				unit1.defG = GameControl.instance.npIntData[19];
+				unit1.resG = GameControl.instance.npIntData[20];
+
+				unit1.proficiency = GameControl.instance.npProf;
+
+				unit1.inventory = GameControl.instance.npInventory;
+				unit1.equippedIndex = GameControl.instance.npIntData[21];
+				unit1.weaponMt = GameControl.instance.npIntData[22];
+				unit1.weaponPhysical = GameControl.instance.npBoolData[2];
+				unit1.weaponAcc = GameControl.instance.npIntData[23];
+				unit1.weaponCrit = GameControl.instance.npIntData[24];
+				unit1.weaponWt = GameControl.instance.npIntData[25];
+				unit1.weaponMinRange = GameControl.instance.npIntData[26];
+				unit1.weaponMaxRange = GameControl.instance.npIntData[27];
+
+				Grid.instance.map[10][11].occupied = unit1;
+
+				unit1.team = 0;
+				unit1.allies.Add(0);
+				unit1.index = indexCount;
+				indexCount++;
+				team0.Add(unit1);
 			}
-			else
+
+			if (GameControl.instance.ultID != 2)
 			{
-				unit1.currentHP = GameControl.instance.npIntData[2];
+				PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(11 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+				unit2.gridPosition = new Vector2(11, 11);
+
+				unit2.unitName = GameControl.instance.ksNameJob[0];
+				unit2.job = GameControl.instance.ksNameJob[1];
+				unit2.isHero = GameControl.instance.ksBoolData[0];
+				unit2.isFlying = GameControl.instance.ksBoolData[1];
+
+				unit2.lvl = GameControl.instance.ksIntData[0];
+				unit2.exp = GameControl.instance.ksIntData[1];
+				unit2.maxHP = GameControl.instance.ksIntData[2];
+				if (GameControl.instance.ksIntData[3] <= 0)
+				{
+					unit2.currentHP = 0;
+				}
+				else
+				{
+					unit2.currentHP = GameControl.instance.ksIntData[2];
+				}
+				unit2.strength = GameControl.instance.ksIntData[4];
+				unit2.mag = GameControl.instance.ksIntData[5];
+				unit2.skl = GameControl.instance.ksIntData[6];
+				unit2.spd = GameControl.instance.ksIntData[7];
+				unit2.luk = GameControl.instance.ksIntData[8];
+				unit2.def = GameControl.instance.ksIntData[9];
+				unit2.res = GameControl.instance.ksIntData[10];
+				unit2.con = GameControl.instance.ksIntData[11];
+				unit2.mov = GameControl.instance.ksIntData[12];
+
+				unit2.hpG = GameControl.instance.ksIntData[13];
+				unit2.strG = GameControl.instance.ksIntData[14];
+				unit2.magG = GameControl.instance.ksIntData[15];
+				unit2.sklG = GameControl.instance.ksIntData[16];
+				unit2.spdG = GameControl.instance.ksIntData[17];
+				unit2.lukG = GameControl.instance.ksIntData[18];
+				unit2.defG = GameControl.instance.ksIntData[19];
+				unit2.resG = GameControl.instance.ksIntData[20];
+
+				unit2.proficiency = GameControl.instance.ksProf;
+
+				unit2.inventory = GameControl.instance.ksInventory;
+				unit2.equippedIndex = GameControl.instance.ksIntData[21];
+				unit2.weaponMt = GameControl.instance.ksIntData[22];
+				unit2.weaponPhysical = GameControl.instance.ksBoolData[2];
+				unit2.weaponAcc = GameControl.instance.ksIntData[23];
+				unit2.weaponCrit = GameControl.instance.ksIntData[24];
+				unit2.weaponWt = GameControl.instance.ksIntData[25];
+				unit2.weaponMinRange = GameControl.instance.ksIntData[26];
+				unit2.weaponMaxRange = GameControl.instance.ksIntData[27];
+
+				Grid.instance.map[11][11].occupied = unit2;
+
+				unit2.team = 0;
+				unit2.allies.Add(0);
+				unit2.index = indexCount;
+				indexCount++;
+				team0.Add(unit2);
 			}
-			unit1.strength = GameControl.instance.npIntData[4];
-			unit1.mag = GameControl.instance.npIntData[5];
-			unit1.skl = GameControl.instance.npIntData[6];
-			unit1.spd = GameControl.instance.npIntData[7];
-			unit1.luk = GameControl.instance.npIntData[8];
-			unit1.def = GameControl.instance.npIntData[9];
-			unit1.res = GameControl.instance.npIntData[10];
-			unit1.con = GameControl.instance.npIntData[11];
-			unit1.mov = GameControl.instance.npIntData[12];
 
-			unit1.hpG = GameControl.instance.npIntData[13];
-			unit1.strG = GameControl.instance.npIntData[14];
-			unit1.magG = GameControl.instance.npIntData[15];
-			unit1.sklG = GameControl.instance.npIntData[16];
-			unit1.spdG = GameControl.instance.npIntData[17];
-			unit1.lukG = GameControl.instance.npIntData[18];
-			unit1.defG = GameControl.instance.npIntData[19];
-			unit1.resG = GameControl.instance.npIntData[20];
-
-			unit1.proficiency = GameControl.instance.npProf;
-
-			unit1.inventory = GameControl.instance.npInventory;
-			unit1.equippedIndex = GameControl.instance.npIntData[21];
-			unit1.weaponMt = GameControl.instance.npIntData[22];
-			unit1.weaponPhysical = GameControl.instance.npBoolData[2];
-			unit1.weaponAcc = GameControl.instance.npIntData[23];
-			unit1.weaponCrit = GameControl.instance.npIntData[24];
-			unit1.weaponWt = GameControl.instance.npIntData[25];
-			unit1.weaponMinRange = GameControl.instance.npIntData[26];
-			unit1.weaponMaxRange = GameControl.instance.npIntData[27];
-
-			Grid.instance.map[10][11].occupied = unit1;
-
-			unit1.team = 0;
-			unit1.allies.Add(0);
-			unit1.index = 0;
-
-
-			PlayerUnit unit2 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(11 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit2.gridPosition = new Vector2(11, 11);
-
-			unit2.unitName = GameControl.instance.ksNameJob[0];
-			unit2.job = GameControl.instance.ksNameJob[1];
-			unit2.isHero = GameControl.instance.ksBoolData[0];
-			unit2.isFlying = GameControl.instance.ksBoolData[1];
-
-			unit2.lvl = GameControl.instance.ksIntData[0];
-			unit2.exp = GameControl.instance.ksIntData[1];
-			unit2.maxHP = GameControl.instance.ksIntData[2];
-			if (GameControl.instance.ksIntData[3] <= 0)
+			if (GameControl.instance.ultID != 3)
 			{
-				unit2.currentHP = 0;
+				PlayerUnit unit3 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(10 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 10 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+				unit3.gridPosition = new Vector2(10, 10);
+
+				unit3.unitName = GameControl.instance.yrNameJob[0];
+				unit3.job = GameControl.instance.yrNameJob[1];
+				unit3.isHero = GameControl.instance.yrBoolData[0];
+				unit3.isFlying = GameControl.instance.yrBoolData[1];
+
+				unit3.lvl = GameControl.instance.yrIntData[0];
+				unit3.exp = GameControl.instance.yrIntData[1];
+				unit3.maxHP = GameControl.instance.yrIntData[2];
+				if (GameControl.instance.yrIntData[3] <= 0)
+				{
+					unit3.currentHP = 0;
+				}
+				else
+				{
+					unit3.currentHP = GameControl.instance.yrIntData[2];
+				}
+				unit3.strength = GameControl.instance.yrIntData[4];
+				unit3.mag = GameControl.instance.yrIntData[5];
+				unit3.skl = GameControl.instance.yrIntData[6];
+				unit3.spd = GameControl.instance.yrIntData[7];
+				unit3.luk = GameControl.instance.yrIntData[8];
+				unit3.def = GameControl.instance.yrIntData[9];
+				unit3.res = GameControl.instance.yrIntData[10];
+				unit3.con = GameControl.instance.yrIntData[11];
+				unit3.mov = GameControl.instance.yrIntData[12];
+
+				unit3.hpG = GameControl.instance.yrIntData[13];
+				unit3.strG = GameControl.instance.yrIntData[14];
+				unit3.magG = GameControl.instance.yrIntData[15];
+				unit3.sklG = GameControl.instance.yrIntData[16];
+				unit3.spdG = GameControl.instance.yrIntData[17];
+				unit3.lukG = GameControl.instance.yrIntData[18];
+				unit3.defG = GameControl.instance.yrIntData[19];
+				unit3.resG = GameControl.instance.yrIntData[20];
+
+				unit3.proficiency = GameControl.instance.yrProf;
+
+				unit3.inventory = GameControl.instance.yrInventory;
+				unit3.equippedIndex = GameControl.instance.yrIntData[21];
+				unit3.weaponMt = GameControl.instance.yrIntData[22];
+				unit3.weaponPhysical = GameControl.instance.yrBoolData[2];
+				unit3.weaponAcc = GameControl.instance.yrIntData[23];
+				unit3.weaponCrit = GameControl.instance.yrIntData[24];
+				unit3.weaponWt = GameControl.instance.yrIntData[25];
+				unit3.weaponMinRange = GameControl.instance.yrIntData[26];
+				unit3.weaponMaxRange = GameControl.instance.yrIntData[27];
+
+				Grid.instance.map[10][10].occupied = unit3;
+
+				unit3.team = 0;
+				unit3.allies.Add(0);
+				unit3.index = indexCount;
+				indexCount++;
+				team0.Add(unit3);
 			}
-			else
+
+			if (GameControl.instance.ultID != 4)
 			{
-				unit2.currentHP = GameControl.instance.ksIntData[2];
+				PlayerUnit unit4 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(11 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 10 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
+				unit4.gridPosition = new Vector2(11, 10);
+
+				unit4.unitName = GameControl.instance.bhNameJob[0];
+				unit4.job = GameControl.instance.bhNameJob[1];
+				unit4.isHero = GameControl.instance.bhBoolData[0];
+				unit4.isFlying = GameControl.instance.bhBoolData[1];
+
+				unit4.lvl = GameControl.instance.bhIntData[0];
+				unit4.exp = GameControl.instance.bhIntData[1];
+				unit4.maxHP = GameControl.instance.bhIntData[2];
+				if (GameControl.instance.bhIntData[3] <= 0)
+				{
+					unit4.currentHP = 0;
+				}
+				else
+				{
+					unit4.currentHP = GameControl.instance.bhIntData[2];
+				}
+				unit4.strength = GameControl.instance.bhIntData[4];
+				unit4.mag = GameControl.instance.bhIntData[5];
+				unit4.skl = GameControl.instance.bhIntData[6];
+				unit4.spd = GameControl.instance.bhIntData[7];
+				unit4.luk = GameControl.instance.bhIntData[8];
+				unit4.def = GameControl.instance.bhIntData[9];
+				unit4.res = GameControl.instance.bhIntData[10];
+				unit4.con = GameControl.instance.bhIntData[11];
+				unit4.mov = GameControl.instance.bhIntData[12];
+
+				unit4.hpG = GameControl.instance.bhIntData[13];
+				unit4.strG = GameControl.instance.bhIntData[14];
+				unit4.magG = GameControl.instance.bhIntData[15];
+				unit4.sklG = GameControl.instance.bhIntData[16];
+				unit4.spdG = GameControl.instance.bhIntData[17];
+				unit4.lukG = GameControl.instance.bhIntData[18];
+				unit4.defG = GameControl.instance.bhIntData[19];
+				unit4.resG = GameControl.instance.bhIntData[20];
+
+				unit4.proficiency = GameControl.instance.bhProf;
+
+				unit4.inventory = GameControl.instance.bhInventory;
+				unit4.equippedIndex = GameControl.instance.bhIntData[21];
+				unit4.weaponMt = GameControl.instance.bhIntData[22];
+				unit4.weaponPhysical = GameControl.instance.bhBoolData[2];
+				unit4.weaponAcc = GameControl.instance.bhIntData[23];
+				unit4.weaponCrit = GameControl.instance.bhIntData[24];
+				unit4.weaponWt = GameControl.instance.bhIntData[25];
+				unit4.weaponMinRange = GameControl.instance.bhIntData[26];
+				unit4.weaponMaxRange = GameControl.instance.bhIntData[27];
+
+				Grid.instance.map[11][10].occupied = unit4;
+
+				unit4.team = 0;
+				unit4.allies.Add(0);
+				unit4.index = indexCount;
+				indexCount++;
+				team0.Add(unit4);
 			}
-			unit2.strength = GameControl.instance.ksIntData[4];
-			unit2.mag = GameControl.instance.ksIntData[5];
-			unit2.skl = GameControl.instance.ksIntData[6];
-			unit2.spd = GameControl.instance.ksIntData[7];
-			unit2.luk = GameControl.instance.ksIntData[8];
-			unit2.def = GameControl.instance.ksIntData[9];
-			unit2.res = GameControl.instance.ksIntData[10];
-			unit2.con = GameControl.instance.ksIntData[11];
-			unit2.mov = GameControl.instance.ksIntData[12];
-
-			unit2.hpG = GameControl.instance.ksIntData[13];
-			unit2.strG = GameControl.instance.ksIntData[14];
-			unit2.magG = GameControl.instance.ksIntData[15];
-			unit2.sklG = GameControl.instance.ksIntData[16];
-			unit2.spdG = GameControl.instance.ksIntData[17];
-			unit2.lukG = GameControl.instance.ksIntData[18];
-			unit2.defG = GameControl.instance.ksIntData[19];
-			unit2.resG = GameControl.instance.ksIntData[20];
-
-			unit2.proficiency = GameControl.instance.ksProf;
-
-			unit2.inventory = GameControl.instance.ksInventory;
-			unit2.equippedIndex = GameControl.instance.ksIntData[21];
-			unit2.weaponMt = GameControl.instance.ksIntData[22];
-			unit2.weaponPhysical = GameControl.instance.ksBoolData[2];
-			unit2.weaponAcc = GameControl.instance.ksIntData[23];
-			unit2.weaponCrit = GameControl.instance.ksIntData[24];
-			unit2.weaponWt = GameControl.instance.ksIntData[25];
-			unit2.weaponMinRange = GameControl.instance.ksIntData[26];
-			unit2.weaponMaxRange = GameControl.instance.ksIntData[27];
-
-			Grid.instance.map[11][11].occupied = unit2;
-
-			unit2.team = 0;
-			unit2.allies.Add(0);
-			unit2.index = 1;
-
-
-			PlayerUnit unit3 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(10 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 10 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit3.gridPosition = new Vector2(10, 10);
-
-			unit3.unitName = GameControl.instance.yrNameJob[0];
-			unit3.job = GameControl.instance.yrNameJob[1];
-			unit3.isHero = GameControl.instance.yrBoolData[0];
-			unit3.isFlying = GameControl.instance.yrBoolData[1];
-
-			unit3.lvl = GameControl.instance.yrIntData[0];
-			unit3.exp = GameControl.instance.yrIntData[1];
-			unit3.maxHP = GameControl.instance.yrIntData[2];
-			if (GameControl.instance.yrIntData[3] <= 0)
-			{
-				unit3.currentHP = 0;
-			}
-			else
-			{
-				unit3.currentHP = GameControl.instance.yrIntData[2];
-			}
-			unit3.strength = GameControl.instance.yrIntData[4];
-			unit3.mag = GameControl.instance.yrIntData[5];
-			unit3.skl = GameControl.instance.yrIntData[6];
-			unit3.spd = GameControl.instance.yrIntData[7];
-			unit3.luk = GameControl.instance.yrIntData[8];
-			unit3.def = GameControl.instance.yrIntData[9];
-			unit3.res = GameControl.instance.yrIntData[10];
-			unit3.con = GameControl.instance.yrIntData[11];
-			unit3.mov = GameControl.instance.yrIntData[12];
-
-			unit3.hpG = GameControl.instance.yrIntData[13];
-			unit3.strG = GameControl.instance.yrIntData[14];
-			unit3.magG = GameControl.instance.yrIntData[15];
-			unit3.sklG = GameControl.instance.yrIntData[16];
-			unit3.spdG = GameControl.instance.yrIntData[17];
-			unit3.lukG = GameControl.instance.yrIntData[18];
-			unit3.defG = GameControl.instance.yrIntData[19];
-			unit3.resG = GameControl.instance.yrIntData[20];
-
-			unit3.proficiency = GameControl.instance.yrProf;
-
-			unit3.inventory = GameControl.instance.yrInventory;
-			unit3.equippedIndex = GameControl.instance.yrIntData[21];
-			unit3.weaponMt = GameControl.instance.yrIntData[22];
-			unit3.weaponPhysical = GameControl.instance.yrBoolData[2];
-			unit3.weaponAcc = GameControl.instance.yrIntData[23];
-			unit3.weaponCrit = GameControl.instance.yrIntData[24];
-			unit3.weaponWt = GameControl.instance.yrIntData[25];
-			unit3.weaponMinRange = GameControl.instance.yrIntData[26];
-			unit3.weaponMaxRange = GameControl.instance.yrIntData[27];
-
-			Grid.instance.map[10][10].occupied = unit3;
-
-			unit3.team = 0;
-			unit3.allies.Add(0);
-			unit3.index = 2;
-
-
-			PlayerUnit unit4 = ((GameObject)Instantiate(Grid.instance.unitPrefab, new Vector3(4 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 17 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<PlayerUnit>();
-			unit4.gridPosition = new Vector2(4, 17);
-
-			unit4.unitName = GameControl.instance.bhNameJob[0];
-			unit4.job = GameControl.instance.bhNameJob[1];
-			unit4.isHero = GameControl.instance.bhBoolData[0];
-			unit4.isFlying = GameControl.instance.bhBoolData[1];
-
-			unit4.lvl = GameControl.instance.bhIntData[0];
-			unit4.exp = GameControl.instance.bhIntData[1];
-			unit4.maxHP = GameControl.instance.bhIntData[2];
-			if (GameControl.instance.bhIntData[3] <= 0)
-			{
-				unit4.currentHP = 0;
-			}
-			else
-			{
-				unit4.currentHP = GameControl.instance.bhIntData[2];
-			}
-			unit4.strength = GameControl.instance.bhIntData[4];
-			unit4.mag = GameControl.instance.bhIntData[5];
-			unit4.skl = GameControl.instance.bhIntData[6];
-			unit4.spd = GameControl.instance.bhIntData[7];
-			unit4.luk = GameControl.instance.bhIntData[8];
-			unit4.def = GameControl.instance.bhIntData[9];
-			unit4.res = GameControl.instance.bhIntData[10];
-			unit4.con = GameControl.instance.bhIntData[11];
-			unit4.mov = GameControl.instance.bhIntData[12];
-
-			unit4.hpG = GameControl.instance.bhIntData[13];
-			unit4.strG = GameControl.instance.bhIntData[14];
-			unit4.magG = GameControl.instance.bhIntData[15];
-			unit4.sklG = GameControl.instance.bhIntData[16];
-			unit4.spdG = GameControl.instance.bhIntData[17];
-			unit4.lukG = GameControl.instance.bhIntData[18];
-			unit4.defG = GameControl.instance.bhIntData[19];
-			unit4.resG = GameControl.instance.bhIntData[20];
-
-			unit4.proficiency = GameControl.instance.bhProf;
-
-			unit4.inventory = GameControl.instance.bhInventory;
-			unit4.equippedIndex = GameControl.instance.bhIntData[21];
-			unit4.weaponMt = GameControl.instance.bhIntData[22];
-			unit4.weaponPhysical = GameControl.instance.bhBoolData[2];
-			unit4.weaponAcc = GameControl.instance.bhIntData[23];
-			unit4.weaponCrit = GameControl.instance.bhIntData[24];
-			unit4.weaponWt = GameControl.instance.bhIntData[25];
-			unit4.weaponMinRange = GameControl.instance.bhIntData[26];
-			unit4.weaponMaxRange = GameControl.instance.bhIntData[27];
-
-			Grid.instance.map[4][17].occupied = unit4;
-
-			unit4.team = 0;
-			unit4.allies.Add(0);
-			unit4.index = 3;
-
 
 			AIUnit boss1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(15 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 20 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			boss1.gridPosition = new Vector2(15, 20);
@@ -2258,15 +2280,6 @@ public class CreatePlayers : MonoBehaviour {
 			e11.team = 2;
 			e11.allies.Add(2);
 			e11.index = 11;
-
-			List<Unit> team0 = new List<Unit>();
-			List<Unit> team1 = new List<Unit>();
-			List<Unit> team2 = new List<Unit>();
-
-			team0.Add(unit1);
-			team0.Add(unit2);
-			team0.Add(unit3);
-			team0.Add(unit4);
 
 			
 			team1.Add(boss1);

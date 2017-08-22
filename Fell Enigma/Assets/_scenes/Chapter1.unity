@@ -2687,6 +2687,8 @@ MonoBehaviour:
   bhIntData: 
   bhBoolData: 
   gold: 0
+  ultID: 0
+  chapterID: 0
 --- !u!4 &426856677
 Transform:
   m_ObjectHideFlags: 0
@@ -10102,7 +10104,7 @@ MonoBehaviour:
   mapConfig: {fileID: 4900000, guid: 9f581617f93206f43af4c91b6e05c935, type: 3}
   mainCam: {fileID: 736736688}
   mapName: chapter1
-  nextScene: Chapter2
+  nextScene: Battle Prep
   tilesPerRow: 0
   tilesPerCol: 0
   currentPlayer: 0
