@@ -44,6 +44,8 @@ public class GameControl : MonoBehaviour{
 	public List<string[]> bhInventory;
 
 	public int gold;
+    public int ultID;
+    public int chapterID;
 
 	public void Awake()
 	{
@@ -389,6 +391,8 @@ public class GameControl : MonoBehaviour{
 			bhInventory = data.bhInventory;
 
 			gold = data.gold;
+            ultID = data.ultID;
+            chapterID = data.chapterID;
 			Debug.Log("Loaded");
 			file.Close();
 		}
@@ -397,6 +401,51 @@ public class GameControl : MonoBehaviour{
 			Debug.Log("Missing savefile!");
 		}
 	}
+
+    public void SaveWithoutGrid()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
+        data = new PlayerData();
+
+        data.mcProf = mcProf;
+        data.mcNameJob = mcNameJob;
+        data.mcIntData = mcIntData;
+        data.mcBoolData = mcBoolData;
+        data.mcInventory = mcInventory;
+
+        data.npProf = npProf;
+        data.npNameJob = npNameJob;
+        data.npIntData = npIntData;
+        data.npBoolData = npBoolData;
+        data.npInventory = npInventory;
+
+        data.ksProf = ksProf;
+        data.ksNameJob = ksNameJob;
+        data.ksIntData = ksIntData;
+        data.ksBoolData = ksBoolData;
+        data.ksInventory = ksInventory;
+
+        data.yrProf = yrProf;
+        data.yrNameJob = yrNameJob;
+        data.yrIntData = yrIntData;
+        data.yrBoolData = yrBoolData;
+        data.yrInventory = yrInventory;
+
+        data.bhProf = bhProf;
+        data.bhNameJob = bhNameJob;
+        data.bhIntData = bhIntData;
+        data.bhBoolData = bhBoolData;
+        data.bhInventory = bhInventory;
+
+        data.gold = gold;
+        data.ultID = ultID;
+        data.chapterID = chapterID;
+
+        bf.Serialize(file, data);
+        Debug.Log("Saved without grid");
+        file.Close();
+    }
 
 	[Serializable]
 	private class PlayerData
@@ -434,7 +483,9 @@ public class GameControl : MonoBehaviour{
 		public List<string[]> bhInventory = new List<string[]>();
 
 		public int gold = 0;
+        public int ultID = 0;
+        public int chapterID = 0;
 
-	}
+    }
 }
 

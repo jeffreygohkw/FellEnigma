@@ -716,7 +716,7 @@ public class Grid : MonoBehaviour {
 						{
 							Item.instance.equipWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
 						}
-						else if (target.inventory[i].Length == 13)
+						else if (target.inventory[i].Length == 14)
 						{
 							Item.instance.addWeapon(recruit, target.inventory[i][0], target.inventory[i][1]);
 						}
