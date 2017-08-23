@@ -55,7 +55,7 @@ public class Grid : MonoBehaviour {
 	public bool ultActive = false;
 
 	public bool waitUp = false;
-	public int waitUpTime = 1;
+	public float waitUpTime = 0.5f;
 
 	public Dictionary<Vector2, string> objectiveSpecificTiles = new Dictionary<Vector2, string>();
 	public string objectiveComplete;
@@ -277,7 +277,7 @@ public class Grid : MonoBehaviour {
 		StartCoroutine(delay(waitUpTime));
 	}
 
-	IEnumerator delay(int time)
+	IEnumerator delay(float time)
 	{
 		if (waitUp)
 		{

@@ -31,6 +31,7 @@ public class CreateBuildings : MonoBehaviour
 	*/
 	public static void generateBuildings(string mapName)
 	{
+		Grid.instance.waitUpTime = 0.25f;
 		if (mapName == "tutorial")
 		{
 			//Set next scene

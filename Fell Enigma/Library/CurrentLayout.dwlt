@@ -543,9 +543,9 @@ MonoBehaviour:
     height: 502
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 92730000
-    m_LastClickedID: 29586
-    m_ExpandedIDs: 18bdf3ffcc65f5ff6c68f5ff927dfffffe80ffffc6f9ffffe2fbffff000000006e2c0000d62c0000ea330000b43400006c3c0000d43c0000024500006a450000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: bec5feffe4fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -564,7 +564,7 @@ MonoBehaviour:
       m_ClientGUIView: {fileID: 10}
     m_SearchString: 
   m_ExpandedScenes:
-  - Chapter2
+  - Tutorial
   m_CurrenRootInstanceID: 0
   m_Locked: 0
   m_CurrentSortingName: TransformSorting
