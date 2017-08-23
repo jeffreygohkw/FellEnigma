@@ -237,7 +237,7 @@ public class StatsUI : MonoBehaviour {
                     enemyProfile.texture = profiles[5];
                     enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
                 }
-				else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander"))
+				else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander") || currUnit.unitName.Equals("Mercenary"))
 				{
 					enemyProfile.texture = profiles[6];
 					enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
@@ -276,7 +276,13 @@ public class StatsUI : MonoBehaviour {
                     enemyProfile.texture = profiles[3];
                     enemyProfile.uvRect = new Rect(0.68f, 0.38f, 0.3f, 0.55f);
                 }
-                
+                else if (currUnit.unitName.Equals("Mercenary"))
+                {
+                    enemyProfile.texture = profiles[6];
+                    enemyProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
+                }
+
+
                 OnForecast();
             }
         }
@@ -307,7 +313,7 @@ public class StatsUI : MonoBehaviour {
 				displayProfile.texture = profiles[5];
 				displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
 			}
-			else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander"))
+			else if (currUnit.unitName.Equals("Soldier") || currUnit.unitName.Equals("Commander") || currUnit.unitName.Equals("Mercenary"))
 			{
 				displayProfile.texture = profiles[6];
 				displayProfile.uvRect = new Rect(0, 0.2f, 1, 0.8f);
