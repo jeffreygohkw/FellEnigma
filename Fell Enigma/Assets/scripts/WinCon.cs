@@ -151,6 +151,7 @@ public class WinCon : MonoBehaviour {
 
 			if (heroSlain == 4)
 			{
+				ActivateTextAtLine.instance.startScript(19,20);
 				return 2;
 			}
 			else if (Grid.instance.objectiveComplete == "Escape")
@@ -182,6 +183,7 @@ public class WinCon : MonoBehaviour {
 
 			if (heroSlain == 4)
 			{
+				ActivateTextAtLine.instance.startScript(11,12);
 				return 2;
 			}
 			else if (Grid.instance.units[1][0].currentHP == 0)

@@ -79,7 +79,7 @@ public class CreateBuildings : MonoBehaviour
 
 			Grid.instance.objectiveSpecificTiles.Add(Grid.instance.map[14][0].gridPosition, "Escape");
 
-			//ActivateTextAtLine.instance.startScript(0, 10);
+			ActivateTextAtLine.instance.startScript(0, 16);
 		}
 		else if (mapName == "chapter2")
 		{
@@ -111,7 +111,7 @@ public class CreateBuildings : MonoBehaviour
 			Grid.instance.commander = GameControl.instance.ultID;
 			Grid.instance.ultCharge = 0;
 
-			//ActivateTextAtLine.instance.startScript(0, 10);
+			ActivateTextAtLine.instance.startScript(0, 8);
 		}
 	}
 }
