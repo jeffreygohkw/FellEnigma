@@ -175,7 +175,7 @@ public class CreatePlayers : MonoBehaviour {
 			boss1.lvl = 2;
 			boss1.exp = 0;
 			boss1.maxHP = 22;
-			boss1.currentHP = 1;
+			boss1.currentHP = 22;
 			boss1.strength = 4;
 			boss1.mag = 6;
 			boss1.skl = 4;
@@ -1002,8 +1002,8 @@ public class CreatePlayers : MonoBehaviour {
 
 			AIUnit enemy12 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(1 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 13 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy12.gridPosition = new Vector2(1, 13);
-			enemy12.ai_id = 1;
-			enemy12.ai_id_priority.Add(1);
+			enemy12.ai_id = 0;
+			enemy12.ai_id_priority.Add(0);
 
 			enemy12.unitName = "Bandit";
 			enemy12.job = "Bandit";
@@ -1036,8 +1036,8 @@ public class CreatePlayers : MonoBehaviour {
 
 			AIUnit enemy13 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(3 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 11 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy13.gridPosition = new Vector2(3, 11);
-			enemy13.ai_id = 1;
-			enemy13.ai_id_priority.Add(1);
+			enemy13.ai_id = 0;
+			enemy13.ai_id_priority.Add(0);
 
 			enemy13.unitName = "Bandit";
 			enemy13.job = "Bandit";
@@ -1432,7 +1432,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(1 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 17 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy1.gridPosition = new Vector2(1, 17);
 			enemy1.ai_id = 1;
-			enemy1.ai_id_priority.Add(2);
+			enemy1.ai_id_priority.Add(1);
 
 			enemy1.unitName = "Soldier";
 			enemy1.job = "Armour Knight";
@@ -1466,7 +1466,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy2 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 17 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy2.gridPosition = new Vector2(2, 17);
 			enemy2.ai_id = 1;
-			enemy2.ai_id_priority.Add(2);
+			enemy2.ai_id_priority.Add(1);
 
 			enemy2.unitName = "Soldier";
 			enemy2.job = "Armour Knight";
@@ -1500,7 +1500,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy3 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(9 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 21 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy3.gridPosition = new Vector2(9, 21);
 			enemy3.ai_id = 1;
-			enemy3.ai_id_priority.Add(2);
+			enemy3.ai_id_priority.Add(1);
 
 			enemy3.unitName = "Soldier";
 			enemy3.job = "Armour Knight";
@@ -1534,7 +1534,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy4 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(9 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 20 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy4.gridPosition = new Vector2(9, 20);
 			enemy4.ai_id = 1;
-			enemy4.ai_id_priority.Add(2);
+			enemy4.ai_id_priority.Add(1);
 
 			enemy4.unitName = "Soldier";
 			enemy4.job = "Armour Knight";
@@ -1568,7 +1568,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy5 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(0 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 21 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy5.gridPosition = new Vector2(0, 21);
 			enemy5.ai_id = 1;
-			enemy5.ai_id_priority.Add(2);
+			enemy5.ai_id_priority.Add(1);
 
 			enemy5.unitName = "Soldier";
 			enemy5.job = "Archer";
@@ -1602,7 +1602,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy6 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 22 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy6.gridPosition = new Vector2(2, 22);
 			enemy6.ai_id = 1;
-			enemy6.ai_id_priority.Add(2);
+			enemy6.ai_id_priority.Add(1);
 
 			enemy6.unitName = "Soldier";
 			enemy6.job = "Archer";
@@ -1636,7 +1636,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy7 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(0 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 18 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy7.gridPosition = new Vector2(0, 18);
 			enemy7.ai_id = 1;
-			enemy7.ai_id_priority.Add(2);
+			enemy7.ai_id_priority.Add(1);
 
 			enemy7.unitName = "Soldier";
 			enemy7.job = "Mage";
@@ -1670,7 +1670,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy8 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(7 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 22 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy8.gridPosition = new Vector2(7, 22);
 			enemy8.ai_id = 1;
-			enemy8.ai_id_priority.Add(2);
+			enemy8.ai_id_priority.Add(1);
 
 			enemy8.unitName = "Soldier";
 			enemy8.job = "Mage";
@@ -1704,7 +1704,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy9 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(4 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 24 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy9.gridPosition = new Vector2(4, 24);
 			enemy9.ai_id = 1;
-			enemy9.ai_id_priority.Add(2);
+			enemy9.ai_id_priority.Add(1);
 
 			enemy9.unitName = "Soldier";
 			enemy9.job = "Cavalry";
@@ -1738,7 +1738,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy10 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(5 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 24 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy10.gridPosition = new Vector2(5, 24);
 			enemy10.ai_id = 1;
-			enemy10.ai_id_priority.Add(2);
+			enemy10.ai_id_priority.Add(1);
 
 			enemy10.unitName = "Soldier";
 			enemy10.job = "Cavalry";
@@ -1772,7 +1772,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy11 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(15 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 21 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy11.gridPosition = new Vector2(15, 21);
 			enemy11.ai_id = 1;
-			enemy11.ai_id_priority.Add(2);
+			enemy11.ai_id_priority.Add(1);
 
 			enemy11.unitName = "Soldier";
 			enemy11.job = "Dragoon";
@@ -1807,7 +1807,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy12 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(14 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 22 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy12.gridPosition = new Vector2(14, 22);
 			enemy12.ai_id = 1;
-			enemy12.ai_id_priority.Add(2);
+			enemy12.ai_id_priority.Add(1);
 
 			enemy12.unitName = "Soldier";
 			enemy12.job = "Dragoon";
@@ -1818,7 +1818,7 @@ public class CreatePlayers : MonoBehaviour {
 			enemy12.lvl = 7;
 			enemy12.exp = 0;
 			enemy12.maxHP = 28;
-			enemy12.currentHP = 28;
+			enemy12.currentHP = 2;
 			enemy12.strength = 10;
 			enemy12.mag = 0;
 			enemy12.skl = 5;
@@ -1842,7 +1842,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit enemy13 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(14 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 19 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			enemy13.gridPosition = new Vector2(14, 19);
 			enemy13.ai_id = 1;
-			enemy13.ai_id_priority.Add(2);
+			enemy13.ai_id_priority.Add(1);
 
 			enemy13.unitName = "Soldier";
 			enemy13.job = "Dragoon";
@@ -1877,7 +1877,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit boss2 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(8 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			boss2.gridPosition = new Vector2(8, 0);
 			boss2.ai_id = 1;
-			boss2.ai_id_priority.Add(2);
+			boss2.ai_id_priority.Add(1);
 
 			boss2.unitName = "Rebel Leader";
 			boss2.job = "Sellsword";
@@ -1911,7 +1911,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e1 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(8 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 2 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e1.gridPosition = new Vector2(8, 2);
 			e1.ai_id = 1;
-			e1.ai_id_priority.Add(2);
+			e1.ai_id_priority.Add(1);
 
 			e1.unitName = "Rebel";
 			e1.job = "Sellsword";
@@ -1945,7 +1945,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e2 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(10 - Mathf.Floor(Grid.instance.tilesPerCol / 2),6 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e2.gridPosition = new Vector2(10, 6);
 			e2.ai_id = 1;
-			e2.ai_id_priority.Add(2);
+			e2.ai_id_priority.Add(1);
 
 			e2.unitName = "Rebel";
 			e2.job = "Archer";
@@ -1979,7 +1979,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e3 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(5 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 4 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e3.gridPosition = new Vector2(5, 4);
 			e3.ai_id = 1;
-			e3.ai_id_priority.Add(2);
+			e3.ai_id_priority.Add(1);
 
 			e3.unitName = "Rebel";
 			e3.job = "Archer";
@@ -2013,7 +2013,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e4 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(7 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e4.gridPosition = new Vector2(7, 0);
 			e4.ai_id = 1;
-			e4.ai_id_priority.Add(2);
+			e4.ai_id_priority.Add(1);
 
 			e4.unitName = "Rebel";
 			e4.job = "Fighter";
@@ -2047,7 +2047,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e5 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(9 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e5.gridPosition = new Vector2(9, 0);
 			e5.ai_id = 1;
-			e5.ai_id_priority.Add(2);
+			e5.ai_id_priority.Add(1);
 
 			e5.unitName = "Rebel";
 			e5.job = "Fighter";
@@ -2078,10 +2078,10 @@ public class CreatePlayers : MonoBehaviour {
 			e5.index = 5;
 
 
-			AIUnit e6 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(0 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 5 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-			e6.gridPosition = new Vector2(0, 5);
-			e6.ai_id = 1;
-			e6.ai_id_priority.Add(2);
+			AIUnit e6 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(4 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 8 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			e6.gridPosition = new Vector2(4, 8);
+			e6.ai_id = 0;
+			e6.ai_id_priority.Add(0);
 
 			e6.unitName = "Rebel";
 			e6.job = "Fighter";
@@ -2105,7 +2105,7 @@ public class CreatePlayers : MonoBehaviour {
 			e6.proficiency.Add("Axe");
 			Item.instance.equipWeapon(e6, "Axe", "IronAxe");
 
-			Grid.instance.map[0][5].occupied = e6;
+			Grid.instance.map[4][8].occupied = e6;
 
 			e6.team = 2;
 			e6.allies.Add(2);
@@ -2115,7 +2115,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e7 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(6 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 5 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e7.gridPosition = new Vector2(6, 5);
 			e7.ai_id = 1;
-			e7.ai_id_priority.Add(2);
+			e7.ai_id_priority.Add(1);
 
 			e7.unitName = "Rebel";
 			e7.job = "Fighter";
@@ -2146,10 +2146,10 @@ public class CreatePlayers : MonoBehaviour {
 			e7.index = 7;
 
 
-			AIUnit e8 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(12 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 3 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-			e8.gridPosition = new Vector2(12, 3);
-			e8.ai_id = 1;
-			e8.ai_id_priority.Add(2);
+			AIUnit e8 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(14 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 7 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			e8.gridPosition = new Vector2(14, 7);
+			e8.ai_id = 0;
+			e8.ai_id_priority.Add(0);
 
 			e8.unitName = "Rebel";
 			e8.job = "Fighter";
@@ -2173,17 +2173,17 @@ public class CreatePlayers : MonoBehaviour {
 			e8.proficiency.Add("Axe");
 			Item.instance.equipWeapon(e8, "Axe", "IronAxe");
 
-			Grid.instance.map[12][3].occupied = e8;
+			Grid.instance.map[14][7].occupied = e8;
 
 			e8.team = 2;
 			e8.allies.Add(2);
 			e8.index = 8;
 
 
-			AIUnit e9 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(13 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 2 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
-			e9.gridPosition = new Vector2(13, 2);
-			e9.ai_id = 1;
-			e9.ai_id_priority.Add(2);
+			AIUnit e9 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(13 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 6 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
+			e9.gridPosition = new Vector2(13, 6);
+			e9.ai_id = 0;
+			e9.ai_id_priority.Add(0);
 
 			e9.unitName = "Rebel";
 			e9.job = "Fighter";
@@ -2207,7 +2207,7 @@ public class CreatePlayers : MonoBehaviour {
 			e9.proficiency.Add("Axe");
 			Item.instance.equipWeapon(e9, "Axe", "IronAxe");
 
-			Grid.instance.map[13][2].occupied = e9;
+			Grid.instance.map[13][6].occupied = e9;
 
 			e9.team = 2;
 			e9.allies.Add(2);
@@ -2217,7 +2217,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e10 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(2 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e10.gridPosition = new Vector2(2, 0);
 			e10.ai_id = 1;
-			e10.ai_id_priority.Add(2);
+			e10.ai_id_priority.Add(1);
 
 			e10.unitName = "Rebel";
 			e10.job = "Shaman";
@@ -2251,7 +2251,7 @@ public class CreatePlayers : MonoBehaviour {
 			AIUnit e11 = ((GameObject)Instantiate(Grid.instance.enemyPrefab, new Vector3(12 - Mathf.Floor(Grid.instance.tilesPerCol / 2), 0 - Mathf.Floor(Grid.instance.tilesPerRow / 2), 0), Quaternion.Euler(new Vector3(90, 0, 0)))).GetComponent<AIUnit>();
 			e11.gridPosition = new Vector2(12, 0);
 			e11.ai_id = 1;
-			e11.ai_id_priority.Add(2);
+			e11.ai_id_priority.Add(1);
 
 			e11.unitName = "Rebel";
 			e11.job = "Shaman";
