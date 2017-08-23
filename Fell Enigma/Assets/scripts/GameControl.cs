@@ -348,11 +348,13 @@ public class GameControl : MonoBehaviour{
 		if (Grid.instance.mapName == "tutorial")
 		{
 			data.chapterID = 1;
+			data.nextScene = "Chapter1";
 		}
 		else if (Grid.instance.mapName == "chapter1")
 		{
 			data.chapterID = 2;
-			}
+			data.nextScene = "Battle Prep";
+		}
 
 		bf.Serialize(file, data);
 		Debug.Log("Saved");
@@ -450,6 +452,11 @@ public class GameControl : MonoBehaviour{
         data.gold = gold;
         data.ultID = ultID;
         data.chapterID = chapterID;
+
+		if (chapterID == 2)
+		{
+			data.nextScene = "Chapter2";
+		}
 
         bf.Serialize(file, data);
         Debug.Log("Saved without grid");

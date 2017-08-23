@@ -13,7 +13,7 @@ public class LoadSceneFromMainMenu : MonoBehaviour {
 	public void Continue(string sceneName)
 	{
 		GameControl.instance.Load();
-		if (GameControl.instance.nextScene != "")
+		if (GameControl.instance.nextScene != null)
 		{
 			sceneName = GameControl.instance.nextScene;
 		}
